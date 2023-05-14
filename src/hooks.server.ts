@@ -1,6 +1,7 @@
 // src/hooks.server.ts
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 import { createSupabaseServerClient } from '@supabase/auth-helpers-sveltekit';
+import { redirect, error } from '@sveltejs/kit';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -20,6 +21,23 @@ export const handle: Handle = async ({ event, resolve }) => {
 		return session;
 	};
 
+	if (event.url.pathname.startsWith('/protected-routes')) {
+		const session = await event.locals.getSession();
+		if (!session) {
+			// the user is not signed in
+			throw redirect(303, '/');
+		}
+	}
+
+	// protect POST requests to all routes that start with /protected-posts
+	if (event.url.pathname.startsWith('/protected-posts') && event.request.method === 'POST') {
+		const session = await event.locals.getSession();
+		if (!session) {
+			// the user is not signed in
+			throw error(303, '/');
+		}
+	}
+
 	return resolve(event, {
 		/**
 		 * There´s an issue with `filterSerializedResponseHeaders` not working when using `sequence`
@@ -31,3 +49,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	});
 };
+
+// src/hooks.server.ts
+
+
