@@ -1,0 +1,45 @@
+//Primary Colors
+$dark-blue:#183B77;
+$blue:#3568BF;
+$light-blue:#559EDD;
+$xlight-blue:#7FB6E6;
+$xxlight-blue:#AACEEE;
+
+//Primary Font-colors
+$dark-blue-text:#FFFFFF;
+$blue-text:#FFFFFF;
+$light-blue:#559EDD;
+$xlight-blue:#7FB6E6;
+$xxlight-blue:#AACEEE;
+
+//Neutral Colors
+$black:#333333;
+$dark-grey:#595959;
+$grey:#999999;
+$light-grey:#B3B3B3;
+$xlight-grey:#F2F2F2;
+
+//Ui Colors
+$info: $light-blue;
+$light-info: $xxlight-blue;
+$success:#57D3AE;
+$light-success:#DDF6EF;
+$danger:#FF6433;
+$light-danger:#FFE0D6;
+$warning:#F99D3E;
+$light-warning:#FFE4C9;
+
+.bg-dark-blue {
+    background-color: $dark-blue;
+    color: $dark-blue-text;
+}
+
+.bg-blue {
+    background-color: $blue;
+    color: $blue-text;
+}
+
+.bg-light-blue {
+    background-color: $light-blue;
+    color: $dark-blue-text;
+}
