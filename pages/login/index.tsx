@@ -1,6 +1,7 @@
 import { useUser } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import { useLogin } from "@budget/hooks/auth/useLogin";
+import { TextField, Button } from "@mui/material";
 
 const LoginPage = () => {
   const { email, password, error, setEmail, setPassword, handleSubmit } =
@@ -9,39 +10,34 @@ const LoginPage = () => {
   const user = useUser();
   const router = useRouter();
 
-  if (user) {
-    router.push("/dashboard/");
-  }
-
   return (
     <main className="justify-center min-w-full mt-10 main-min-h site-width site_grid">
-      <div className="w-full col-start-6 col-span-4">
-        <form className="w-full p-10 bg-slate-600 grid grid-cols-2">
-          <h4 className="text-4xl text-slate-900 col-span-2">Login</h4>
-          {error && <p className="text-red-500 col-span-2">{error}</p>}
-          <label className="w-full mt-5 cols-start-2 col-span-2 text-slate-900">
-            Email:{" "}
-          </label>
-          <input
-            className="w-full p-5 rounded cols-start-2 col-span-2"
+      <div className="w-full col-span-4 col-start-6">
+        <form className="grid w-full grid-cols-2 gap-6 p-10 bg-white">
+          <h4 className="text-4xl col-span-full text-slate-900">Login</h4>
+          {error && <p className="col-span-2 text-red-500">{error}</p>}
+          <TextField
+            variant="outlined"
+            className="col-span-full"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             type="email"
+            label="Email"
           />
-          <label className="w-full mt-5 cols-start-2 col-span-2 text-slate-900">
-            Password:{" "}
-          </label>
-          <input
-            className="w-full p-5 rounded cols-start-2 col-span-2"
+          <TextField
+            variant="outlined"
+            className="col-span-full"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             type="password"
+            label="Password"
           />
-          <button
+          <Button
+            variant="contained"
             className="p-2 mt-5 bg-white rounded text-slate-900"
             onClick={(e) => handleSubmit(e)}>
             Login
-          </button>
+          </Button>
         </form>
       </div>
     </main>
