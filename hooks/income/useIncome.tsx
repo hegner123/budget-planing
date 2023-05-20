@@ -23,7 +23,7 @@ export const useIncome = () => {
           ...notificationQue,
           {
             id: new Date().toDateString(),
-            message: "Balance fetched",
+            message: "Income fetched",
             type: "success",
           },
         ]);
@@ -31,7 +31,7 @@ export const useIncome = () => {
       })
       .then((err: any) => {
         setShowNotification(true);
-        setShowNotification(true);
+
         setNotificationQue([
           ...notificationQue,
           {
@@ -41,7 +41,14 @@ export const useIncome = () => {
           },
         ]);
       });
-  }, [fetchedIncome, supabaseClient, user]);
+  }, [
+    fetchedIncome,
+    supabaseClient,
+    user,
+    notificationQue,
+    setShowNotification,
+    setNotificationQue,
+  ]);
 
   function addIncome(e: any) {}
 

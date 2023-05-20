@@ -17,7 +17,7 @@ export const useBalance = () => {
     if (fetchedBalance) return;
     if (!user) return;
 
-    getBalance(supabase, user.id)
+    getBalance(user.id, supabase)
       .then((data): any => {
         setBalance(data);
         setFetched(true);

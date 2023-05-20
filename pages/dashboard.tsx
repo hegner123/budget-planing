@@ -1,6 +1,7 @@
 import { Link } from "@mui/material";
 import { useBalance } from "@budget/hooks/balance/useBalance";
 import { useExpenses } from "@budget/hooks/expenses/useExpenses";
+import { useIncome } from "@budget/hooks/income/useIncome";
 import useErrorHandler from "@budget/hooks/errorHandle/handler";
 import { useState, useEffect, SyntheticEvent } from "react";
 import { AddIncomeForm } from "@budget/components/addIncome/addIncome";
@@ -17,8 +18,12 @@ import { showNotificationAtom, notificationQueAtom } from "@budget/store/state";
 const Dashboard = () => {
   const { balance, fetchedBalance } = useBalance();
   const { expenses, fetchedExpenses } = useExpenses();
+  const { income, fetchedIncome } = useIncome();
   const { handleError } = useErrorHandler();
   const [balanceData, setBalanceData] = useState<any>(null);
+  const [expenseData, setExpenseData] = useState<any>(null);
+  const [incomeData, setIncomeData] = useState<any>(null);
+  const [data, setData] = useState<any>(null);
   const [showNotification, setShowNotification] = useAtom(showNotificationAtom);
   const [notificationQue, setNotificationQue] = useAtom(notificationQueAtom);
 
@@ -33,7 +38,38 @@ const Dashboard = () => {
       };
     });
     setBalanceData(parsedBalanceData);
-  }, [fetchedBalance, balance]);
+    let parsedExpensesData = expenses?.data?.map((item: any) => {
+      return {
+        id: item.id,
+        name: item.name,
+        expenses: `$${item.amount}`,
+        date: formatDate(new Date(item.date)),
+      };
+    });
+    setExpenseData(parsedExpensesData);
+    let parsedIncomeData = income?.data?.map((item: any) => {
+      return {
+        id: item.id,
+        name: item.name,
+        income: `$${item.amount}`,
+        date: formatDate(new Date(item.date)),
+      };
+    });
+    setIncomeData(parsedIncomeData);
+  }, [
+    fetchedBalance,
+    balance,
+    expenses,
+    fetchedExpenses,
+    income,
+    fetchedIncome,
+  ]);
+
+  useEffect(() => {
+    if (balanceData && expenseData && incomeData) {
+      setData([...balanceData, ...expenseData, ...incomeData]);
+    }
+  }, [balanceData, expenseData, incomeData]);
 
   function formatDate(date: any) {
     let day = date.getDate();
@@ -64,17 +100,17 @@ const Dashboard = () => {
           <button onClick={() => newTestMessage()}>Test SnackBar</button>
         </ButtonGroup>
       </div>
-      {balanceData && (
+      {data && (
         <MaterialTable
           title="Balance"
           columns={[
             { title: "Description", field: "name" },
             { title: "Amount", field: "amount" },
-            { title: "Debit", field: "debit" },
-            { title: "Credit", field: "credit" },
+            { title: "Expenses", field: "expenses" },
+            { title: "Income", field: "income" },
             { title: "Date", field: "date" },
           ]}
-          data={balanceData}
+          data={data}
         />
       )}
     </main>

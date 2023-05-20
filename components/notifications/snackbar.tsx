@@ -17,9 +17,8 @@ export default function SimpleSnackbar(message: any) {
     if (reason === "clickaway") {
       return;
     }
-    console.log(message);
 
-    // setShowNotification(false);
+    setShowNotification(false);
     setNotificationQue(
       notificationQue.filter((item: any) => item.id !== message.id)
     );
@@ -39,10 +38,10 @@ export default function SimpleSnackbar(message: any) {
 
   return (
     <div>
-      {notificationQue.map((notification: any) => (
+      {notificationQue.map((notification: any, i: any) => (
         <>
           <Snackbar
-            key={notification.id}
+            key={i}
             open={showNotification}
             autoHideDuration={6000}
             onClose={handleClose}

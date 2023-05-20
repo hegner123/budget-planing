@@ -28,5 +28,5 @@ export async function getExpenses(user: any, supabaseClient: any) {
     .from("Expenses")
     .select("*")
     .eq("user", user);
-  console.log(data);
+    return { data, error };
 }
