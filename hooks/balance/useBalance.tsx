@@ -9,8 +9,9 @@ export const useBalance = () => {
 
   useEffect(() => {
     if (fetched) return;
+    if (!user) return;
 
-    getBalance(supabase)
+    getBalance(supabase, user.id)
       .then((data): any => {
         setBalance(data);
         setFetched(true);
