@@ -3,7 +3,9 @@ import { useState } from "react";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider, Session } from "@supabase/auth-helpers-react";
 import { AppProps } from "next/app";
+import JotaiProvider from "@budget/store/state";
 import Navigation from "@budget/components/navigation/nav";
+import SimpleSnackbar from "@budget/components/notifications/snackbar";
 import "@budget/styles/style.scss";
 
 function MyApp({
@@ -20,8 +22,11 @@ function MyApp({
     <SessionContextProvider
       supabaseClient={supabase}
       initialSession={pageProps.initialSession}>
-      <Navigation />
-      <Component {...pageProps} />
+      <JotaiProvider>
+        <Navigation />
+        <Component {...pageProps} />
+        <SimpleSnackbar />
+      </JotaiProvider>
     </SessionContextProvider>
   );
 }

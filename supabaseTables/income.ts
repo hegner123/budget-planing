@@ -24,7 +24,10 @@ export async function addIncome(
 }
 
 export async function getIncomes(user: any, supabaseClient: any) {
-  const { data, error } = await supabaseClient.from("income").select("*");
+  const { data, error } = await supabaseClient
+    .from("income")
+    .select("*")
+    .eq("user", user);
 
   return { data, error };
 }

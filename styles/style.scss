@@ -2,10 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './variables';
 @import './color';
+@import './media_query';
 @import './grid';
 @import './svg';
 @import './sizes';
+@import './layout';
 
 
 

@@ -1,0 +1,83 @@
+$max-width:1400px;
+$min-border: 20px;
+$gt-large-max-width: $max-width+2 * $min-border+1px;
+$lt-large-max-width: $max-width+2 * $min-border+1px;
+$gt-xl-max-width: $max-width+2 * $min-border+481px;
+$lt-xl-max-width: $max-width+2 * $min-border+480px;
+
+@mixin media($point) {
+    @if $point==gt-xs {
+        @media (min-width: 481px) {
+            @content;
+        }
+    }
+
+    @if $point==lt-xs {
+        @media (max-width: 480px) {
+            @content;
+        }
+    }
+
+    @if $point==gt-small {
+        @media (min-width: 769px) {
+            @content;
+        }
+    }
+
+    @if $point==lt-small {
+        @media (max-width: 768px) {
+            @content;
+        }
+    }
+
+    // 62em - 992px
+    @if $point==gt-medium {
+        @media (min-width: 993px) {
+            @content;
+        }
+    }
+
+    @if $point==lt-medium {
+        @media (max-width: 992px) {
+            @content;
+        }
+    }
+
+    @if $point==gt-menu {
+        @media (min-width: 993px) {
+            @content;
+        }
+    }
+
+    @if $point==lt-menu {
+        @media (max-width: 992px) {
+            @content;
+        }
+    }
+
+    // content max width
+    @if $point==gt-large {
+        @media (min-width: $gt-large-max-width) {
+            @content;
+        }
+    }
+
+    @if $point==lt-large {
+        @media (max-width: $lt-large-max-width) {
+            @content;
+        }
+    }
+
+    // content max width plus 480px
+    @if $point==gt-xl {
+        @media (min-width: $gt-xl-max-width) {
+            @content;
+        }
+    }
+
+    @if $point==lt-xl {
+        @media (max-width: $lt-xl-max-width) {
+            @content;
+        }
+    }
+}

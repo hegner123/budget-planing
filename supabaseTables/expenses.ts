@@ -23,4 +23,10 @@ export async function addExpenses(
 
   return { data, error };
 }
-export async function getExpenses(user: any, supabaseClient: any) {}
+export async function getExpenses(user: any, supabaseClient: any) {
+  let { data, error } = await supabaseClient
+    .from("Expenses")
+    .select("*")
+    .eq("user", user);
+  console.log(data);
+}
