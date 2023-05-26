@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getExpenses } from "@budget/supabaseTables";
+import { getExpenses, addExpenses } from "@budget/supabaseTables";
 import { ExpenseObject } from "@budget/types/expenses";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useAtom } from "jotai";
@@ -39,7 +39,11 @@ export const useExpenses = () => {
     setNotificationMessage,
   ]);
 
-  function addExpense(e: any) {}
+  function addExpense(data: any) {
+    setShowNotification(true);
+    setNotificationMessage(JSON.stringify(data));
+    addExpenses({ ...data, supabaseClient });
+  }
 
   return { expenses, fetchedExpenses, addExpense };
 };

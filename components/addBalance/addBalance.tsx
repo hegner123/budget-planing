@@ -1,11 +1,15 @@
 import { useState } from "react";
-import { Input, TextField } from "@mui/material";
+import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import InputAdornment from "@mui/material/InputAdornment";
 import {
   showNotificationAtom,
   notificationMessageAtom,
@@ -72,18 +76,33 @@ const AddBalanceForm = () => {
                 id="amount"
                 label="Amount"
                 variant="outlined"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">$</InputAdornment>
+                  ),
+                }}
+                type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 className="w-full mt-5"
               />
 
-              <Input
-                id="date"
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className="w-full mt-5"
-              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  value={date}
+                  onChange={(newValue) => setDate(newValue)}
+                  renderInput={(
+                    props: JSX.IntrinsicAttributes & TextFieldProps
+                  ) => (
+                    <TextField
+                      {...props}
+                      id="frequency"
+                      label="Frequency"
+                      className="w-full mt-5"
+                    />
+                  )}
+                />
+              </LocalizationProvider>
             </form>
           </DialogContent>
         </div>

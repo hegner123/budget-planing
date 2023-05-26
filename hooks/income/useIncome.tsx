@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getIncomes } from "@budget/supabaseTables";
+import { getIncomes, addIncome } from "@budget/supabaseTables";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useAtom } from "jotai";
 import {
@@ -25,7 +25,7 @@ export const useIncome = () => {
         setFetched(true);
         setIncome(data);
       })
-      .then((err: any) => {
+      .catch((err: any) => {
         console.log(err);
       });
   }, [
@@ -37,7 +37,11 @@ export const useIncome = () => {
     setNotificationMessage,
   ]);
 
-  function addIncome(e: any) {}
+  function addIncomeSubmit(data: any) {
+    setShowNotification(true);
+    setNotificationMessage(JSON.stringify(data));
+    addIncome({ ...data, supabaseClient });
+  }
 
-  return { income, fetchedIncome, addIncome };
+  return { income, fetchedIncome, addIncomeSubmit };
 };

@@ -1,11 +1,18 @@
-export async function addExpenses(
-  user: any,
-  name: string,
-  amount: string,
-  repeated: string,
-  repeated_date: string,
-  supabaseClient: any
-) {
+export async function addExpenses({
+  user,
+  name,
+  amount,
+  repeated,
+  repeated_date,
+  supabaseClient,
+}: {
+  user: string;
+  name: string;
+  amount: string;
+  repeated: string;
+  repeated_date: string;
+  supabaseClient: any;
+}) {
   if (!user) throw new Error("No user provided");
   if (!name) throw new Error("No amount provided");
   if (!amount) throw new Error("No date provided");
@@ -16,7 +23,7 @@ export async function addExpenses(
       user: `${user}`,
       name: `${name}`,
       amount: `${amount}`,
-      repeated: `${repeated}`,
+      repeated: repeated,
       repeated_date: `${repeated_date}`,
     },
   ]);
@@ -28,5 +35,5 @@ export async function getExpenses(user: any, supabaseClient: any) {
     .from("Expenses")
     .select("*")
     .eq("user", user);
-    return { data, error };
+  return { data, error };
 }

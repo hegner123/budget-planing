@@ -80,7 +80,7 @@ const Dashboard = () => {
 
   return (
     <main className="p-5 dashboard-main">
-      <h1 className="mb-5 text-6xl">Dashboard</h1>
+      <h1 className="mt-5 mb-5 text-6xl">Dashboard</h1>
       <div className="mb-5 ">
         <ButtonGroup>
           <AddBalanceForm />
@@ -94,8 +94,8 @@ const Dashboard = () => {
           columns={[
             { title: "Description", field: "name" },
             { title: "Amount", field: "amount" },
-            { title: "Expenses", field: "expenses" },
             { title: "Income", field: "income" },
+            { title: "Expenses", field: "expenses" },
             { title: "Date", field: "date" },
           ]}
           data={data}

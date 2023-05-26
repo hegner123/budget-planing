@@ -1,11 +1,18 @@
-export async function addIncome(
-  user: any,
-  name: string,
-  amount: string,
-  repeated: string,
-  repeated_date: string,
-  supabaseClient: any
-) {
+export async function addIncome({
+  user,
+  name,
+  amount,
+  repeated,
+  repeated_date,
+  supabaseClient,
+}: {
+  user: any;
+  name: string;
+  amount: string;
+  repeated: string;
+  repeated_date: string;
+  supabaseClient: any;
+}) {
   if (!name) throw new Error("No amount provided");
   if (!amount) throw new Error("No date provided");
   if (!repeated) throw new Error("No date provided");
@@ -15,7 +22,7 @@ export async function addIncome(
       user: `${user}`,
       name: `${name}`,
       amount: `${amount}`,
-      repeated: `${repeated}`,
+      repeated: repeated,
       repeated_date: `${repeated_date}`,
     },
   ]);

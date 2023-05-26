@@ -6,7 +6,7 @@ import { useSession } from "@supabase/auth-helpers-react";
 export default function Navigation() {
   const user: any = useSession();
   return (
-    <nav className="flex justify-between p-5 bg-slate-700">
+    <nav className="flex justify-between p-5 bg-blue-950">
       <div>
         <Link href="/">Budget Planning</Link>
       </div>
