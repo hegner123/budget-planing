@@ -1,4 +1,3 @@
-import { Link } from "@mui/material";
 import { useBalance } from "@budget/hooks/balance/useBalance";
 import { useExpenses } from "@budget/hooks/expenses/useExpenses";
 import { useIncome } from "@budget/hooks/income/useIncome";
@@ -8,12 +7,13 @@ import { AddIncomeForm } from "@budget/components/addIncome/addIncome";
 import { AddExpenseForm } from "@budget/components/addExpenses/addExpenses";
 import { AddBalanceForm } from "@budget/components/addBalance/addBalance";
 import { hydrateRoot } from "react-dom/client";
-import AddIcon from "@mui/icons-material/Add";
 import MaterialTable, { MTableActions } from "@material-table/core";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import Button from "@mui/material/Button";
 import { useAtom } from "jotai";
-import { showNotificationAtom, notificationQueAtom } from "@budget/store/state";
+import {
+  showNotificationAtom,
+  notificationMessageAtom,
+} from "@budget/store/state";
 
 const Dashboard = () => {
   const { balance, fetchedBalance } = useBalance();
@@ -24,8 +24,8 @@ const Dashboard = () => {
   const [expenseData, setExpenseData] = useState<any>(null);
   const [incomeData, setIncomeData] = useState<any>(null);
   const [data, setData] = useState<any>(null);
-  const [showNotification, setShowNotification] = useAtom(showNotificationAtom);
-  const [notificationQue, setNotificationQue] = useAtom(notificationQueAtom);
+  const [, setShowNotification] = useAtom(showNotificationAtom);
+  const [, setNotificationMessage] = useAtom(notificationMessageAtom);
 
   useEffect(() => {
     if (!balance) return;
@@ -78,26 +78,14 @@ const Dashboard = () => {
     return `${month}/${day}/${year}`;
   }
 
-  function newTestMessage() {
-    setShowNotification(true);
-    setNotificationQue([
-      ...notificationQue,
-      {
-        id: new Date().toDateString(),
-        message: "Test Message",
-        type: "success",
-      },
-    ]);
-  }
   return (
     <main className="p-5 dashboard-main">
       <h1 className="mb-5 text-6xl">Dashboard</h1>
       <div className="mb-5 ">
-        <ButtonGroup variant="contained">
+        <ButtonGroup>
+          <AddBalanceForm />
           <AddIncomeForm />
           <AddExpenseForm />
-          <AddBalanceForm />
-          <button onClick={() => newTestMessage()}>Test SnackBar</button>
         </ButtonGroup>
       </div>
       {data && (
@@ -111,6 +99,11 @@ const Dashboard = () => {
             { title: "Date", field: "date" },
           ]}
           data={data}
+          options={{
+            headerStyle: { color: "white", background: "black" },
+            pageSize: 20,
+          }}
+          style={{ background: "black", color: "white" }}
         />
       )}
     </main>

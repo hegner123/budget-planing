@@ -6,8 +6,14 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { useUser } from "@supabase/auth-helpers-react";
 const AddIncomeForm = () => {
   const [open, setOpen] = useState<boolean>(false);
+  const [name, setName] = useState<any>("");
+  const [amount, setAmount] = useState<any>("");
+  const [repeated, setRepeated] = useState<any>("");
+  const [frequency, setFrequency] = useState<any>("");
+  const user: any = useUser();
   function handleOpen() {
     setOpen(true);
   }
@@ -15,13 +21,14 @@ const AddIncomeForm = () => {
     setOpen(false);
   };
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    const name = e.target.name.value;
-    const amount = e.target.amount.value;
-    const repeated = e.target.repeated.value;
-    const frequency = e.target.frequency.value;
-    console.log(name, amount, repeated, frequency);
+  const handleSubmit = () => {
+    const formSubmit = {
+      name: name,
+      amount: amount,
+      repeated: repeated,
+      repeated_date: frequency,
+      user: user.id,
+    };
     handleClose();
   };
   return (
@@ -42,24 +49,32 @@ const AddIncomeForm = () => {
                 id="name"
                 label="Name"
                 variant="outlined"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full mt-5"
               />
               <TextField
                 id="amount"
                 label="Amount"
                 variant="outlined"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
                 className="w-full mt-5"
               />
               <TextField
                 id="repeated"
                 label="Repeated"
                 variant="outlined"
+                value={repeated}
+                onChange={(e) => setRepeated(e.target.value)}
                 className="w-full mt-5"
               />
               <TextField
                 id="frequency"
                 label="Frequency"
                 variant="outlined"
+                value={frequency}
+                onChange={(e) => setFrequency(e.target.value)}
                 className="w-full mt-5"
               />
             </form>
@@ -68,7 +83,7 @@ const AddIncomeForm = () => {
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button
-            onClick={handleSubmit}
+            onClick={() => handleSubmit()}
             variant="contained"
             className="text-black hover:text-white">
             Add

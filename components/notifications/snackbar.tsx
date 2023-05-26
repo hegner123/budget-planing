@@ -4,11 +4,16 @@ import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { useAtom } from "jotai";
-import { showNotificationAtom, notificationQueAtom } from "@budget/store/state";
+import {
+  showNotificationAtom,
+  notificationMessageAtom,
+} from "@budget/store/state";
 
 export default function SimpleSnackbar(message: any) {
   const [showNotification, setShowNotification] = useAtom(showNotificationAtom);
-  const [notificationQue, setNotificationQue] = useAtom(notificationQueAtom);
+  const [notificationMessage, setNotificationMessage] = useAtom(
+    notificationMessageAtom
+  );
 
   const handleClose = (
     event: React.SyntheticEvent | Event,
@@ -19,9 +24,7 @@ export default function SimpleSnackbar(message: any) {
     }
 
     setShowNotification(false);
-    setNotificationQue(
-      notificationQue.filter((item: any) => item.id !== message.id)
-    );
+    setNotificationMessage("");
   };
 
   const action = (
@@ -38,18 +41,13 @@ export default function SimpleSnackbar(message: any) {
 
   return (
     <div>
-      {notificationQue.map((notification: any, i: any) => (
-        <>
-          <Snackbar
-            key={i}
-            open={showNotification}
-            autoHideDuration={6000}
-            onClose={handleClose}
-            message={notification.message}
-            action={action}
-          />
-        </>
-      ))}
+      <Snackbar
+        open={showNotification}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message={notificationMessage}
+        action={action}
+      />
     </div>
   );
 }

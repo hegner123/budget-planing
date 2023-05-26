@@ -1,18 +1,19 @@
 import { useState } from "react";
 import { useAtom } from "jotai";
-import { showNotificationAtom, notificationQueAtom } from "@budget/store/state";
+import {
+  showNotificationAtom,
+  notificationMessageAtom,
+} from "@budget/store/state";
 
 const useErrorHandler = () => {
   const [showNotification, setShowNotification] = useAtom(showNotificationAtom);
-  const [notificationQue, setNotificationQue] = useAtom(notificationQueAtom);
+  const [notificationQue, setNotificationQue] = useAtom(
+    notificationMessageAtom
+  );
 
   const handleError = (error: any, message: any, type: any) => {
     setShowNotification(true);
-
-    setNotificationQue([
-      ...notificationQue,
-      { id: new Date().toDateString(), message, type },
-    ]);
+    setNotificationQue(message);
   };
 
   return { handleError };

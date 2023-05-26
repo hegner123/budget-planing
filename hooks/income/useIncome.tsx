@@ -2,13 +2,18 @@ import { useState, useEffect } from "react";
 import { getIncomes } from "@budget/supabaseTables";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useAtom } from "jotai";
-import { showNotificationAtom, notificationQueAtom } from "@budget/store/state";
+import {
+  showNotificationAtom,
+  notificationMessageAtom,
+} from "@budget/store/state";
 
 export const useIncome = () => {
-  const [income, setIncome] = useState(null);
+  const [income, setIncome] = useState<any>(null);
   const [fetchedIncome, setFetched] = useState(false);
   const [, setShowNotification] = useAtom(showNotificationAtom);
-  const [notificationQue, setNotificationQue] = useAtom(notificationQueAtom);
+  const [notificationMessage, setNotificationMessage] = useAtom(
+    notificationMessageAtom
+  );
   const user: any = useUser();
   const supabaseClient = useSupabaseClient();
 
@@ -18,36 +23,18 @@ export const useIncome = () => {
     getIncomes(user?.id, supabaseClient)
       .then((data: any) => {
         setFetched(true);
-        setShowNotification(true);
-        setNotificationQue([
-          ...notificationQue,
-          {
-            id: new Date().toDateString(),
-            message: "Income fetched",
-            type: "success",
-          },
-        ]);
         setIncome(data);
       })
       .then((err: any) => {
-        setShowNotification(true);
-
-        setNotificationQue([
-          ...notificationQue,
-          {
-            id: new Date().toDateString(),
-            message: "Balance fetched",
-            type: "success",
-          },
-        ]);
+        console.log(err);
       });
   }, [
     fetchedIncome,
     supabaseClient,
     user,
-    notificationQue,
+    notificationMessage,
     setShowNotification,
-    setNotificationQue,
+    setNotificationMessage,
   ]);
 
   function addIncome(e: any) {}
