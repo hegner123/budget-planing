@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
-import { getExpenses, addExpenses } from "@budget/supabaseTables";
+import {
+  getExpenses,
+  addExpenses,
+  deleteExpenses,
+} from "@budget/supabaseTables";
 import { ExpenseObject } from "@budget/types/expenses";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useAtom } from "jotai";
@@ -45,5 +49,9 @@ export const useExpenses = () => {
     addExpenses({ ...data, supabaseClient });
   }
 
-  return { expenses, fetchedExpenses, addExpense };
+  function deleteExpense(id: string) {
+    deleteExpenses(id, supabaseClient);
+  }
+
+  return { expenses, fetchedExpenses, addExpense, deleteExpense };
 };

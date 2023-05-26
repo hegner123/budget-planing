@@ -38,3 +38,11 @@ export async function getIncomes(user: any, supabaseClient: any) {
 
   return { data, error };
 }
+
+export async function deleteIncome(id: any, supabaseClient: any) {
+  let { data, error } = await supabaseClient
+    .from("Income")
+    .delete()
+    .eq("id", id);
+  return { data, error };
+}

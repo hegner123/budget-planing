@@ -37,3 +37,11 @@ export async function getExpenses(user: any, supabaseClient: any) {
     .eq("user", user);
   return { data, error };
 }
+
+export async function deleteExpenses(id: any, supabaseClient: any) {
+  let { data, error } = await supabaseClient
+    .from("Expenses")
+    .delete()
+    .eq("id", id);
+  return { data, error };
+}

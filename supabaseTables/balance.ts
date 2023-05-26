@@ -24,3 +24,11 @@ export async function getBalance(user: string, supabaseClient: any) {
 
   return { data, error };
 }
+
+export async function deleteBalance(id: any, supabaseClient: any) {
+  let { data, error } = await supabaseClient
+    .from("Balance")
+    .delete()
+    .eq("id", id);
+  return { data, error };
+}

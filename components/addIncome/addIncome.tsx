@@ -40,7 +40,13 @@ const AddIncomeForm = () => {
   };
 
   const handleSubmit = () => {
-    const expenseDate = `${frequency.$M + 1}/${frequency.$D}/${frequency.$y}`;
+    let expenseDate: any = `${frequency.$M + 1}/${frequency.$D}/${
+      frequency.$y
+    }`;
+    if (repeated === false) {
+      expenseDate = null;
+    }
+
     const formSubmit = {
       name: name,
       amount: amount,
