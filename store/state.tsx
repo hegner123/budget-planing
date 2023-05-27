@@ -3,6 +3,7 @@ import { Provider, createStore, atom } from "jotai";
 
 const budgetStore = createStore();
 
+const compiledDataAtom = atom([]);
 const showNotificationAtom = atom(false);
 const notificationMessageAtom = atom("");
 const deleteEntryAtom = atom("");
@@ -13,6 +14,7 @@ const refreshedExpensesAtom = atom([]);
 const refreshedIncomeAtom = atom([]);
 
 export {
+  compiledDataAtom,
   showNotificationAtom,
   notificationMessageAtom,
   deleteEntryAtom,

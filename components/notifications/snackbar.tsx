@@ -9,8 +9,8 @@ import {
   notificationMessageAtom,
 } from "@budget/store/state";
 
-export default function SimpleSnackbar(message: any) {
-  const [showNotification, setShowNotification] = useAtom(showNotificationAtom);
+export default function SimpleSnackbar() {
+  const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useAtom(
     notificationMessageAtom
   );
@@ -38,6 +38,12 @@ export default function SimpleSnackbar(message: any) {
       </IconButton>
     </>
   );
+
+  useEffect(() => {
+    if (notificationMessage !== "") {
+      setShowNotification(true);
+    }
+  }, [showNotification, notificationMessage]);
 
   return (
     <div>

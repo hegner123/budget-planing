@@ -114,24 +114,22 @@ const AddExpenseForm = () => {
                   <MenuItem value={"true"}>True</MenuItem>
                 </Select>
               </FormControl>
-              {repeated && (
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    value={frequency}
-                    onChange={(newValue) => setFrequency(newValue)}
-                    renderInput={(
-                      props: JSX.IntrinsicAttributes & TextFieldProps
-                    ) => (
-                      <TextField
-                        {...props}
-                        id="frequency"
-                        label="Frequency"
-                        className="w-full mt-5"
-                      />
-                    )}
-                  />
-                </LocalizationProvider>
-              )}
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  value={frequency}
+                  onChange={(newValue) => setFrequency(newValue)}
+                  renderInput={(
+                    props: JSX.IntrinsicAttributes & TextFieldProps
+                  ) => (
+                    <TextField
+                      {...props}
+                      id="date"
+                      label="Date"
+                      className="w-full mt-5"
+                    />
+                  )}
+                />
+              </LocalizationProvider>
             </form>
           </DialogContent>
         </div>

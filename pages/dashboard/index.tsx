@@ -3,12 +3,12 @@ import { useBalance } from "@budget/hooks/balance/useBalance";
 import { useExpenses } from "@budget/hooks/expenses/useExpenses";
 import { useIncome } from "@budget/hooks/income/useIncome";
 import useErrorHandler from "@budget/hooks/errorHandle/handler";
-import { useState, useEffect, SyntheticEvent, use } from "react";
+import { useState, useEffect } from "react";
 import { AddIncomeForm } from "@budget/components/addIncome/addIncome";
 import { AddExpenseForm } from "@budget/components/addExpenses/addExpenses";
 import { AddBalanceForm } from "@budget/components/addBalance/addBalance";
 import { useRouter } from "next/router";
-import MaterialTable, { MTableActions } from "@material-table/core";
+import MaterialTable from "@material-table/core";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -20,6 +20,7 @@ import {
   refreshedBalanceAtom,
   refreshedExpensesAtom,
   refreshedIncomeAtom,
+  compiledDataAtom,
 } from "@budget/store/state";
 
 const Dashboard = () => {
@@ -37,6 +38,7 @@ const Dashboard = () => {
   const [refreshedBalance] = useAtom(refreshedBalanceAtom);
   const [refreshedExpenses] = useAtom(refreshedExpensesAtom);
   const [refreshedIncome] = useAtom(refreshedIncomeAtom);
+  const [, setCompiledData] = useAtom(compiledDataAtom);
 
   useEffect(() => {}, [refreshedBalance, refreshedExpenses, refreshedIncome]);
 
@@ -45,15 +47,12 @@ const Dashboard = () => {
     setExpenseData(parseData(expenses, "expense"));
     setIncomeData(parseData(income, "income"));
     if (refreshedBalance.length > 0) {
-      console.log(refreshedBalance);
       setBalanceData(parseData(refreshedBalance, "balance"));
     }
     if (refreshedExpenses.length > 0) {
-      console.log(refreshedExpenses);
-      setExpenseData(parseData(refreshedExpenses, "expense"));
+      setExpenseData(parseData(refreshedExpenses, "expenses"));
     }
     if (refreshedIncome.length > 0) {
-      console.log(refreshedIncome);
       setIncomeData(parseData(refreshedIncome, "income"));
     }
 
@@ -88,10 +87,11 @@ const Dashboard = () => {
     }
     function setTableData(balanceData: any, expenseData: any, incomeData: any) {
       setData([...balanceData, ...expenseData, ...incomeData]);
+      setCompiledData([...balanceData, ...expenseData, ...incomeData] as any);
     }
-  }, [balanceData, expenseData, incomeData]);
+  }, [balanceData, expenseData, incomeData, setCompiledData]);
 
-  function handleDelete(id: string, type: string) {
+  function prepDelete(id: string, type: string) {
     setDeleteEntry(id);
     setDeleteEntryType(type);
   }
@@ -129,7 +129,7 @@ const Dashboard = () => {
               tooltip: "Delete",
               onClick: (e, rowData: any) => {
                 setOpenDialog(true);
-                handleDelete(rowData.id, rowData.type);
+                prepDelete(rowData.id, rowData.type);
               },
             },
           ]}
@@ -140,12 +140,10 @@ const Dashboard = () => {
                   <div className="text-white cursor-pointer">
                     {props.actions.map((action: any) => {
                       return (
-                        <div className="flex justify-between" key={action.icon}>
-                          <div
-                            className="mr-5"
-                            onClick={(e) => action.onClick(e, props.data)}>
-                            <DeleteIcon />
-                          </div>
+                        <div
+                          key={action.icon}
+                          onClick={(e) => action.onClick(e, props.data)}>
+                          <DeleteIcon color="action" />
                         </div>
                       );
                     })}
@@ -167,10 +165,8 @@ const Dashboard = () => {
           ]}
           data={data}
           options={{
-            headerStyle: { color: "white", background: "black" },
-            pageSize: 20,
+            pageSize: 5,
           }}
-          style={{ background: "black", color: "white" }}
         />
       )}
       <DeleteDialog open={openDialog} close={() => setOpenDialog(false)} />
