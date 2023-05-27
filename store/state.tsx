@@ -12,6 +12,7 @@ const needsRefreshAtom = atom(false);
 const refreshedBalanceAtom = atom([]);
 const refreshedExpensesAtom = atom([]);
 const refreshedIncomeAtom = atom([]);
+const configForecastAtom = atom({});
 
 export {
   compiledDataAtom,
@@ -23,6 +24,7 @@ export {
   refreshedBalanceAtom,
   refreshedExpensesAtom,
   refreshedIncomeAtom,
+  configForecastAtom,
 };
 
 const JotaiProvider = ({ children }: any) => {

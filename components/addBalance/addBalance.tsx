@@ -16,7 +16,7 @@ const AddBalanceForm = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [amount, setAmount] = useState<any>("");
   const [name, setName] = useState<any>("");
-  const [date, setDate] = useState<any>("");
+  const [date, setDate] = useState<any>(null);
   const { addBalanceHook } = useBalance();
 
   const user: any = useUser();
@@ -74,18 +74,10 @@ const AddBalanceForm = () => {
 
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
+                  label="Date"
                   value={date}
                   onChange={(newValue) => setDate(newValue)}
-                  renderInput={(
-                    props: JSX.IntrinsicAttributes & TextFieldProps
-                  ) => (
-                    <TextField
-                      {...props}
-                      id="date"
-                      label="Date"
-                      className="w-full mt-5"
-                    />
-                  )}
+                  className="w-full mt-5"
                 />
               </LocalizationProvider>
             </form>

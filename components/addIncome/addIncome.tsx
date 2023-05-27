@@ -27,7 +27,7 @@ const AddIncomeForm = () => {
   const [name, setName] = useState<any>("");
   const [amount, setAmount] = useState<any>("");
   const [repeated, setRepeated] = useState<boolean>(false);
-  const [date, setDate] = useState<any>("default");
+  const [date, setDate] = useState<any>(null);
   const [, setShowNotification] = useAtom(showNotificationAtom);
   const [, setNotificationMessage] = useAtom(notificationMessageAtom);
   const { addIncomeSubmit } = useIncome();
@@ -112,18 +112,10 @@ const AddIncomeForm = () => {
 
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
+                  label="Date"
                   value={date}
                   onChange={(newValue) => setDate(newValue)}
-                  renderInput={(
-                    props: JSX.IntrinsicAttributes & TextFieldProps
-                  ) => (
-                    <TextField
-                      {...props}
-                      id="date"
-                      label="Date"
-                      className="w-full mt-5"
-                    />
-                  )}
+                  className="w-full mt-5"
                 />
               </LocalizationProvider>
             </form>

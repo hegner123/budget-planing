@@ -2,12 +2,10 @@ import Link from "next/link";
 import { useBalance } from "@budget/hooks/balance/useBalance";
 import { useExpenses } from "@budget/hooks/expenses/useExpenses";
 import { useIncome } from "@budget/hooks/income/useIncome";
-import useErrorHandler from "@budget/hooks/errorHandle/handler";
 import { useState, useEffect } from "react";
 import { AddIncomeForm } from "@budget/components/addIncome/addIncome";
 import { AddExpenseForm } from "@budget/components/addExpenses/addExpenses";
 import { AddBalanceForm } from "@budget/components/addBalance/addBalance";
-import { useRouter } from "next/router";
 import MaterialTable from "@material-table/core";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
@@ -83,6 +81,10 @@ const Dashboard = () => {
   useEffect(() => {
     if (balanceData && expenseData && incomeData) {
       setTableData(balanceData, expenseData, incomeData);
+      sessionStorage.setItem(
+        "compiledData",
+        JSON.stringify([...balanceData, ...expenseData, ...incomeData])
+      );
       setLoading(false);
     }
     function setTableData(balanceData: any, expenseData: any, incomeData: any) {
@@ -112,7 +114,7 @@ const Dashboard = () => {
           <AddIncomeForm />
           <AddExpenseForm />
         </ButtonGroup>
-        <Link href="/dashboard/forecast">
+        <Link href="/forecast">
           <Button
             variant="contained"
             className="text-black bg-[#1976d2] border-[#1976d2] hover:text-white hover:bg-black hover:border-white border-solid border-2">

@@ -27,7 +27,7 @@ const AddExpenseForm = () => {
   const [name, setName] = useState<any>("");
   const [amount, setAmount] = useState<any>("");
   const [repeated, setRepeated] = useState<boolean>(false);
-  const [frequency, setFrequency] = useState<any>("default");
+  const [date, setDate] = useState<any>(null);
   const [, setShowNotification] = useAtom(showNotificationAtom);
   const [, setNotificationMessage] = useAtom(notificationMessageAtom);
   const { addExpense } = useExpenses();
@@ -40,9 +40,7 @@ const AddExpenseForm = () => {
   };
 
   const handleSubmit = () => {
-    let expenseDate: any = `${frequency.$M + 1}/${frequency.$D}/${
-      frequency.$y
-    }`;
+    let expenseDate: any = `${date.$M + 1}/${date.$D}/${date.$y}`;
     if (repeated === false) {
       expenseDate = null;
     }
@@ -116,18 +114,10 @@ const AddExpenseForm = () => {
               </FormControl>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  value={frequency}
-                  onChange={(newValue) => setFrequency(newValue)}
-                  renderInput={(
-                    props: JSX.IntrinsicAttributes & TextFieldProps
-                  ) => (
-                    <TextField
-                      {...props}
-                      id="date"
-                      label="Date"
-                      className="w-full mt-5"
-                    />
-                  )}
+                  label="Date"
+                  value={date}
+                  onChange={(newValue) => setDate(newValue)}
+                  className="w-full mt-5"
                 />
               </LocalizationProvider>
             </form>

@@ -4,6 +4,7 @@ import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 
 export default function Home() {
   const router = useRouter();
+  const supabase = useSupabaseClient();
   const user = useUser();
   useEffect(() => {
     console.log(user);
