@@ -3,7 +3,7 @@ import { useBalance } from "@budget/hooks/balance/useBalance";
 import { useExpenses } from "@budget/hooks/expenses/useExpenses";
 import { useIncome } from "@budget/hooks/income/useIncome";
 import useErrorHandler from "@budget/hooks/errorHandle/handler";
-import { useState, useEffect, SyntheticEvent } from "react";
+import { useState, useEffect, SyntheticEvent, use } from "react";
 import { AddIncomeForm } from "@budget/components/addIncome/addIncome";
 import { AddExpenseForm } from "@budget/components/addExpenses/addExpenses";
 import { AddBalanceForm } from "@budget/components/addBalance/addBalance";
@@ -15,77 +15,86 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteDialog from "@budget/components/dialogs/deleteDialog";
 import { useAtom } from "jotai";
 import {
-  showNotificationAtom,
-  notificationMessageAtom,
+  deleteEntryAtom,
+  deleteEntryTypeAtom,
+  refreshedBalanceAtom,
+  refreshedExpensesAtom,
+  refreshedIncomeAtom,
 } from "@budget/store/state";
 
 const Dashboard = () => {
   const { balance, fetchedBalance } = useBalance();
-  const { expenses, fetchedExpenses, deleteExpense } = useExpenses();
+  const { expenses, fetchedExpenses } = useExpenses();
   const { income, fetchedIncome } = useIncome();
   const [openDialog, setOpenDialog] = useState(false);
   const [loading, setLoading] = useState(true);
-  const { handleError } = useErrorHandler();
   const [balanceData, setBalanceData] = useState<any>(null);
   const [expenseData, setExpenseData] = useState<any>(null);
   const [incomeData, setIncomeData] = useState<any>(null);
   const [data, setData] = useState<any>(null);
-  const [, setShowNotification] = useAtom(showNotificationAtom);
-  const [, setNotificationMessage] = useAtom(notificationMessageAtom);
-  const router = useRouter();
+  const [, setDeleteEntry] = useAtom(deleteEntryAtom);
+  const [, setDeleteEntryType] = useAtom(deleteEntryTypeAtom);
+  const [refreshedBalance] = useAtom(refreshedBalanceAtom);
+  const [refreshedExpenses] = useAtom(refreshedExpensesAtom);
+  const [refreshedIncome] = useAtom(refreshedIncomeAtom);
+
+  useEffect(() => {}, [refreshedBalance, refreshedExpenses, refreshedIncome]);
 
   useEffect(() => {
-    if (!balance) return;
-    let parsedBalanceData = balance?.data?.map((item: any) => {
-      return {
-        id: item.id,
-        name: item.name,
-        amount: `$${item.amount}`,
-        date: formatDate(new Date(item.date)),
-      };
-    });
-    setBalanceData(parsedBalanceData);
-    let parsedExpensesData = expenses?.data?.map((item: any) => {
-      return {
-        id: item.id,
-        name: item.name,
-        expenses: `$${item.amount}`,
-        date: formatDate(new Date(item.date)),
-      };
-    });
-    setExpenseData(parsedExpensesData);
-    let parsedIncomeData = income?.data?.map((item: any) => {
-      return {
-        id: item.id,
-        name: item.name,
-        income: `$${item.amount}`,
-        date: formatDate(new Date(item.date)),
-      };
-    });
-    setIncomeData(parsedIncomeData);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+    setBalanceData(parseData(balance, "balance"));
+    setExpenseData(parseData(expenses, "expense"));
+    setIncomeData(parseData(income, "income"));
+    if (refreshedBalance.length > 0) {
+      console.log(refreshedBalance);
+      setBalanceData(parseData(refreshedBalance, "balance"));
+    }
+    if (refreshedExpenses.length > 0) {
+      console.log(refreshedExpenses);
+      setExpenseData(parseData(refreshedExpenses, "expense"));
+    }
+    if (refreshedIncome.length > 0) {
+      console.log(refreshedIncome);
+      setIncomeData(parseData(refreshedIncome, "income"));
+    }
+
+    function parseData(data: any, type: string) {
+      let parsedData = data?.map((item: any) => {
+        return {
+          id: item.id,
+          name: item.name,
+          [type]: `$${item.amount}`,
+          date: formatDate(new Date(item.date)),
+          type: type,
+        };
+      });
+      return parsedData;
+    }
   }, [
-    fetchedBalance,
     balance,
     expenses,
-    fetchedExpenses,
     income,
+    fetchedBalance,
+    fetchedExpenses,
     fetchedIncome,
+    refreshedBalance,
+    refreshedExpenses,
+    refreshedIncome,
   ]);
-
-  function handleDelete(id: string) {
-    deleteExpense(id);
-    setShowNotification(true);
-    setNotificationMessage("Expense Deleted");
-  }
 
   useEffect(() => {
     if (balanceData && expenseData && incomeData) {
+      setTableData(balanceData, expenseData, incomeData);
+      setLoading(false);
+    }
+    function setTableData(balanceData: any, expenseData: any, incomeData: any) {
       setData([...balanceData, ...expenseData, ...incomeData]);
     }
   }, [balanceData, expenseData, incomeData]);
+
+  function handleDelete(id: string, type: string) {
+    setDeleteEntry(id);
+    setDeleteEntryType(type);
+  }
 
   function formatDate(date: any) {
     let day = date.getDate();
@@ -120,7 +129,7 @@ const Dashboard = () => {
               tooltip: "Delete",
               onClick: (e, rowData: any) => {
                 setOpenDialog(true);
-                handleDelete(rowData.id);
+                handleDelete(rowData.id, rowData.type);
               },
             },
           ]}
@@ -147,8 +156,11 @@ const Dashboard = () => {
           }}
           title="Balance"
           columns={[
-            { title: "Description", field: "name" },
-            { title: "Amount", field: "amount" },
+            {
+              title: "Description",
+              field: "name",
+            },
+            { title: "Balance", field: "balance" },
             { title: "Income", field: "income" },
             { title: "Expenses", field: "expenses" },
             { title: "Date", field: "date" },

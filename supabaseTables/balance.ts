@@ -32,3 +32,5 @@ export async function deleteBalance(id: any, supabaseClient: any) {
     .eq("id", id);
   return { data, error };
 }
+
+

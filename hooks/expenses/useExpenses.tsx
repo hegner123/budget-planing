@@ -4,22 +4,14 @@ import {
   addExpenses,
   deleteExpenses,
 } from "@budget/supabaseTables";
-import { ExpenseObject } from "@budget/types/expenses";
-import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { refreshedExpensesAtom } from "@budget/store/state";
 import { useAtom } from "jotai";
-import {
-  showNotificationAtom,
-  notificationMessageAtom,
-} from "@budget/store/state";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 
 export const useExpenses = () => {
   const [expenses, setExpenses] = useState<any>(null);
   const [fetchedExpenses, setFetched] = useState(false);
-  const [, setShowNotification] = useAtom(showNotificationAtom);
-  const [notificationMessage, setNotificationMessage] = useAtom(
-    notificationMessageAtom
-  );
-
+  const [, setRefreshedExpenses] = useAtom(refreshedExpensesAtom);
   const user: any = useUser();
   const supabaseClient = useSupabaseClient();
 
@@ -27,31 +19,69 @@ export const useExpenses = () => {
     if (fetchedExpenses) return;
     if (!user) return;
     getExpenses(user?.id, supabaseClient)
-      .then((data: any) => {
+      .then((res: any) => {
+        setExpenses(res.data);
         setFetched(true);
-        setExpenses(data);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [
-    fetchedExpenses,
-    supabaseClient,
-    user,
-    notificationMessage,
-    setShowNotification,
-    setNotificationMessage,
-  ]);
+  }, [fetchedExpenses, supabaseClient, user]);
+
+  const LiveExpenses = supabaseClient
+    .channel("custom-all-channel")
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "Expenses" },
+      (payload) => {
+        console.log("Change received!", payload);
+        handleUpdatedData(payload);
+      }
+    )
+    .subscribe();
 
   function addExpense(data: any) {
-    setShowNotification(true);
-    setNotificationMessage(JSON.stringify(data));
-    addExpenses({ ...data, supabaseClient });
+    addExpenses({ ...data, supabaseClient: supabaseClient });
   }
 
   function deleteExpense(id: string) {
     deleteExpenses(id, supabaseClient);
   }
 
-  return { expenses, fetchedExpenses, addExpense, deleteExpense };
+  function handleUpdatedData(data: any) {
+    switch (data.eventType) {
+      case "INSERT":
+        let newExpenses = [data.new, ...expenses];
+        setRefreshedExpenses(newExpenses as any);
+        setExpenses(newExpenses);
+        break;
+      case "UPDATE":
+        const updatedExpenses = expenses.map((entry: any) => {
+          if (entry.id === data.new.id) {
+            return data.new;
+          }
+          return entry;
+        });
+        setRefreshedExpenses(updatedExpenses);
+        setExpenses(updatedExpenses);
+        break;
+      case "DELETE":
+        const filteredExpenses = expenses.filter(
+          (entry: any) => entry.id !== data.old.id
+        );
+        setRefreshedExpenses(filteredExpenses);
+        setExpenses(filteredExpenses);
+        break;
+      default:
+        console.log("No event type found");
+    }
+  }
+
+  return {
+    expenses,
+    fetchedExpenses,
+    LiveExpenses,
+    addExpense,
+    deleteExpense,
+  };
 };

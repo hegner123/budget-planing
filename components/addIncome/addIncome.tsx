@@ -27,7 +27,7 @@ const AddIncomeForm = () => {
   const [name, setName] = useState<any>("");
   const [amount, setAmount] = useState<any>("");
   const [repeated, setRepeated] = useState<boolean>(false);
-  const [frequency, setFrequency] = useState<any>("default");
+  const [date, setDate] = useState<any>("default");
   const [, setShowNotification] = useAtom(showNotificationAtom);
   const [, setNotificationMessage] = useAtom(notificationMessageAtom);
   const { addIncomeSubmit } = useIncome();
@@ -40,18 +40,13 @@ const AddIncomeForm = () => {
   };
 
   const handleSubmit = () => {
-    let expenseDate: any = `${frequency.$M + 1}/${frequency.$D}/${
-      frequency.$y
-    }`;
-    if (repeated === false) {
-      expenseDate = null;
-    }
+    let incomeDate: any = `${date.$M + 1}/${date.$D}/${date.$y}`;
 
     const formSubmit = {
       name: name,
       amount: amount,
       repeated: repeated,
-      repeated_date: expenseDate,
+      repeated_date: incomeDate,
       user: user.id,
     };
     addIncomeSubmit(formSubmit);
@@ -59,8 +54,6 @@ const AddIncomeForm = () => {
   };
 
   const handleRepeatChange = (newValue: any) => {
-    setShowNotification(true);
-    setNotificationMessage(newValue);
     if (newValue === "true") {
       setRepeated(true);
     } else {
@@ -116,24 +109,23 @@ const AddIncomeForm = () => {
                   <MenuItem value={"true"}>True</MenuItem>
                 </Select>
               </FormControl>
-              {repeated && (
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    value={frequency}
-                    onChange={(newValue) => setFrequency(newValue)}
-                    renderInput={(
-                      props: JSX.IntrinsicAttributes & TextFieldProps
-                    ) => (
-                      <TextField
-                        {...props}
-                        id="frequency"
-                        label="Frequency"
-                        className="w-full mt-5"
-                      />
-                    )}
-                  />
-                </LocalizationProvider>
-              )}
+
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  value={date}
+                  onChange={(newValue) => setDate(newValue)}
+                  renderInput={(
+                    props: JSX.IntrinsicAttributes & TextFieldProps
+                  ) => (
+                    <TextField
+                      {...props}
+                      id="date"
+                      label="Date"
+                      className="w-full mt-5"
+                    />
+                  )}
+                />
+              </LocalizationProvider>
             </form>
           </DialogContent>
         </div>

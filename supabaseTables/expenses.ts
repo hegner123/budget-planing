@@ -8,23 +8,24 @@ export async function addExpenses({
 }: {
   user: string;
   name: string;
-  amount: string;
+  amount: number;
   repeated: string;
   repeated_date: string;
   supabaseClient: any;
 }) {
   if (!user) throw new Error("No user provided");
-  if (!name) throw new Error("No amount provided");
-  if (!amount) throw new Error("No date provided");
-  if (!repeated) throw new Error("No date provided");
-  if (!repeated_date) throw new Error("No recurrence provided");
-  const { data, error } = await supabaseClient.from("expense").insert([
+  if (!name) throw new Error("No name provided");
+  if (!amount) throw new Error("No amount provided");
+
+  let repeated_date_formatted = repeated_date ? `${repeated_date}` : null;
+
+  const { data, error } = await supabaseClient.from("Expenses").insert([
     {
       user: `${user}`,
       name: `${name}`,
       amount: `${amount}`,
       repeated: repeated,
-      repeated_date: `${repeated_date}`,
+      date: repeated_date_formatted,
     },
   ]);
 

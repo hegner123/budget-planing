@@ -84,6 +84,8 @@ const AddExpenseForm = () => {
                 id="name"
                 label="Name"
                 variant="outlined"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full mt-5"
               />
               <TextField

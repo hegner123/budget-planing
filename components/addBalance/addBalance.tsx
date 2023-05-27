@@ -6,27 +6,19 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import InputAdornment from "@mui/material/InputAdornment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import InputAdornment from "@mui/material/InputAdornment";
-import {
-  showNotificationAtom,
-  notificationMessageAtom,
-} from "@budget/store/state";
-import { useAtom } from "jotai";
-import { addBalance } from "@budget/supabaseTables";
-import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { useBalance } from "@budget/hooks/balance/useBalance";
+import { useUser } from "@supabase/auth-helpers-react";
 const AddBalanceForm = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [amount, setAmount] = useState<any>("");
   const [name, setName] = useState<any>("");
   const [date, setDate] = useState<any>("");
-  const [, setShowNotification] = useAtom(showNotificationAtom);
-  const [notificationMessage, setNotificationMessage] = useAtom(
-    notificationMessageAtom
-  );
-  const supabase: any = useSupabaseClient();
+  const { addBalanceHook } = useBalance();
+
   const user: any = useUser();
   function handleOpen() {
     setOpen(true);
@@ -36,19 +28,12 @@ const AddBalanceForm = () => {
   };
 
   const handleSubmit = () => {
-    const message = `${name} ${amount} ${date}`;
-    console.log(user.id);
-
     handleClose();
-    addBalance({
+    addBalanceHook({
       name: name,
       amount: amount,
       date: date,
       user: user.id,
-      supabaseClient: supabase,
-    }).then((data: any) => {
-      setShowNotification(true);
-      setNotificationMessage(JSON.stringify(data));
     });
   };
   return (
@@ -96,8 +81,8 @@ const AddBalanceForm = () => {
                   ) => (
                     <TextField
                       {...props}
-                      id="frequency"
-                      label="Frequency"
+                      id="date"
+                      label="Date"
                       className="w-full mt-5"
                     />
                   )}

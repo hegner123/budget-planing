@@ -5,8 +5,23 @@ const budgetStore = createStore();
 
 const showNotificationAtom = atom(false);
 const notificationMessageAtom = atom("");
+const deleteEntryAtom = atom("");
+const deleteEntryTypeAtom = atom("");
+const needsRefreshAtom = atom(false);
+const refreshedBalanceAtom = atom([]);
+const refreshedExpensesAtom = atom([]);
+const refreshedIncomeAtom = atom([]);
 
-export { showNotificationAtom, notificationMessageAtom };
+export {
+  showNotificationAtom,
+  notificationMessageAtom,
+  deleteEntryAtom,
+  deleteEntryTypeAtom,
+  needsRefreshAtom,
+  refreshedBalanceAtom,
+  refreshedExpensesAtom,
+  refreshedIncomeAtom,
+};
 
 const JotaiProvider = ({ children }: any) => {
   return <Provider store={budgetStore}>{children}</Provider>;
