@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { getBalance, addBalance, deleteBalance } from "@budget/supabaseTables";

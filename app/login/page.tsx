@@ -1,3 +1,4 @@
+"use client";
 import { useUser } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import { useLogin } from "@budget/hooks/auth/useLogin";

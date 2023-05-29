@@ -1,3 +1,4 @@
+"use client";
 import useRegister from "@budget/hooks/auth/useRegister";
 import Link from "next/link";
 import { SyntheticEvent } from "react";
@@ -14,8 +15,8 @@ const RegisterForm = () => {
   } = useRegister();
 
   return (
-    <section className="min-h-screen grid grid-cols-12 grid-rows-12 bg-slate-50">
-      <form className="p-4 my-auto rounded grid col-span-5 col-start-3 space-y-3 col-start bg-slate-400 max-h-max">
+    <section className="grid min-h-screen grid-cols-12 grid-rows-12 bg-slate-50">
+      <form className="grid col-span-5 col-start-3 p-4 my-auto space-y-3 rounded col-start bg-slate-400 max-h-max">
         <h1 className="text-6xl col-span-full">Register</h1>
         <label className="col-span-full " htmlFor="email">
           Email

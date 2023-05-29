@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { compiledDataAtom, configForecastAtom } from "@budget/store/state";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -32,7 +32,7 @@ export const ConfigForecast = () => {
 
   function handleSubmit() {
     setForecastLength(forecastDuration);
-    router.push(`/forecast/${forecastDuration}`);
+    router.push(`/forecast/reports/${forecastDuration}`);
   }
 
   return (
@@ -65,7 +65,7 @@ export const ConfigForecast = () => {
         />
       </LocalizationProvider>
       <Button
-        onClick={handleSubmit}
+        onClick={() => handleSubmit()}
         variant="contained"
         className="text-black bg-[#1976d2] border-[#1976d2] hover:text-white hover:bg-black hover:border-white border-solid border-2 col-span-4 h-fit w-fit self-center col-start-1">
         Submit

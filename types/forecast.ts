@@ -12,3 +12,12 @@ export interface ForecastLength {
   seconds: Number;
   years: Number;
 }
+
+export interface Forecast {
+  dates: ForecastData[];
+}
+
+export interface ForecastData {
+  date: Date;
+  [key: string]: any;
+}

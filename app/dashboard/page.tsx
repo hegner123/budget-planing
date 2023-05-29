@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { useBalance } from "@budget/hooks/balance/useBalance";
 import { useExpenses } from "@budget/hooks/expenses/useExpenses";

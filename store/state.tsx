@@ -1,6 +1,7 @@
 import { Provider, createStore, atom } from "jotai";
 import { ForecastLength } from "@budget/types/forecast";
 
+
 const budgetStore = createStore();
 
 const compiledDataAtom = atom([]);
@@ -14,6 +15,7 @@ const refreshedExpensesAtom = atom([]);
 const refreshedIncomeAtom = atom([]);
 const configForecastAtom = atom({});
 const configForecastDurationAtom = atom<any>(null);
+const showDebugModalAtom = atom(false);
 
 export {
   compiledDataAtom,
@@ -27,6 +29,7 @@ export {
   refreshedIncomeAtom,
   configForecastAtom,
   configForecastDurationAtom,
+  showDebugModalAtom,
 };
 
 const JotaiProvider = ({ children }: any) => {
