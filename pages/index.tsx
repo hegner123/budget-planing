@@ -10,10 +10,10 @@ export default function Home() {
     console.log(user);
   }, [user]);
 
-  // useEffect(() => {
-  //   console.log(user);
-  //   if (!user) router.push("/login");
-  //   router.push("/dashboard");
-  // }, [router, user]);
+  useEffect(() => {
+    console.log(user);
+    if (!user) router.push("/login");
+    router.push("/dashboard");
+  }, [router, user]);
   return <></>;
 }

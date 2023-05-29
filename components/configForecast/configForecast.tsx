@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -8,35 +9,38 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import dayjs, { Dayjs, duration } from "dayjs";
+import { useForecastLength } from "@budget/hooks/forecast/useForecastLength";
 import { useAtom } from "jotai";
-import { configForecastAtom } from "@budget/store/state";
+import { configForecastDurationAtom } from "@budget/store/state";
 
 export const ConfigForecast = () => {
-  const [forecastStart, setForecastStart] = useState<any>("");
-  const [forecastUnit, setForecastUnit] = useState<any>("");
-  const [forecastStartDate, setForecastStartDate] = useState<any>(null);
-  const [, setConfigForecast] = useAtom(configForecastAtom);
-  dayjs.extend(duration);
+  const {
+    setLength,
+    setUnit,
+    setStartDate,
+    length,
+    unit,
+    startDate,
+    forecastDuration,
+  } = useForecastLength();
+  const [, setForecastLength] = useAtom(configForecastDurationAtom);
+  const router = useRouter();
 
-  function handleSubmit() {
-    let forecastDuration = dayjs.duration(forecastStart, forecastUnit);
-    const formFields = {
-      forecastStart: forecastStartDate,
-      forecastDuration: forecastDuration,
-    };
-    setConfigForecast(formFields);
+  function handleChange(event: SelectChangeEvent) {
+    setUnit(event.target.value);
   }
 
-  const handleChange = (event: any) => {
-    setForecastUnit(event.target.value);
-  };
+  function handleSubmit() {
+    setForecastLength(forecastDuration);
+    router.push(`/forecast/${forecastDuration}`);
+  }
+
   return (
     <div className="grid grid-cols-12 gap-5">
       <TextField
         label="Forecast Length"
-        value={forecastStart}
-        onChange={(e) => setForecastStart(e.target.value)}
+        value={length}
+        onChange={(e) => setLength(e.target.value)}
         type="number"
         className="col-span-6 mt-5"
       />
@@ -44,7 +48,7 @@ export const ConfigForecast = () => {
         <InputLabel id="forecast-unit">Unit</InputLabel>
         <Select
           labelId="forecast-unit"
-          value={forecastUnit}
+          value={unit}
           label="Unit"
           onChange={handleChange}>
           <MenuItem value={"days"}>Days</MenuItem>
@@ -55,15 +59,15 @@ export const ConfigForecast = () => {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
           label="Forecast Start Date"
-          value={forecastStartDate}
-          onChange={(newValue) => setForecastStartDate(newValue)}
+          value={startDate}
+          onChange={(newValue) => setStartDate(newValue)}
           className="col-span-6 mt-5"
         />
       </LocalizationProvider>
       <Button
-        className="col-span-6 w-fit"
+        onClick={handleSubmit}
         variant="contained"
-        onClick={handleSubmit}>
+        className="text-black bg-[#1976d2] border-[#1976d2] hover:text-white hover:bg-black hover:border-white border-solid border-2 col-span-4 h-fit w-fit self-center col-start-1">
         Submit
       </Button>
     </div>

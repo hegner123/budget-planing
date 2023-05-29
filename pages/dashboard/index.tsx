@@ -33,16 +33,16 @@ const Dashboard = () => {
   const [data, setData] = useState<any>(null);
   const [, setDeleteEntry] = useAtom(deleteEntryAtom);
   const [, setDeleteEntryType] = useAtom(deleteEntryTypeAtom);
+  const [, setCompiledData] = useAtom(compiledDataAtom);
   const [refreshedBalance] = useAtom(refreshedBalanceAtom);
   const [refreshedExpenses] = useAtom(refreshedExpensesAtom);
   const [refreshedIncome] = useAtom(refreshedIncomeAtom);
-  const [, setCompiledData] = useAtom(compiledDataAtom);
 
   useEffect(() => {}, [refreshedBalance, refreshedExpenses, refreshedIncome]);
 
   useEffect(() => {
     setBalanceData(parseData(balance, "balance"));
-    setExpenseData(parseData(expenses, "expense"));
+    setExpenseData(parseData(expenses, "expenses"));
     setIncomeData(parseData(income, "income"));
     if (refreshedBalance.length > 0) {
       setBalanceData(parseData(refreshedBalance, "balance"));

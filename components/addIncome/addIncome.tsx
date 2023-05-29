@@ -37,16 +37,15 @@ const AddIncomeForm = () => {
   }
   const handleClose = () => {
     setOpen(false);
+    resetForm();
   };
 
   const handleSubmit = () => {
-    let incomeDate: any = `${date.$M + 1}/${date.$D}/${date.$y}`;
-
     const formSubmit = {
       name: name,
       amount: amount,
       repeated: repeated,
-      repeated_date: incomeDate,
+      date: date,
       user: user.id,
     };
     addIncomeSubmit(formSubmit);
@@ -59,6 +58,12 @@ const AddIncomeForm = () => {
     } else {
       setRepeated(false);
     }
+  };
+  const resetForm = () => {
+    setName("");
+    setAmount("");
+    setRepeated(false);
+    setDate(null);
   };
   return (
     <>

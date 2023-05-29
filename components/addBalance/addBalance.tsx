@@ -24,6 +24,7 @@ const AddBalanceForm = () => {
     setOpen(true);
   }
   const handleClose = () => {
+    resetForm();
     setOpen(false);
   };
 
@@ -35,6 +36,12 @@ const AddBalanceForm = () => {
       date: date,
       user: user.id,
     });
+  };
+
+  const resetForm = () => {
+    setName("");
+    setAmount("");
+    setDate(null);
   };
   return (
     <>

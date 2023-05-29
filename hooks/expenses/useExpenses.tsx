@@ -18,7 +18,7 @@ export const useExpenses = () => {
   useEffect(() => {
     if (fetchedExpenses) return;
     if (!user) return;
-    getExpenses(user?.id, supabaseClient)
+    getExpenses({ user: user?.id, supabaseClient: supabaseClient })
       .then((res: any) => {
         setExpenses(res.data);
         setFetched(true);
@@ -45,7 +45,7 @@ export const useExpenses = () => {
   }
 
   function deleteExpense(id: string) {
-    deleteExpenses(id, supabaseClient);
+    deleteExpenses({ id, supabaseClient: supabaseClient });
   }
 
   function handleUpdatedData(data: any) {

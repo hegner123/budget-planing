@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/router";
 
 const useRegister = () => {
   const [email, setEmail] = useState<String>("");
@@ -7,6 +8,7 @@ const useRegister = () => {
   const [passwordConfirmation, setPasswordConfirmation] = useState<String>("");
   const [error, setError] = useState<any>(null);
   const supabaseClient = useSupabaseClient();
+  const router = useRouter();
 
   async function registerUser() {
     const { data, error }: any = await supabaseClient.auth.signUp({
@@ -32,7 +34,13 @@ const useRegister = () => {
       return;
     }
 
-    registerUser();
+    registerUser()
+      .then(() => {
+        router.push("/dashboard");
+      })
+      .catch((err) => {
+        setError(err);
+      });
   }
 
   return {

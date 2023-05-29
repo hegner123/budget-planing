@@ -3,21 +3,19 @@ export async function addExpenses({
   name,
   amount,
   repeated,
-  repeated_date,
+  date,
   supabaseClient,
 }: {
   user: string;
   name: string;
   amount: number;
   repeated: string;
-  repeated_date: string;
+  date: string;
   supabaseClient: any;
 }) {
   if (!user) throw new Error("No user provided");
   if (!name) throw new Error("No name provided");
   if (!amount) throw new Error("No amount provided");
-
-  let repeated_date_formatted = repeated_date ? `${repeated_date}` : null;
 
   const { data, error } = await supabaseClient.from("Expenses").insert([
     {
@@ -25,13 +23,19 @@ export async function addExpenses({
       name: `${name}`,
       amount: `${amount}`,
       repeated: repeated,
-      date: repeated_date_formatted,
+      date: `${date}`,
     },
   ]);
 
   return { data, error };
 }
-export async function getExpenses(user: any, supabaseClient: any) {
+export async function getExpenses({
+  user,
+  supabaseClient,
+}: {
+  user: any;
+  supabaseClient: any;
+}) {
   let { data, error } = await supabaseClient
     .from("Expenses")
     .select("*")
@@ -39,7 +43,13 @@ export async function getExpenses(user: any, supabaseClient: any) {
   return { data, error };
 }
 
-export async function deleteExpenses(id: any, supabaseClient: any) {
+export async function deleteExpenses({
+  id,
+  supabaseClient,
+}: {
+  id: any;
+  supabaseClient: any;
+}) {
   let { data, error } = await supabaseClient
     .from("Expenses")
     .delete()

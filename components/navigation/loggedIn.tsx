@@ -9,6 +9,9 @@ const LoggedInLinks = () => {
         <Link href="/dashboard">Dashboard</Link>
       </li>
       <li className="px-5">
+        <Link href="/testing">Testing</Link>
+      </li>
+      <li className="px-5">
         <span
           className="text-white hover:cursor-pointer"
           onClick={() => signOut()}>

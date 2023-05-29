@@ -36,23 +36,27 @@ const AddExpenseForm = () => {
     setOpen(true);
   }
   const handleClose = () => {
+    resetForm();
     setOpen(false);
   };
 
   const handleSubmit = () => {
-    let expenseDate: any = `${date.$M + 1}/${date.$D}/${date.$y}`;
-    if (repeated === false) {
-      expenseDate = null;
-    }
     const formSubmit = {
       name: name,
       amount: amount,
       repeated: repeated,
-      repeated_date: expenseDate,
+      date: date,
       user: user.id,
     };
     addExpense(formSubmit);
     handleClose();
+  };
+
+  const resetForm = () => {
+    setName("");
+    setAmount("");
+    setRepeated(false);
+    setDate(null);
   };
 
   const handleRepeatChange = (newValue: any) => {

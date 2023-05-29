@@ -3,27 +3,26 @@ export async function addIncome({
   name,
   amount,
   repeated,
-  repeated_date,
+  date,
   supabaseClient,
 }: {
   user: any;
   name: string;
   amount: string;
   repeated: string;
-  repeated_date: string;
+  date: string;
   supabaseClient: any;
 }) {
   if (!name) throw new Error("No name provided");
   if (!amount) throw new Error("No amount provided");
 
-  let repeated_date_formatted = repeated_date ? `${repeated_date}` : null;
   const { data, error } = await supabaseClient.from("Income").insert([
     {
       user: `${user}`,
       name: `${name}`,
       amount: `${amount}`,
       repeated: repeated,
-      date: `${repeated_date_formatted}`,
+      date: `${date}`,
     },
   ]);
 

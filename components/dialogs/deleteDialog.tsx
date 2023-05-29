@@ -24,7 +24,7 @@ const DeleteDialog = ({ open, close }: { open: any; close: any }) => {
 
   function confirmDelete() {
     switch (deleteEntryType) {
-      case "expense":
+      case "expenses":
         deleteExpense(deleteEntry);
         setShowNotification(true);
         setNotificationMessage("Expense deleted");

@@ -3,20 +3,20 @@ import { useAtom } from "jotai";
 import { compiledDataAtom } from "@budget/store/state";
 import { useForecast } from "@budget/hooks/forecast/useForecast";
 import Card from "@mui/material/Card";
-import dayjs, { Dayjs } from "dayjs";
-import duration from "dayjs/plugin/duration";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ConfigForecast } from "@budget/components/configForecast/configForecast";
+import { configForecastDurationAtom } from "@budget/store/state";
 
 const Forecast = () => {
   const [compiledData, setCompiledData] = useAtom(compiledDataAtom);
+  const [forecastLength, setForecastLength] = useAtom(
+    configForecastDurationAtom
+  );
   const { forecastData } = useForecast();
 
-  dayjs.extend(duration);
   useEffect(() => {
     console.log(forecastData);
-    console.log(forecastData.subtract({ days: 1 }));
   }, [forecastData]);
 
   useEffect(() => {
@@ -38,10 +38,9 @@ const Forecast = () => {
           <Card className="col-span-4 p-5">
             <h2 className="mb-5 text-2xl">Forecast Dates</h2>
             <ul>
-              <li>{JSON.stringify(forecastData)}</li>
-              {/* {forecastDates.map((entry: any) => {
-              <li>{entry}</li>;
-            })} */}
+              {forecastLength && (
+                <li>Forecast Length: {JSON.stringify(forecastLength)} days</li>
+              )}
             </ul>
           </Card>
         </div>
