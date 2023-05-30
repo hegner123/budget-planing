@@ -32,7 +32,7 @@ export const ConfigForecast = () => {
 
   function handleSubmit() {
     setForecastLength(forecastDuration);
-    router.push(`/forecast/reports/${forecastDuration}`);
+    router.push(`/forecast/${forecastDuration}`);
   }
 
   return (

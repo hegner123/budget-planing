@@ -1,6 +1,6 @@
 "use client";
 import { useUser } from "@supabase/auth-helpers-react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useLogin } from "@budget/hooks/auth/useLogin";
 import { TextField, Button } from "@mui/material";
 

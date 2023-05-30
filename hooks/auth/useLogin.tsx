@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { loginUser } from "@budget/supabaseTables";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 export const useLogin = () => {

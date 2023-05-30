@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { AddIncomeForm } from "@budget/components/addIncome/addIncome";
 import { AddExpenseForm } from "@budget/components/addExpenses/addExpenses";
 import { AddBalanceForm } from "@budget/components/addBalance/addBalance";
-
+import MaterialTable from "@material-table/core";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -21,10 +21,8 @@ import {
   refreshedIncomeAtom,
   compiledDataAtom,
 } from "@budget/store/state";
-import { DataGrid } from "@mui/x-data-grid";
-import { useDemoData } from "@mui/x-data-grid-generator";
 
-export default function Dashboard() {
+const Dashboard = () => {
   const { balance, fetchedBalance } = useBalance();
   const { expenses, fetchedExpenses } = useExpenses();
   const { income, fetchedIncome } = useIncome();
@@ -40,6 +38,8 @@ export default function Dashboard() {
   const [refreshedBalance] = useAtom(refreshedBalanceAtom);
   const [refreshedExpenses] = useAtom(refreshedExpensesAtom);
   const [refreshedIncome] = useAtom(refreshedIncomeAtom);
+
+  useEffect(() => {}, [refreshedBalance, refreshedExpenses, refreshedIncome]);
 
   useEffect(() => {
     setBalanceData(parseData(balance, "balance"));
@@ -105,8 +105,10 @@ export default function Dashboard() {
     let year = date.getFullYear();
     return `${month}/${day}/${year}`;
   }
+
   return (
     <main className="p-5 dashboard-main">
+      <h1 className="mt-5 mb-5 text-6xl">Dashboard</h1>
       <div className="flex justify-between mb-5">
         <ButtonGroup>
           <AddBalanceForm />
@@ -121,19 +123,58 @@ export default function Dashboard() {
           </Button>
         </Link>
       </div>
-      <div className="col-span-10 col-start-2 mt-5 bg-white">
-        <DataGrid
-          columns={[
-            { field: "name", headerName: "Name", flex: 1 },
-            { field: "balance", headerName: "Balance", flex: 1 },
-            { field: "income", headerName: "Income", flex: 1 },
-            { field: "expenses", headerName: "Expenses", flex: 1 },
-            { field: "date", headerName: "Date", flex: 1 },
+      {data && (
+        <MaterialTable
+          isLoading={loading}
+          actions={[
+            {
+              icon: "delete",
+              tooltip: "Delete",
+              onClick: (e, rowData: any) => {
+                setOpenDialog(true);
+                prepDelete(rowData.id, rowData.type);
+              },
+            },
           ]}
-          rows={data ? data : []}
+          components={{
+            Actions: (props) => {
+              return (
+                <>
+                  <div className="text-white cursor-pointer">
+                    {props.actions.map((action: any) => {
+                      return (
+                        <div
+                          key={action.icon}
+                          onClick={(e) => action.onClick(e, props.data)}>
+                          <DeleteIcon color="action" />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              );
+            },
+          }}
+          title="Balance"
+          columns={[
+            {
+              title: "Description",
+              field: "name",
+            },
+            { title: "Balance", field: "balance" },
+            { title: "Income", field: "income" },
+            { title: "Expenses", field: "expenses" },
+            { title: "Date", field: "date" },
+          ]}
+          data={data}
+          options={{
+            pageSize: 5,
+          }}
         />
-      </div>
+      )}
       <DeleteDialog open={openDialog} close={() => setOpenDialog(false)} />
     </main>
   );
-}
+};
+
+export default Dashboard;

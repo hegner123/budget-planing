@@ -1,9 +1,20 @@
-import { Metadata } from "next";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Budget Forecasting",
-};
+import CircularProgress from "@mui/material/CircularProgress";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Page() {
-  return "...";
+  const router = useRouter();
+  useEffect(() => {
+    router.push("/login");
+  }, [router]);
+
+  return (
+    <>
+      <main className="grid min-w-full min-h-screen place-items-center">
+        <CircularProgress />
+      </main>
+    </>
+  );
 }
