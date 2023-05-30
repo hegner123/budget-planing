@@ -107,7 +107,7 @@ export default function Dashboard() {
   }
   return (
     <main className="p-5 dashboard-main">
-      <div className="flex justify-between mb-5">
+      <div className="flex justify-between mt-5 mb-5">
         <ButtonGroup>
           <AddBalanceForm />
           <AddIncomeForm />

@@ -16,7 +16,7 @@ import {
 import Fab from "@mui/material/Fab";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
-export default function DebugModal() {
+export default function DebugDialog() {
   const [showDebugModal, setShowDebugModal] = useAtom(showDebugModalAtom);
   const [compiledData] = useAtom(compiledDataAtom);
   const [showNotification] = useAtom(showNotificationAtom);

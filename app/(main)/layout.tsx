@@ -1,17 +1,14 @@
 "use client";
+
+import "@budget/styles/style.scss";
 import { Inter } from "next/font/google";
 import { useState } from "react";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider, Session } from "@supabase/auth-helpers-react";
-import { ReactElement, ReactNode } from "react";
-import JotaiProvider, { showDebugModalAtom } from "@budget/store/state";
-import DebugModal from "@budget/components/debugModal";
+import JotaiProvider from "@budget/store/state";
+import DebugDialog from "@budget/components/dialogs/debugDialog";
 import Navigation from "@budget/components/navigation/nav";
 import SimpleSnackbar from "@budget/components/notifications/snackbar";
-import Fab from "@mui/material/Fab";
-import { useAtom } from "jotai";
-import "@budget/styles/style.scss";
-import "@budget/public/globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
@@ -30,10 +27,10 @@ export default function RootLayout({
         <SessionContextProvider supabaseClient={supabase}>
           <JotaiProvider>
             <Navigation />
-            <DebugModal />
             {children}
 
             <SimpleSnackbar />
+            <DebugDialog />
           </JotaiProvider>
         </SessionContextProvider>
       </body>
