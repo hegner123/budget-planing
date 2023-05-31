@@ -17,10 +17,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import {
-  showNotificationAtom,
-  notificationMessageAtom,
-} from "@budget/store/state";
+import { showNotificationMessageAtom } from "@budget/store/state";
 import { useAtom } from "jotai";
 import { useExpenses } from "@budget/hooks/expenses/useExpenses";
 import { useSession } from "@budget/hooks/auth/useSession";
@@ -30,8 +27,8 @@ const AddExpenseForm = () => {
   const [amount, setAmount] = useState<any>("");
   const [repeated, setRepeated] = useState<boolean>(false);
   const [date, setDate] = useState<any>(null);
-  const [, setShowNotification] = useAtom(showNotificationAtom);
-  const [, setNotificationMessage] = useAtom(notificationMessageAtom);
+
+  const [, setNotificationMessage] = useAtom(showNotificationMessageAtom);
   const { addExpense } = useExpenses();
   const { user } = useSession();
 
@@ -49,7 +46,7 @@ const AddExpenseForm = () => {
       amount: amount,
       repeated: repeated,
       date: date,
-      user: user.id,
+      user: user,
     };
     addExpense(formSubmit);
     handleClose();
@@ -63,7 +60,6 @@ const AddExpenseForm = () => {
   };
 
   const handleRepeatChange = (newValue: any) => {
-    setShowNotification(true);
     setNotificationMessage(newValue);
     if (newValue === "true") {
       setRepeated(true);
@@ -135,7 +131,7 @@ const AddExpenseForm = () => {
           <Button
             onClick={handleSubmit}
             variant="contained"
-            className="text-black hover:text-white">
+            className="text-black hover:text-white bg-brand-dark-blue">
             Add
           </Button>
         </DialogActions>

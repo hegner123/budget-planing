@@ -5,24 +5,16 @@ import { getBalance, addBalance, deleteBalance } from "@budget/supabaseTables";
 import { refreshedBalanceAtom } from "@budget/store/state";
 import { useAtom } from "jotai";
 import { AppUser } from "@budget/types";
+import { useSession } from "@budget/hooks/auth/useSession";
+import { showNotificationMessageAtom } from "@budget/store/state";
 
 export const useBalance = () => {
   const [balance, setBalance] = useState<any>(null);
   const [fetchedBalance, setFetched] = useState(false);
-  const [currentUser, setCurrentUser] = useState<string | null>(null);
+  const [, setShowNotificationMessage] = useAtom(showNotificationMessageAtom);
   const [refreshedBalance, setRefreshedBalance] = useAtom(refreshedBalanceAtom);
   const supabase = createClientComponentClient();
-  useEffect(() => {
-    async function getSupabaseSession() {
-      const { data, error } = await supabase.auth.getSession();
-
-      return data.session.user.id;
-    }
-    if (currentUser) return;
-    getSupabaseSession().then((res) => {
-      setCurrentUser(res);
-    });
-  }, [currentUser, supabase.auth]);
+  const { user } = useSession();
 
   const LiveBalance = supabase
     .channel("custom-all-channel")
@@ -38,9 +30,9 @@ export const useBalance = () => {
 
   useEffect(() => {
     if (fetchedBalance) return;
-    if (!currentUser) return;
+    if (!user) return;
 
-    getBalance(currentUser, supabase)
+    getBalance(user, supabase)
       .then((res): any => {
         setBalance(res.data);
         setFetched(true);
@@ -48,7 +40,7 @@ export const useBalance = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [fetchedBalance, currentUser, supabase]);
+  }, [fetchedBalance, user, supabase, setShowNotificationMessage]);
 
   function addBalanceHook(data: any) {
     addBalance({ ...data, supabaseClient: supabase });

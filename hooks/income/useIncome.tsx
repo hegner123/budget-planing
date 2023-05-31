@@ -2,47 +2,28 @@
 import { useState, useEffect } from "react";
 import { getIncomes, addIncome, deleteIncome } from "@budget/supabaseTables";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useSession } from "@budget/hooks/auth/useSession";
 import { useAtom } from "jotai";
 import {
-  showNotificationAtom,
-  notificationMessageAtom,
+  showNotificationMessageAtom,
   refreshedIncomeAtom,
 } from "@budget/store/state";
 
 export const useIncome = () => {
   const [income, setIncome] = useState<any>(null);
   const [fetchedIncome, setFetched] = useState(false);
-  const [, setShowNotification] = useAtom(showNotificationAtom);
+
   const [, setRefreshedIncome] = useAtom(refreshedIncomeAtom);
   const [notificationMessage, setNotificationMessage] = useAtom(
-    notificationMessageAtom
+    showNotificationMessageAtom
   );
-  const [user, setUser] = useState<any>(null);
-  const [error, setError] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const { user } = useSession();
   const supabase = createClientComponentClient();
-
-  useEffect(() => {
-    async function getSupabaseSession() {
-      const { data, error } = await supabase.auth.getSession();
-      console.log(data);
-      return { data: data.session.user.id, error: error };
-    }
-    getSupabaseSession()
-      .then((res) => {
-        setUser(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err);
-        setLoading(false);
-      });
-  }, [supabase.auth]);
 
   useEffect(() => {
     if (fetchedIncome) return;
     if (!user) return;
-    getIncomes(user?.id, supabase)
+    getIncomes(user, supabase)
       .then((res: any) => {
         setFetched(true);
         setIncome(res.data);
@@ -55,7 +36,7 @@ export const useIncome = () => {
     supabase,
     user,
     notificationMessage,
-    setShowNotification,
+
     setNotificationMessage,
   ]);
 

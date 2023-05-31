@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { useLogin } from "@budget/hooks/auth/useLogin";
@@ -9,7 +9,8 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Dialog from "@mui/material/Dialog";
 import usePasswordReset from "@budget/hooks/auth/usePasswordReset";
-
+import { loadingAtom } from "@budget/store/state";
+import { useAtom } from "jotai";
 import type { Session } from "@supabase/auth-helpers-nextjs";
 
 const LoginPage = ({ session }: { session: Session | null }) => {
@@ -18,9 +19,13 @@ const LoginPage = ({ session }: { session: Session | null }) => {
   const [showPasswordReset, setShowPasswordReset] = useState(false);
   const [passwordResetEmail, setPasswordResetEmail] = useState("");
   const { handlePasswordReset } = usePasswordReset();
+  const [, setLoadingAtom] = useAtom(loadingAtom);
 
   const supabase = createClientComponentClient();
   const router = useRouter();
+  useEffect(() => {
+    setLoadingAtom(false);
+  }, [setLoadingAtom]);
 
   return session ? (
     <button onClick={() => console.log(0)}>Sign out</button>

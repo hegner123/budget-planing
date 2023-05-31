@@ -2,15 +2,15 @@
 
 import "@budget/styles/style.scss";
 import { Inter } from "next/font/google";
-import { useState } from "react";
+
 import {
   createClientComponentClient,
   Session,
 } from "@supabase/auth-helpers-nextjs";
 import JotaiProvider from "@budget/store/state";
-import DebugDialog from "@budget/components/dialogs/debugDialog";
+
 import Navigation from "@budget/components/navigation/nav";
-import SimpleSnackbar from "@budget/components/notifications/snackbar";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
@@ -22,7 +22,7 @@ export default function RootLayout({
     initialSession: Session | null;
   };
 }) {
-  const [supabase] = useState(() => createClientComponentClient());
+  const supabase = createClientComponentClient();
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -30,9 +30,6 @@ export default function RootLayout({
         <JotaiProvider>
           <Navigation />
           {children}
-
-          <SimpleSnackbar />
-          <DebugDialog />
         </JotaiProvider>
         {/* </SessionContextProvider> */}
       </body>

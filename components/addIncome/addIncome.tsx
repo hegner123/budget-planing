@@ -17,10 +17,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useIncome } from "@budget/hooks/income/useIncome";
-import {
-  showNotificationAtom,
-  notificationMessageAtom,
-} from "@budget/store/state";
+import { showNotificationMessageAtom } from "@budget/store/state";
 import { useAtom } from "jotai";
 import { useSession } from "@budget/hooks/auth/useSession";
 const AddIncomeForm = () => {
@@ -29,8 +26,8 @@ const AddIncomeForm = () => {
   const [amount, setAmount] = useState<any>("");
   const [repeated, setRepeated] = useState<boolean>(false);
   const [date, setDate] = useState<any>(null);
-  const [, setShowNotification] = useAtom(showNotificationAtom);
-  const [, setNotificationMessage] = useAtom(notificationMessageAtom);
+
+  const [, setNotificationMessage] = useAtom(showNotificationMessageAtom);
   const { addIncomeSubmit } = useIncome();
   const { user } = useSession();
   function handleOpen() {
@@ -132,7 +129,7 @@ const AddIncomeForm = () => {
           <Button
             onClick={() => handleSubmit()}
             variant="contained"
-            className="text-black hover:text-white">
+            className="text-black hover:text-white bg-brand-dark-blue">
             Add
           </Button>
         </DialogActions>

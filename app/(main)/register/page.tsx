@@ -1,7 +1,9 @@
 "use client";
 import useRegister from "@budget/hooks/auth/useRegister";
 import Link from "next/link";
-import { SyntheticEvent } from "react";
+import { loadingAtom } from "@budget/store/state";
+import { useAtom } from "jotai";
+import { SyntheticEvent, useEffect } from "react";
 
 const RegisterForm = () => {
   const {
@@ -13,6 +15,10 @@ const RegisterForm = () => {
     setPasswordConfirmation,
     handleSubmit,
   } = useRegister();
+  const [, setLoading] = useAtom(loadingAtom);
+  useEffect(() => {
+    setLoading(false);
+  }, [setLoading]);
 
   return (
     <section className="grid min-h-screen grid-cols-12 grid-rows-12 bg-slate-50">

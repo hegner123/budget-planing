@@ -8,37 +8,19 @@ import {
 import { refreshedExpensesAtom } from "@budget/store/state";
 import { useAtom } from "jotai";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useSession } from "@budget/hooks/auth/useSession";
 
 export const useExpenses = () => {
   const [expenses, setExpenses] = useState<any>(null);
   const [fetchedExpenses, setFetched] = useState(false);
   const [, setRefreshedExpenses] = useAtom(refreshedExpensesAtom);
   const supabase = createClientComponentClient();
-  const [user, setUser] = useState<any>(null);
-  const [error, setError] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function getSupabaseSession() {
-      const { data, error } = await supabase.auth.getSession();
-      console.log(data);
-      return { data: data.session.user.id, error: error };
-    }
-    getSupabaseSession()
-      .then((res) => {
-        setUser(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err);
-        setLoading(false);
-      });
-  }, [supabase.auth]);
+  const { user } = useSession();
 
   useEffect(() => {
     if (fetchedExpenses) return;
     if (!user) return;
-    getExpenses({ user: user?.id, supabaseClient: supabase })
+    getExpenses({ user: user, supabaseClient: supabase })
       .then((res: any) => {
         setExpenses(res.data);
         setFetched(true);

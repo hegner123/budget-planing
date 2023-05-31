@@ -3,10 +3,10 @@ import { Provider, createStore, atom } from "jotai";
 import { ForecastLength } from "@budget/types/forecast";
 
 const budgetStore = createStore();
-
+const loadingAtom = atom(true);
 const compiledDataAtom = atom([]);
 const showNotificationAtom = atom(false);
-const notificationMessageAtom = atom("");
+const showNotificationMessageAtom = atom("");
 const deleteEntryAtom = atom("");
 const deleteEntryTypeAtom = atom("");
 const needsRefreshAtom = atom(false);
@@ -18,9 +18,10 @@ const configForecastDurationAtom = atom<any>(null);
 const showDebugModalAtom = atom(false);
 
 export {
+  loadingAtom,
   compiledDataAtom,
   showNotificationAtom,
-  notificationMessageAtom,
+  showNotificationMessageAtom,
   deleteEntryAtom,
   deleteEntryTypeAtom,
   needsRefreshAtom,

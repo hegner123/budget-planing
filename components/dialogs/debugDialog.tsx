@@ -3,8 +3,7 @@ import { useAtom } from "jotai";
 import {
   showDebugModalAtom,
   compiledDataAtom,
-  showNotificationAtom,
-  notificationMessageAtom,
+  showNotificationMessageAtom,
   deleteEntryAtom,
   deleteEntryTypeAtom,
   needsRefreshAtom,
@@ -17,11 +16,11 @@ import {
 import Fab from "@mui/material/Fab";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
+import { useSession } from "@budget/hooks/auth/useSession";
 export default function DebugDialog() {
   const [showDebugModal, setShowDebugModal] = useAtom(showDebugModalAtom);
   const [compiledData] = useAtom(compiledDataAtom);
-  const [showNotification] = useAtom(showNotificationAtom);
-  const [notificationMessage] = useAtom(notificationMessageAtom);
+  const [notificationMessage] = useAtom(showNotificationMessageAtom);
   const [deleteEntry] = useAtom(deleteEntryAtom);
   const [deleteEntryType] = useAtom(deleteEntryTypeAtom);
   const [needsRefresh] = useAtom(needsRefreshAtom);
@@ -30,6 +29,7 @@ export default function DebugDialog() {
   const [refreshedIncome] = useAtom(refreshedIncomeAtom);
   const [configForecast] = useAtom(configForecastAtom);
   const [configForecastDuration] = useAtom(configForecastDurationAtom);
+  const { user } = useSession();
 
   return (
     <div className=" col-span-full">
@@ -45,13 +45,14 @@ export default function DebugDialog() {
       <Dialog onClose={() => setShowDebugModal(false)} open={showDebugModal}>
         <DialogTitle className="px-4 w-[500px]">Debug Modal</DialogTitle>
         <div className="px-4 mt-5">
+          <h2>User</h2>
+          <pre>{JSON.stringify(user, null, 2)}</pre>
+        </div>
+        <div className="px-4 mt-5">
           <h2>Compiled Data</h2>
           <pre>{JSON.stringify(compiledData, null, 2)}</pre>
         </div>
-        <div className="px-4 mt-5">
-          <h2>Notification</h2>
-          <pre>{JSON.stringify(showNotification, null, 2)}</pre>
-        </div>
+
         <div className="px-4 mt-5">
           <h2>Notification Message</h2>
           <pre>{JSON.stringify(notificationMessage, null, 2)}</pre>

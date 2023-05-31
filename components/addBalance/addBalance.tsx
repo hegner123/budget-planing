@@ -101,7 +101,7 @@ const AddBalanceForm = () => {
           <Button
             onClick={handleSubmit}
             variant="contained"
-            className="text-black hover:text-white">
+            className="text-black hover:text-white bg-brand-dark-blue">
             Add
           </Button>
         </DialogActions>
