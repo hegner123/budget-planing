@@ -1,4 +1,5 @@
-import { useState } from "react";
+"use client";
+import { useState, useEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -15,13 +16,14 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useUser } from "@supabase/auth-helpers-react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import {
   showNotificationAtom,
   notificationMessageAtom,
 } from "@budget/store/state";
 import { useAtom } from "jotai";
 import { useExpenses } from "@budget/hooks/expenses/useExpenses";
+import { useSession } from "@budget/hooks/auth/useSession";
 const AddExpenseForm = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [name, setName] = useState<any>("");
@@ -31,7 +33,8 @@ const AddExpenseForm = () => {
   const [, setShowNotification] = useAtom(showNotificationAtom);
   const [, setNotificationMessage] = useAtom(notificationMessageAtom);
   const { addExpense } = useExpenses();
-  const user: any = useUser();
+  const { user } = useSession();
+
   function handleOpen() {
     setOpen(true);
   }

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { getIncomes, addIncome, deleteIncome } from "@budget/supabaseTables";
-import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useAtom } from "jotai";
 import {
   showNotificationAtom,
@@ -17,13 +17,32 @@ export const useIncome = () => {
   const [notificationMessage, setNotificationMessage] = useAtom(
     notificationMessageAtom
   );
-  const user: any = useUser();
-  const supabaseClient = useSupabaseClient();
+  const [user, setUser] = useState<any>(null);
+  const [error, setError] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const supabase = createClientComponentClient();
+
+  useEffect(() => {
+    async function getSupabaseSession() {
+      const { data, error } = await supabase.auth.getSession();
+      console.log(data);
+      return { data: data.session.user.id, error: error };
+    }
+    getSupabaseSession()
+      .then((res) => {
+        setUser(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err);
+        setLoading(false);
+      });
+  }, [supabase.auth]);
 
   useEffect(() => {
     if (fetchedIncome) return;
     if (!user) return;
-    getIncomes(user?.id, supabaseClient)
+    getIncomes(user?.id, supabase)
       .then((res: any) => {
         setFetched(true);
         setIncome(res.data);
@@ -33,14 +52,14 @@ export const useIncome = () => {
       });
   }, [
     fetchedIncome,
-    supabaseClient,
+    supabase,
     user,
     notificationMessage,
     setShowNotification,
     setNotificationMessage,
   ]);
 
-  const LiveIncome = supabaseClient
+  const LiveIncome = supabase
     .channel("custom-all-channel")
     .on(
       "postgres_changes",
@@ -53,11 +72,11 @@ export const useIncome = () => {
     .subscribe();
 
   function addIncomeSubmit(data: any) {
-    addIncome({ ...data, supabaseClient: supabaseClient });
+    addIncome({ ...data, supabaseClient: supabase });
   }
 
   function deleteIncomeEntry(id: string) {
-    deleteIncome(id, supabaseClient);
+    deleteIncome(id, supabase);
   }
 
   function handleUpdatedData(data: any) {

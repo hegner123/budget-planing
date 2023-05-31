@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useUser } from "@supabase/auth-helpers-react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { useLogin } from "@budget/hooks/auth/useLogin";
 import TextField from "@mui/material/TextField";
@@ -10,17 +10,21 @@ import CloseIcon from "@mui/icons-material/Close";
 import Dialog from "@mui/material/Dialog";
 import usePasswordReset from "@budget/hooks/auth/usePasswordReset";
 
-const LoginPage = () => {
+import type { Session } from "@supabase/auth-helpers-nextjs";
+
+const LoginPage = ({ session }: { session: Session | null }) => {
   const { email, password, error, setEmail, setPassword, handleSubmit } =
     useLogin();
   const [showPasswordReset, setShowPasswordReset] = useState(false);
   const [passwordResetEmail, setPasswordResetEmail] = useState("");
   const { handlePasswordReset } = usePasswordReset();
 
-  const user = useUser();
+  const supabase = createClientComponentClient();
   const router = useRouter();
 
-  return (
+  return session ? (
+    <button onClick={() => console.log(0)}>Sign out</button>
+  ) : (
     <>
       <main className="justify-center min-w-full mt-10 main-min-h site-width site_grid">
         <div className="w-full col-span-4 col-start-6">

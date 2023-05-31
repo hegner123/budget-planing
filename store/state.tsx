@@ -1,6 +1,6 @@
+"use strict";
 import { Provider, createStore, atom } from "jotai";
 import { ForecastLength } from "@budget/types/forecast";
-
 
 const budgetStore = createStore();
 

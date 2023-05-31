@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import TextField from "@mui/material/TextField";
@@ -23,7 +24,7 @@ export const ConfigForecast = () => {
     startDate,
     forecastDuration,
   } = useForecastLength();
-  const [, setForecastLength] = useAtom(configForecastDurationAtom);
+  const [, setForecastLength]: any = useAtom(configForecastDurationAtom);
   const router = useRouter();
 
   function handleChange(event: SelectChangeEvent) {

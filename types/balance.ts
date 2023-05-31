@@ -1,3 +1,3 @@
-interface BalanceObject {
+export interface BalanceObject {
   data: {};
 }

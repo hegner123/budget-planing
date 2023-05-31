@@ -2,14 +2,14 @@
 import { useState } from "react";
 import { loginUser } from "@budget/supabaseTables";
 import { useRouter } from "next/navigation";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export const useLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const router = useRouter();
-  const supabaseClient = useSupabaseClient();
+  const supabaseClient = createClientComponentClient();
 
   function handleSubmit(e: any) {
     e.preventDefault();

@@ -1,4 +1,5 @@
-import { useState } from "react";
+"use client";
+import { useEffect, useState } from "react";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -11,15 +12,20 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useBalance } from "@budget/hooks/balance/useBalance";
-import { useUser } from "@supabase/auth-helpers-react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+
+import { AppUser } from "@budget/types/props";
+import { useSession } from "@budget/hooks/auth/useSession";
+
 const AddBalanceForm = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [amount, setAmount] = useState<any>("");
   const [name, setName] = useState<any>("");
   const [date, setDate] = useState<any>(null);
+  const { user } = useSession();
+
   const { addBalanceHook } = useBalance();
 
-  const user: any = useUser();
   function handleOpen() {
     setOpen(true);
   }
@@ -34,7 +40,7 @@ const AddBalanceForm = () => {
       name: name,
       amount: amount,
       date: date,
-      user: user.id,
+      user: user,
     });
   };
 

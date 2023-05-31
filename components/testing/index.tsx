@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useAtom } from "jotai";
@@ -19,7 +21,7 @@ const TestingComponent = () => {
   const [field5, setField5] = useState<any>("");
   const [startDate, setStartDate] = useState<any>(null);
   const [endDate, setEndDate] = useState<any>("");
-  const [configForecastDuration, setConfigForecastDuration] = useAtom(
+  const [configForecastDuration, setConfigForecastDuration]: any = useAtom<any>(
     configForecastDurationAtom
   );
   const [results, setResults] = useState<any>("");

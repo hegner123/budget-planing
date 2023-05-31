@@ -7,19 +7,38 @@ import {
 } from "@budget/supabaseTables";
 import { refreshedExpensesAtom } from "@budget/store/state";
 import { useAtom } from "jotai";
-import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export const useExpenses = () => {
   const [expenses, setExpenses] = useState<any>(null);
   const [fetchedExpenses, setFetched] = useState(false);
   const [, setRefreshedExpenses] = useAtom(refreshedExpensesAtom);
-  const user: any = useUser();
-  const supabaseClient = useSupabaseClient();
+  const supabase = createClientComponentClient();
+  const [user, setUser] = useState<any>(null);
+  const [error, setError] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function getSupabaseSession() {
+      const { data, error } = await supabase.auth.getSession();
+      console.log(data);
+      return { data: data.session.user.id, error: error };
+    }
+    getSupabaseSession()
+      .then((res) => {
+        setUser(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err);
+        setLoading(false);
+      });
+  }, [supabase.auth]);
 
   useEffect(() => {
     if (fetchedExpenses) return;
     if (!user) return;
-    getExpenses({ user: user?.id, supabaseClient: supabaseClient })
+    getExpenses({ user: user?.id, supabaseClient: supabase })
       .then((res: any) => {
         setExpenses(res.data);
         setFetched(true);
@@ -27,9 +46,9 @@ export const useExpenses = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [fetchedExpenses, supabaseClient, user]);
+  }, [fetchedExpenses, supabase, user]);
 
-  const LiveExpenses = supabaseClient
+  const LiveExpenses = supabase
     .channel("custom-all-channel")
     .on(
       "postgres_changes",
@@ -42,11 +61,11 @@ export const useExpenses = () => {
     .subscribe();
 
   function addExpense(data: any) {
-    addExpenses({ ...data, supabaseClient: supabaseClient });
+    addExpenses({ ...data, supabaseClient: supabase });
   }
 
   function deleteExpense(id: string) {
-    deleteExpenses({ id, supabaseClient: supabaseClient });
+    deleteExpenses({ id, supabaseClient: supabase });
   }
 
   function handleUpdatedData(data: any) {

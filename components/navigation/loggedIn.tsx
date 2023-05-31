@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import useSignOut from "@budget/hooks/auth/useSignOut";
 

@@ -1,9 +1,9 @@
 "use client";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 
 const useSignOut = () => {
-  const supabase = useSupabaseClient();
+  const supabase = createClientComponentClient();
   const router = useRouter();
   async function signOut() {
     const { error } = await supabase.auth.signOut();

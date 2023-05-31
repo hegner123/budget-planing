@@ -1,16 +1,28 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { getBalance, addBalance, deleteBalance } from "@budget/supabaseTables";
 import { refreshedBalanceAtom } from "@budget/store/state";
 import { useAtom } from "jotai";
+import { AppUser } from "@budget/types";
 
 export const useBalance = () => {
   const [balance, setBalance] = useState<any>(null);
   const [fetchedBalance, setFetched] = useState(false);
+  const [currentUser, setCurrentUser] = useState<string | null>(null);
   const [refreshedBalance, setRefreshedBalance] = useAtom(refreshedBalanceAtom);
-  const user: any = useUser();
-  const supabase = useSupabaseClient();
+  const supabase = createClientComponentClient();
+  useEffect(() => {
+    async function getSupabaseSession() {
+      const { data, error } = await supabase.auth.getSession();
+
+      return data.session.user.id;
+    }
+    if (currentUser) return;
+    getSupabaseSession().then((res) => {
+      setCurrentUser(res);
+    });
+  }, [currentUser, supabase.auth]);
 
   const LiveBalance = supabase
     .channel("custom-all-channel")
@@ -26,9 +38,9 @@ export const useBalance = () => {
 
   useEffect(() => {
     if (fetchedBalance) return;
-    if (!user) return;
+    if (!currentUser) return;
 
-    getBalance(user.id, supabase)
+    getBalance(currentUser, supabase)
       .then((res): any => {
         setBalance(res.data);
         setFetched(true);
@@ -36,7 +48,7 @@ export const useBalance = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [fetchedBalance, user, supabase]);
+  }, [fetchedBalance, currentUser, supabase]);
 
   function addBalanceHook(data: any) {
     addBalance({ ...data, supabaseClient: supabase });

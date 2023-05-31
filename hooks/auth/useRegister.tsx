@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 
 const useRegister = () => {
@@ -8,13 +8,16 @@ const useRegister = () => {
   const [password, setPassword] = useState<String>("");
   const [passwordConfirmation, setPasswordConfirmation] = useState<String>("");
   const [error, setError] = useState<any>(null);
-  const supabaseClient = useSupabaseClient();
+  const supabaseClient = createClientComponentClient();
   const router = useRouter();
 
   async function registerUser() {
     const { data, error }: any = await supabaseClient.auth.signUp({
       email: `${email}`,
       password: `${password}`,
+      options: {
+        emailRedirectTo: `${location.origin}/auth/callback`,
+      },
     });
     if (error) {
       setError(error);

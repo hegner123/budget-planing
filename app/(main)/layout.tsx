@@ -3,8 +3,10 @@
 import "@budget/styles/style.scss";
 import { Inter } from "next/font/google";
 import { useState } from "react";
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { SessionContextProvider, Session } from "@supabase/auth-helpers-react";
+import {
+  createClientComponentClient,
+  Session,
+} from "@supabase/auth-helpers-nextjs";
 import JotaiProvider from "@budget/store/state";
 import DebugDialog from "@budget/components/dialogs/debugDialog";
 import Navigation from "@budget/components/navigation/nav";
@@ -20,19 +22,19 @@ export default function RootLayout({
     initialSession: Session | null;
   };
 }) {
-  const [supabase] = useState(() => createBrowserSupabaseClient());
+  const [supabase] = useState(() => createClientComponentClient());
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SessionContextProvider supabaseClient={supabase}>
-          <JotaiProvider>
-            <Navigation />
-            {children}
+        {/* <SessionContextProvider supabaseClient={supabase}> */}
+        <JotaiProvider>
+          <Navigation />
+          {children}
 
-            <SimpleSnackbar />
-            <DebugDialog />
-          </JotaiProvider>
-        </SessionContextProvider>
+          <SimpleSnackbar />
+          <DebugDialog />
+        </JotaiProvider>
+        {/* </SessionContextProvider> */}
       </body>
     </html>
   );
