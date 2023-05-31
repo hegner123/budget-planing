@@ -31,7 +31,7 @@ export const useExpenses = () => {
   }, [fetchedExpenses, supabase, user]);
 
   const LiveExpenses = supabase
-    .channel("custom-all-channel")
+    .channel("expense")
     .on(
       "postgres_changes",
       { event: "*", schema: "public", table: "Expenses" },

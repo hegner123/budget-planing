@@ -1,3 +1,4 @@
+"use client";
 import { Session } from "@supabase/auth-helpers-nextjs";
 import DebugDialog from "@budget/components/dialogs/debugDialog";
 import SimpleSnackbar from "@budget/components/notifications/snackbar";

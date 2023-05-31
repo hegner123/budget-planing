@@ -17,7 +17,7 @@ export const useBalance = () => {
   const { user } = useSession();
 
   const LiveBalance = supabase
-    .channel("custom-all-channel")
+    .channel("balance")
     .on(
       "postgres_changes",
       { event: "*", schema: "public", table: "Balance" },

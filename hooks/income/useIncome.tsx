@@ -36,12 +36,11 @@ export const useIncome = () => {
     supabase,
     user,
     notificationMessage,
-
     setNotificationMessage,
   ]);
 
   const LiveIncome = supabase
-    .channel("custom-all-channel")
+    .channel("income")
     .on(
       "postgres_changes",
       { event: "*", schema: "public", table: "Income" },

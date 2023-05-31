@@ -120,6 +120,7 @@ export default function Dashboard() {
   function prepDelete(id: string, type: string) {
     setDeleteEntry(id);
     setDeleteEntryType(type);
+    setOpenDialog(true);
   }
 
   function formatDate(date: any) {
@@ -158,7 +159,7 @@ export default function Dashboard() {
                 <GridActionsCellItem
                   key={params.id}
                   icon={<DeleteIcon />}
-                  onClick={() => setOpenDialog(true)}
+                  onClick={() => prepDelete(`${params.id}`, params.row.type)}
                   label="Delete"
                 />,
               ],
