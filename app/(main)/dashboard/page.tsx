@@ -79,7 +79,7 @@ export default function Dashboard() {
     function parseData(data: any, type: string) {
       let parsedData = data?.map((item: any) => {
         return {
-          id: item.id,
+          id: item.uuid,
           name: item.name,
           [type]: `$${item.amount}`,
           date: formatDate(new Date(item.date)),

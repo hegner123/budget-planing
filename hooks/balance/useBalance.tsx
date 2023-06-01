@@ -57,7 +57,7 @@ export const useBalance = () => {
         setBalance(newBalance);
         break;
       case "UPDATE":
-        const updatedBalance = balance.map((entry: any) => {
+        const updatedBalance = balance?.map((entry: any) => {
           if (entry.id === data.new.id) {
             return data.new;
           }
@@ -67,7 +67,7 @@ export const useBalance = () => {
         setBalance(updatedBalance);
         break;
       case "DELETE":
-        const filteredBalance = balance.filter(
+        const filteredBalance = balance?.filter(
           (entry: any) => entry.id !== data.old.id
         );
         setRefreshedBalance(filteredBalance);
