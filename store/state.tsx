@@ -6,7 +6,7 @@ const budgetStore = createStore();
 const loadingAtom = atom(true);
 const compiledDataAtom = atom([]);
 const showNotificationAtom = atom(false);
-const showNotificationMessageAtom = atom("");
+const notificationMessageAtom = atom("");
 const deleteEntryAtom = atom("");
 const deleteEntryTypeAtom = atom("");
 const needsRefreshAtom = atom(false);
@@ -21,7 +21,7 @@ export {
   loadingAtom,
   compiledDataAtom,
   showNotificationAtom,
-  showNotificationMessageAtom,
+  notificationMessageAtom,
   deleteEntryAtom,
   deleteEntryTypeAtom,
   needsRefreshAtom,

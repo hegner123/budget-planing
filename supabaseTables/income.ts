@@ -42,6 +42,6 @@ export async function deleteIncome(id: any, supabaseClient: any) {
   let { data, error } = await supabaseClient
     .from("Income")
     .delete()
-    .eq("id", id);
+    .eq("uuid", id);
   return { data, error };
 }

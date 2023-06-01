@@ -30,7 +30,7 @@ export async function deleteBalance(id: any, supabaseClient: any) {
   let { data, error } = await supabaseClient
     .from("Balance")
     .delete()
-    .eq("id", id);
+    .eq("uuid", id);
   return { data, error };
 }
 

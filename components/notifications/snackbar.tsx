@@ -5,12 +5,12 @@ import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { useAtom } from "jotai";
-import { showNotificationMessageAtom } from "@budget/store/state";
+import { notificationMessageAtom } from "@budget/store/state";
 
 export default function SimpleSnackbar() {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useAtom(
-    showNotificationMessageAtom
+    notificationMessageAtom
   );
 
   const handleClose = (

@@ -1,13 +1,13 @@
 "use client";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { showNotificationMessageAtom } from "@budget/store/state";
+import { notificationMessageAtom } from "@budget/store/state";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 
 const useSignOut = () => {
   const supabase = createClientComponentClient();
   const router = useRouter();
-  const [, setNotificationMessage] = useAtom(showNotificationMessageAtom);
+  const [, setNotificationMessage] = useAtom(notificationMessageAtom);
   async function signOut() {
     const { error } = await supabase.auth.signOut();
     if (error) {

@@ -53,6 +53,6 @@ export async function deleteExpenses({
   let { data, error } = await supabaseClient
     .from("Expenses")
     .delete()
-    .eq("id", id);
+    .eq("uuid", id);
   return { data, error };
 }

@@ -1,11 +1,11 @@
 "use client";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useAtom } from "jotai";
-import { showNotificationMessageAtom } from "@budget/store/state";
+import { notificationMessageAtom } from "@budget/store/state";
 
 export default function usePasswordReset() {
   const supabase = createClientComponentClient();
-  const [, setNotificationMessage] = useAtom(showNotificationMessageAtom);
+  const [, setNotificationMessage] = useAtom(notificationMessageAtom);
 
   async function handlePasswordReset(email: string) {
     if (!email) return setNotificationMessage("Please enter an email address");

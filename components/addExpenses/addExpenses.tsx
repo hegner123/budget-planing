@@ -17,7 +17,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { showNotificationMessageAtom } from "@budget/store/state";
+import { notificationMessageAtom } from "@budget/store/state";
 import { useAtom } from "jotai";
 import { useExpenses } from "@budget/hooks/expenses/useExpenses";
 import { useSession } from "@budget/hooks/auth/useSession";
@@ -28,7 +28,7 @@ const AddExpenseForm = () => {
   const [repeated, setRepeated] = useState<boolean>(false);
   const [date, setDate] = useState<any>(null);
 
-  const [, setNotificationMessage] = useAtom(showNotificationMessageAtom);
+  const [, setNotificationMessage] = useAtom(notificationMessageAtom);
   const { addExpense } = useExpenses();
   const { user } = useSession();
 

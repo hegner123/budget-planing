@@ -3,7 +3,7 @@ import { useAtom } from "jotai";
 import {
   showDebugModalAtom,
   compiledDataAtom,
-  showNotificationMessageAtom,
+  notificationMessageAtom,
   deleteEntryAtom,
   deleteEntryTypeAtom,
   needsRefreshAtom,
@@ -20,7 +20,7 @@ import { useSession } from "@budget/hooks/auth/useSession";
 export default function DebugDialog() {
   const [showDebugModal, setShowDebugModal] = useAtom(showDebugModalAtom);
   const [compiledData] = useAtom(compiledDataAtom);
-  const [notificationMessage] = useAtom(showNotificationMessageAtom);
+  const [notificationMessage] = useAtom(notificationMessageAtom);
   const [deleteEntry] = useAtom(deleteEntryAtom);
   const [deleteEntryType] = useAtom(deleteEntryTypeAtom);
   const [needsRefresh] = useAtom(needsRefreshAtom);

@@ -17,7 +17,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useIncome } from "@budget/hooks/income/useIncome";
-import { showNotificationMessageAtom } from "@budget/store/state";
+import { notificationMessageAtom } from "@budget/store/state";
 import { useAtom } from "jotai";
 import { useSession } from "@budget/hooks/auth/useSession";
 const AddIncomeForm = () => {
@@ -27,7 +27,7 @@ const AddIncomeForm = () => {
   const [repeated, setRepeated] = useState<boolean>(false);
   const [date, setDate] = useState<any>(null);
 
-  const [, setNotificationMessage] = useAtom(showNotificationMessageAtom);
+  const [, setNotificationMessage] = useAtom(notificationMessageAtom);
   const { addIncomeSubmit } = useIncome();
   const { user } = useSession();
   function handleOpen() {
