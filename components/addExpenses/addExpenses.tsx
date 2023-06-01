@@ -16,9 +16,6 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { notificationMessageAtom } from "@budget/store/state";
-import { useAtom } from "jotai";
 import { useExpenses } from "@budget/hooks/expenses/useExpenses";
 import { useSession } from "@budget/hooks/auth/useSession";
 const AddExpenseForm = () => {
@@ -28,7 +25,6 @@ const AddExpenseForm = () => {
   const [repeated, setRepeated] = useState<boolean>(false);
   const [date, setDate] = useState<any>(null);
 
-  const [, setNotificationMessage] = useAtom(notificationMessageAtom);
   const { addExpense } = useExpenses();
   const { user } = useSession();
 
@@ -60,7 +56,6 @@ const AddExpenseForm = () => {
   };
 
   const handleRepeatChange = (newValue: any) => {
-    setNotificationMessage(newValue);
     if (newValue === "true") {
       setRepeated(true);
     } else {

@@ -7,6 +7,7 @@ import { useAtom } from "jotai";
 import { AppUser } from "@budget/types";
 import { useSession } from "@budget/hooks/auth/useSession";
 import { notificationMessageAtom } from "@budget/store/state";
+import { useSnackbar } from "notistack";
 
 export const useBalance = () => {
   const [balance, setBalance] = useState<any>(null);
@@ -17,6 +18,7 @@ export const useBalance = () => {
   const [connected, setConnected] = useState(false);
   const [counter, setCounter] = useState(0);
   const { user } = useSession();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (connected) return;
@@ -68,19 +70,26 @@ export const useBalance = () => {
   }, [connected, supabase, balance, setRefreshedBalance]);
 
   useEffect(() => {
-    if (fetchedBalance) return;
+    let fetched = false;
+    if (fetchedBalance) {
+      fetched = true;
+      return;
+    }
     if (!user) return;
 
-    getBalance(user, supabase)
-      .then((res): any => {
-        setBalance(res.data);
-        setFetched(true);
-        setNotificationMessage(`Balance ${counter} fetched!`);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [fetchedBalance, user, supabase, setNotificationMessage, counter]);
+    if (user && !fetchedBalance && !fetched) {
+      getBalance(user, supabase)
+        .then((res): any => {
+          setBalance(res.data);
+          setFetched(true);
+          enqueueSnackbar("Balance loaded", { variant: "success" });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    fetched = true;
+  }, [fetchedBalance, user, supabase, enqueueSnackbar]);
 
   function addBalanceHook(data: any) {
     addBalance({ ...data, supabaseClient: supabase });

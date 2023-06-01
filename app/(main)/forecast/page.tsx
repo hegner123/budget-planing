@@ -17,10 +17,6 @@ const Forecast = () => {
   const { forecastData } = useForecast();
 
   useEffect(() => {
-    console.log(forecastData);
-  }, [forecastData]);
-
-  useEffect(() => {
     sessionStorage.getItem("compiledData")
       ? setCompiledData(JSON.parse(sessionStorage.getItem("compiledData")!))
       : setCompiledData([]);

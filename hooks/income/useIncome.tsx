@@ -4,19 +4,15 @@ import { getIncomes, addIncome, deleteIncome } from "@budget/supabaseTables";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useSession } from "@budget/hooks/auth/useSession";
 import { useAtom } from "jotai";
-import {
-  notificationMessageAtom,
-  refreshedIncomeAtom,
-} from "@budget/store/state";
+import { refreshedIncomeAtom } from "@budget/store/state";
+import { useSnackbar } from "notistack";
 
 export const useIncome = () => {
   const [income, setIncome] = useState<any>(null);
   const [fetchedIncome, setFetched] = useState(false);
   const [connected, setConnected] = useState(false);
   const [, setRefreshedIncome] = useAtom(refreshedIncomeAtom);
-  const [notificationMessage, setNotificationMessage] = useAtom(
-    notificationMessageAtom
-  );
+  const { enqueueSnackbar } = useSnackbar();
   const { user } = useSession();
   const supabase = createClientComponentClient();
 
@@ -41,6 +37,7 @@ export const useIncome = () => {
           let newIncome = [data.new, ...income];
           setRefreshedIncome(newIncome as any);
           setIncome(newIncome);
+          enqueueSnackbar("Income added", { variant: "success" });
           break;
         case "UPDATE":
           const updatedIncome = income.map((entry: any) => {
@@ -51,6 +48,7 @@ export const useIncome = () => {
           });
           setRefreshedIncome(updatedIncome);
           setIncome(updatedIncome);
+          enqueueSnackbar("Income updated", { variant: "success" });
           break;
         case "DELETE":
           const filteredIncome = income.filter(
@@ -58,12 +56,13 @@ export const useIncome = () => {
           );
           setRefreshedIncome(filteredIncome);
           setIncome(filteredIncome);
+          enqueueSnackbar("Income deleted", { variant: "success" });
           break;
         default:
           console.log("No event type found");
       }
     }
-  }, [connected, supabase, income, setRefreshedIncome]);
+  }, [connected, supabase, income, setRefreshedIncome, enqueueSnackbar]);
 
   useEffect(() => {
     if (fetchedIncome) return;
@@ -72,17 +71,12 @@ export const useIncome = () => {
       .then((res: any) => {
         setFetched(true);
         setIncome(res.data);
+        enqueueSnackbar("Income loaded", { variant: "success" });
       })
       .catch((err: any) => {
         console.log(err);
       });
-  }, [
-    fetchedIncome,
-    supabase,
-    user,
-    notificationMessage,
-    setNotificationMessage,
-  ]);
+  }, [fetchedIncome, supabase, user, enqueueSnackbar]);
 
   function addIncomeSubmit(data: any) {
     addIncome({ ...data, supabaseClient: supabase });

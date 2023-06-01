@@ -12,9 +12,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useBalance } from "@budget/hooks/balance/useBalance";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import { AppUser } from "@budget/types/props";
 import { useSession } from "@budget/hooks/auth/useSession";
 
 const AddBalanceForm = () => {

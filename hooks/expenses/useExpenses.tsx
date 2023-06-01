@@ -10,6 +10,7 @@ import { notificationMessageAtom } from "@budget/store/state";
 import { useAtom } from "jotai";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useSession } from "@budget/hooks/auth/useSession";
+import { useSnackbar } from "notistack";
 
 export const useExpenses = () => {
   const [expenses, setExpenses] = useState<any>(null);
@@ -17,10 +18,7 @@ export const useExpenses = () => {
   const [fetchedExpenses, setFetched] = useState(false);
   const [, setRefreshedExpenses] = useAtom(refreshedExpensesAtom);
   const supabase = createClientComponentClient();
-  const [notificationMessage, setNotificationMessage] = useAtom(
-    notificationMessageAtom
-  );
-
+  const { enqueueSnackbar } = useSnackbar();
   const { user } = useSession();
 
   useEffect(() => {
@@ -73,12 +71,12 @@ export const useExpenses = () => {
       .then((res: any) => {
         setExpenses(res.data);
         setFetched(true);
-        setNotificationMessage(`Expenses fetched!`);
+        enqueueSnackbar(`Expenses fetched!`, { variant: "success" });
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [fetchedExpenses, supabase, user, setNotificationMessage]);
+  }, [fetchedExpenses, supabase, user, enqueueSnackbar]);
 
   function addExpense(data: any) {
     addExpenses({ ...data, supabaseClient: supabase });
