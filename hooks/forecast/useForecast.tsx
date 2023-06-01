@@ -11,8 +11,10 @@ export const useForecast = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    setForecastData(configForecast.forecastDuration as any);
-  }, [compiledData, configForecast]);
+    let cachedData = sessionStorage.getItem("compiledData");
+    setForecastData(cachedData ? JSON.parse(cachedData) : []);
+    enqueueSnackbar(`config ${JSON.stringify(configForecast)}`);
+  }, [setForecastData]);
 
   useEffect(() => {
     // handleForecastData();

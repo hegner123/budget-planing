@@ -11,6 +11,7 @@ const ForecastLength = ({ params }: { params: { length: string } }) => {
 
   useEffect(() => {
     enqueueSnackbar(`Forecast Length: ${forecastLength}`);
+    enqueueSnackbar(`Forecast Data: ${JSON.stringify(forecastData)}`);
   }, [enqueueSnackbar, forecastLength, forecastData]);
 
   return (
