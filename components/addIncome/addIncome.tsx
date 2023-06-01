@@ -44,7 +44,7 @@ const AddIncomeForm = () => {
       amount: amount,
       repeated: repeated,
       date: date,
-      user: user.id,
+      user: user,
     };
     addIncomeSubmit(formSubmit);
     handleClose();
