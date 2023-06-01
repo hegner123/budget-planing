@@ -13,7 +13,7 @@ const needsRefreshAtom = atom(false);
 const refreshedBalanceAtom = atom([]);
 const refreshedExpensesAtom = atom([]);
 const refreshedIncomeAtom = atom([]);
-const configForecastAtom = atom({});
+const configForecastAtom = atom<any>({});
 const configForecastDurationAtom = atom<any>(null);
 const showDebugModalAtom = atom(false);
 

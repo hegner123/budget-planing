@@ -27,7 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <JotaiProvider>
-          <SnackbarProvider maxSnack={3}>
+          <SnackbarProvider maxSnack={6}>
             <Navigation />
             {children}
           </SnackbarProvider>

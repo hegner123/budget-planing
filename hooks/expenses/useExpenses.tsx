@@ -6,7 +6,7 @@ import {
   deleteExpenses,
 } from "@budget/supabaseTables";
 import { refreshedExpensesAtom } from "@budget/store/state";
-import { notificationMessageAtom } from "@budget/store/state";
+
 import { useAtom } from "jotai";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useSession } from "@budget/hooks/auth/useSession";
@@ -71,7 +71,7 @@ export const useExpenses = () => {
       .then((res: any) => {
         setExpenses(res.data);
         setFetched(true);
-        enqueueSnackbar(`Expenses fetched!`, { variant: "success" });
+        enqueueSnackbar(`Expenses loaded`, { variant: "success" });
       })
       .catch((err) => {
         console.log(err);
