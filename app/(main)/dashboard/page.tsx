@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useBalance } from "@budget/hooks/balance/useBalance";
 import { useExpenses } from "@budget/hooks/expenses/useExpenses";
 import { useIncome } from "@budget/hooks/income/useIncome";
@@ -39,13 +39,11 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 }));
 
 export default function Dashboard() {
-  const supabase = createClientComponentClient();
-
   const { balance, fetchedBalance } = useBalance();
   const { expenses, fetchedExpenses } = useExpenses();
   const { income, fetchedIncome } = useIncome();
-  const [openDialog, setOpenDialog] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [openDialog, setOpenDialog] = useState<any>(false);
+  const [loading, setLoading] = useState<any>(true);
   const [balanceData, setBalanceData] = useState<any>(null);
   const [expenseData, setExpenseData] = useState<any>(null);
   const [incomeData, setIncomeData] = useState<any>(null);
@@ -56,11 +54,6 @@ export default function Dashboard() {
   const [refreshedBalance] = useAtom(refreshedBalanceAtom);
   const [refreshedExpenses] = useAtom(refreshedExpensesAtom);
   const [refreshedIncome] = useAtom(refreshedIncomeAtom);
-  const [, setLoadingAtom] = useAtom(loadingAtom);
-
-  useEffect(() => {
-    setLoadingAtom(false);
-  }, [setLoadingAtom]);
 
   useEffect(() => {
     setBalanceData(parseData(balance, "balance"));

@@ -71,7 +71,7 @@ export const useExpenses = () => {
       .then((res: any) => {
         setExpenses(res.data);
         setFetched(true);
-        enqueueSnackbar(`Expenses loaded`, { variant: "success" });
+        // enqueueSnackbar(`Expenses loaded`, { variant: "success" });
       })
       .catch((err) => {
         console.log(err);

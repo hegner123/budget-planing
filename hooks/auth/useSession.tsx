@@ -7,6 +7,7 @@ export const useSession = () => {
   const [error, setError] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const supabase = createClientComponentClient();
+  
 
   useEffect(() => {
     async function getSupabaseSession() {
@@ -14,6 +15,7 @@ export const useSession = () => {
 
       return { data: data.session.user.id, error: error };
     }
+
     getSupabaseSession()
       .then((res) => {
         setUser(res.data);
@@ -23,7 +25,7 @@ export const useSession = () => {
         setError(err);
         setLoading(false);
       });
-  }, [supabase.auth]);
+  }, [supabase.auth, loading]);
 
   return { user, error, loading };
 };

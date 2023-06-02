@@ -12,9 +12,12 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useForecastLength } from "@budget/hooks/forecast/useForecastLength";
 import { useAtom } from "jotai";
-import { configForecastDurationAtom } from "@budget/store/state";
+import {
+  configForecastDurationAtom,
+  configForecastStartAtom,
+} from "@budget/store/state";
 
-export const ConfigForecast = () => {
+export const ConfigForecast = ({ getData }: any) => {
   const {
     setLength,
     setUnit,
@@ -24,7 +27,9 @@ export const ConfigForecast = () => {
     startDate,
     forecastDuration,
   } = useForecastLength();
-  const [, setForecastLength]: any = useAtom(configForecastDurationAtom);
+  const [, setForecastLength] = useAtom(configForecastDurationAtom);
+  const [, setForecastStart] = useAtom(configForecastStartAtom);
+  const [start, setStart] = useState("");
   const router = useRouter();
 
   function handleChange(event: SelectChangeEvent) {
@@ -33,11 +38,12 @@ export const ConfigForecast = () => {
 
   function handleSubmit() {
     setForecastLength(forecastDuration);
-    router.push(`/forecast/${forecastDuration}`);
+    setForecastStart(startDate);
+    getData();
   }
 
   return (
-    <div className="grid grid-cols-12 gap-5">
+    <form className="grid grid-cols-12 gap-5">
       <TextField
         label="Forecast Length"
         value={length}
@@ -61,7 +67,7 @@ export const ConfigForecast = () => {
         <DatePicker
           label="Forecast Start Date"
           value={startDate}
-          onChange={(newValue) => setStartDate(newValue)}
+          onChange={(newValue) => startDate(newValue)}
           className="col-span-6 mt-5"
         />
       </LocalizationProvider>
@@ -71,6 +77,6 @@ export const ConfigForecast = () => {
         className="text-black bg-[#1976d2] border-[#1976d2] hover:text-white hover:bg-black hover:border-white border-solid border-2 col-span-4 h-fit w-fit self-center col-start-1">
         Submit
       </Button>
-    </div>
+    </form>
   );
 };

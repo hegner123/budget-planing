@@ -1,30 +1,31 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
-import { compiledDataAtom, configForecastAtom } from "@budget/store/state";
+import {
+  compiledDataAtom,
+  configForecastAtom,
+  configForecastDurationAtom,
+  configForecastStartAtom,
+} from "@budget/store/state";
 import { useSnackbar } from "notistack";
+import { BudgetForecast } from "@budget/forecast/forecast";
 
 export const useForecast = () => {
   const [compiledData] = useAtom<any>(compiledDataAtom);
-  const [configForecast, setConfigForecast] = useAtom(configForecastAtom);
-  const [forecastData, setForecastData] = useState<any>(["any"]);
+  const [configForecast] = useAtom<any>(configForecastAtom);
+  const [configForecastStart] = useAtom<any>(configForecastStartAtom);
+  const [forecastDuration] = useAtom(configForecastDurationAtom);
+  const [forecastData, setForecastData] = useState<any>([]);
   const { enqueueSnackbar } = useSnackbar();
 
-  useEffect(() => {
-    let cachedData = sessionStorage.getItem("compiledData");
-    setForecastData(cachedData ? JSON.parse(cachedData) : []);
-    enqueueSnackbar(`config ${JSON.stringify(configForecast)}`);
-  }, [setForecastData]);
+  function getForecastData() {
+    const forecast = new BudgetForecast(
+      forecastDuration,
+      configForecastStart,
+      compiledData
+    );
+    setForecastData(forecast.getForecast());
+  }
 
-  useEffect(() => {
-    // handleForecastData();
-    // function handleForecastData() {
-    //   for (let x of compiledData) {
-    //     enqueueSnackbar(`Compiled Data: ${JSON.stringify(x)}`);
-    //   }
-    //   enqueueSnackbar(`Forecast Data: ${JSON.stringify(compiledData)}`);
-    // }
-  }, [enqueueSnackbar, forecastData, compiledData, configForecast]);
-
-  return { forecastData };
+  return { forecastData, getForecastData };
 };

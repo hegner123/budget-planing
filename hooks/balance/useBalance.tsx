@@ -12,8 +12,8 @@ import { useSnackbar } from "notistack";
 export const useBalance = () => {
   const [balance, setBalance] = useState<any>(null);
   const [fetchedBalance, setFetched] = useState(false);
-  const [, setNotificationMessage] = useAtom(notificationMessageAtom);
-  const [refreshedBalance, setRefreshedBalance] = useAtom(refreshedBalanceAtom);
+
+  const [, setRefreshedBalance] = useAtom(refreshedBalanceAtom);
   const supabase = createClientComponentClient();
   const [connected, setConnected] = useState(false);
   const [counter, setCounter] = useState(0);
