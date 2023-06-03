@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
+import { RepeatedDefaults } from "@budget/forecast/forecast";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -45,7 +46,16 @@ const AddIncomeForm = () => {
       user: user,
     };
     addIncomeSubmit(formSubmit);
+  };
+
+  const handleSubmitAndClose = () => {
+    handleSubmit();
     handleClose();
+  };
+
+  const handleSubmitAndReset = () => {
+    handleSubmit();
+    resetForm();
   };
 
   const handleRepeatChange = (newValue: any) => {
@@ -108,6 +118,11 @@ const AddIncomeForm = () => {
                   onChange={(e) => handleRepeatChange(e.target.value)}>
                   <MenuItem value={"false"}>False</MenuItem>
                   <MenuItem value={"true"}>True</MenuItem>
+                  {RepeatedDefaults.map((item, i) => (
+                    <MenuItem value={item} key={`${item}${i}`}>
+                      {item}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
 
@@ -125,10 +140,16 @@ const AddIncomeForm = () => {
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button
-            onClick={() => handleSubmit()}
+            onClick={handleSubmitAndClose}
             variant="contained"
             className="text-black hover:text-white bg-brand-dark-blue">
             Add
+          </Button>
+          <Button
+            onClick={handleSubmitAndReset}
+            variant="contained"
+            className="text-black hover:text-white bg-brand-dark-blue">
+            Add Another
           </Button>
         </DialogActions>
       </Dialog>

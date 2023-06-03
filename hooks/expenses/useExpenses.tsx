@@ -4,6 +4,7 @@ import {
   getExpenses,
   addExpenses,
   deleteExpenses,
+  updateExpense,
 } from "@budget/supabaseTables";
 import { refreshedExpensesAtom } from "@budget/store/state";
 
@@ -11,6 +12,7 @@ import { useAtom } from "jotai";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useSession } from "@budget/hooks/auth/useSession";
 import { useSnackbar } from "notistack";
+import { ExpenseUpdateObject, ExpenseUpdateHook } from "@budget/types";
 
 export const useExpenses = () => {
   const [expenses, setExpenses] = useState<any>(null);
@@ -86,11 +88,20 @@ export const useExpenses = () => {
     deleteExpenses({ id, supabaseClient: supabase });
   }
 
+  function updateExpenses({ id, column, value }: ExpenseUpdateHook) {
+    updateExpense({
+      id,
+      column,
+      value,
+      supabaseClient: supabase,
+    } as ExpenseUpdateObject);
+  }
+
   return {
     expenses,
     fetchedExpenses,
-
     addExpense,
     deleteExpense,
+    updateExpenses,
   };
 };

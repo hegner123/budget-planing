@@ -1,3 +1,4 @@
+import { IncomeUpdateObject } from "@budget/types";
 export async function addIncome({
   user,
   name,
@@ -42,6 +43,19 @@ export async function deleteIncome(id: any, supabaseClient: any) {
   let { data, error } = await supabaseClient
     .from("Income")
     .delete()
+    .eq("uuid", id);
+  return { data, error };
+}
+
+export async function updateIncome({
+  id,
+  column,
+  value,
+  supabaseClient,
+}: IncomeUpdateObject) {
+  const { data, error } = await supabaseClient
+    .from("Income")
+    .update({ [column]: `${value}` })
     .eq("uuid", id);
   return { data, error };
 }

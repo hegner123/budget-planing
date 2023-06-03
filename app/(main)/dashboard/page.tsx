@@ -22,9 +22,15 @@ import {
   refreshedIncomeAtom,
   compiledDataAtom,
 } from "@budget/store/state";
-import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import { useDemoData } from "@mui/x-data-grid-generator";
+import { renderRepeatingEditInputCell } from "@budget/components/customCellEditing/repeatedSelect";
+import {
+  DataGrid,
+  GridActionsCellItem,
+  GridEventListener,
+} from "@mui/x-data-grid";
+
 import { darken, lighten, styled } from "@mui/material/styles";
+import { enqueueSnackbar } from "notistack";
 
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   "& .super-app-theme--balance": {
@@ -40,8 +46,8 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 
 export default function Dashboard() {
   const { balance, fetchedBalance } = useBalance();
-  const { expenses, fetchedExpenses } = useExpenses();
-  const { income, fetchedIncome } = useIncome();
+  const { expenses, fetchedExpenses, updateExpenses } = useExpenses();
+  const { income, fetchedIncome, updateIncomeEntry } = useIncome();
   const [openDialog, setOpenDialog] = useState<any>(false);
   const [loading, setLoading] = useState<any>(true);
   const [balanceData, setBalanceData] = useState<any>(null);
@@ -76,6 +82,7 @@ export default function Dashboard() {
           name: item.name,
           [type]: `$${item.amount}`,
           date: formatDate(new Date(item.date)),
+          repeated: item.repeated,
           type: type,
         };
       });
@@ -100,6 +107,7 @@ export default function Dashboard() {
       setLoading(false);
     }
     function setTableData(balanceData: any, expenseData: any, incomeData: any) {
+      sessionStorage.removeItem("compiledData");
       let combined = [...balanceData, ...expenseData, ...incomeData];
       let sorted = combined.sort((a: any, b: any) => {
         return new Date(a.date).getTime() - new Date(b.date).getTime();
@@ -122,6 +130,33 @@ export default function Dashboard() {
     let year = date.getFullYear();
     return `${month}/${day}/${year}`;
   }
+  const updateCell = (
+    type: string,
+    id: string,
+    column: string,
+    value: string
+  ) => {
+    switch (type) {
+      case "balance":
+        break;
+      case "expenses":
+        updateExpenses({ id: id, column: column, value: value });
+        break;
+      case "income":
+        updateIncomeEntry({ id: id, column: column, value: value });
+        break;
+      default:
+        break;
+    }
+  };
+  const handleSaveEvent: GridEventListener<"rowClick"> = (
+    params: any, // GridRowParams
+    event: any, // MuiEvent<React.MouseEvent<HTMLElement>>
+    details: any // GridCallbackDetails
+  ) => {
+    enqueueSnackbar(`${params.row.type}`, { variant: "success" });
+    updateCell(params.row.type, params.row.id, params.field, params.value);
+  };
   return (
     <main className="p-5 dashboard-main">
       <h2 className="self-end mt-2 mb-2 text-3xl text-white">Overview</h2>
@@ -162,9 +197,25 @@ export default function Dashboard() {
             { field: "income", headerName: "Income", flex: 1 },
             { field: "expenses", headerName: "Expenses", flex: 1 },
             { field: "date", headerName: "Date", flex: 1 },
+            {
+              field: "repeated",
+              headerName: "Repeated",
+              flex: 1,
+              editable: true,
+              renderCell: (params) => (
+                <p>
+                  {params.value &&
+                    params.value.charAt(0).toUpperCase() +
+                      params.value.slice(1)}
+                </p>
+              ),
+              renderEditCell: renderRepeatingEditInputCell,
+              type: "singleSelect",
+            },
           ]}
           rows={data ? data : []}
           getRowClassName={(params) => `super-app-theme--${params.row.type}`}
+          onCellEditStop={handleSaveEvent}
         />
       </div>
       <DeleteDialog open={openDialog} close={() => setOpenDialog(false)} />

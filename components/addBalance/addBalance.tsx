@@ -33,13 +33,22 @@ const AddBalanceForm = () => {
   };
 
   const handleSubmit = () => {
-    handleClose();
     addBalanceHook({
       name: name,
       amount: amount,
       date: date,
       user: user,
     });
+  };
+
+  const handleSubmitAndReset = () => {
+    handleSubmit();
+    resetForm();
+  };
+
+  const handleSubmitAndClose = () => {
+    handleSubmit();
+    handleClose();
   };
 
   const resetForm = () => {
@@ -97,10 +106,16 @@ const AddBalanceForm = () => {
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button
-            onClick={handleSubmit}
+            onClick={handleSubmitAndClose}
             variant="contained"
             className="text-black hover:text-white bg-brand-dark-blue">
             Add
+          </Button>
+          <Button
+            onClick={handleSubmitAndReset}
+            variant="contained"
+            className="text-black hover:text-white bg-brand-dark-blue">
+            Add Another
           </Button>
         </DialogActions>
       </Dialog>

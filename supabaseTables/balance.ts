@@ -1,3 +1,5 @@
+import { BalanceUpdateObject } from "@budget/types";
+
 export async function addBalance({
   name,
   amount,
@@ -26,6 +28,19 @@ export async function getBalance(user: string, supabaseClient: any) {
   return { data, error };
 }
 
+export async function updateBalance({
+  id,
+  column,
+  value,
+  supabaseClient,
+}: BalanceUpdateObject) {
+  const { data, error } = await supabaseClient
+    .from("Balance")
+    .update({ [column]: `${value}` })
+    .eq("uuid", id);
+  return { data, error };
+}
+
 export async function deleteBalance(id: any, supabaseClient: any) {
   let { data, error } = await supabaseClient
     .from("Balance")
@@ -33,5 +48,3 @@ export async function deleteBalance(id: any, supabaseClient: any) {
     .eq("uuid", id);
   return { data, error };
 }
-
-

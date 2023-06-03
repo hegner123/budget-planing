@@ -90,3 +90,18 @@ export interface BudgetForecast {
   startDate: string;
   data: any;
 }
+
+export const RepeatedDefaults = [
+  "None",
+  "Weekly",
+  "Biweekly",
+  "Monthly",
+  "Yearly",
+];
+
+export const RepeatedDefaultsMap = {
+  weekly: (date: any) => dayjs(date).add(1, "week"),
+  biweekly: (date: any) => dayjs(date).add(2, "week"),
+  monthly: (date: any) => dayjs(date).add(1, "month"),
+  yearly: (date: any) => dayjs(date).add(1, "year"),
+};

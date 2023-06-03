@@ -1,11 +1,17 @@
 "use client";
 import { useState, useEffect } from "react";
-import { getIncomes, addIncome, deleteIncome } from "@budget/supabaseTables";
+import {
+  getIncomes,
+  addIncome,
+  deleteIncome,
+  updateIncome,
+} from "@budget/supabaseTables";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useSession } from "@budget/hooks/auth/useSession";
 import { useAtom } from "jotai";
 import { refreshedIncomeAtom } from "@budget/store/state";
 import { useSnackbar } from "notistack";
+import { IncomeUpdateObject, IncomeUpdateHook } from "@budget/types/income";
 
 export const useIncome = () => {
   const [income, setIncome] = useState<any>(null);
@@ -86,11 +92,20 @@ export const useIncome = () => {
     deleteIncome(id, supabase);
   }
 
+  function updateIncomeEntry({ id, column, value }: IncomeUpdateHook) {
+    updateIncome({
+      id,
+      column,
+      value,
+      supabaseClient: supabase,
+    } as IncomeUpdateObject);
+  }
+
   return {
     income,
     fetchedIncome,
-
     addIncomeSubmit,
     deleteIncomeEntry,
+    updateIncomeEntry,
   };
 };

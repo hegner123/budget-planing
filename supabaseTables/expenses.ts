@@ -1,3 +1,5 @@
+import { ExpenseUpdateObject } from "@budget/types";
+
 export async function addExpenses({
   user,
   name,
@@ -53,6 +55,19 @@ export async function deleteExpenses({
   let { data, error } = await supabaseClient
     .from("Expenses")
     .delete()
+    .eq("uuid", id);
+  return { data, error };
+}
+
+export async function updateExpense({
+  id,
+  column,
+  value,
+  supabaseClient,
+}: ExpenseUpdateObject) {
+  const { data, error } = await supabaseClient
+    .from("Expenses")
+    .update({ [column]: `${value}` })
     .eq("uuid", id);
   return { data, error };
 }

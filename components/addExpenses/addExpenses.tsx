@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
+import { RepeatedDefaults } from "@budget/forecast/forecast";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -45,7 +46,16 @@ const AddExpenseForm = () => {
       user: user,
     };
     addExpense(formSubmit);
+  };
+
+  const handleSubmitAndClose = () => {
+    handleSubmit();
     handleClose();
+  };
+
+  const handleSubmitAndReset = () => {
+    handleSubmit();
+    resetForm();
   };
 
   const resetForm = () => {
@@ -108,6 +118,11 @@ const AddExpenseForm = () => {
                   onChange={(e) => handleRepeatChange(e.target.value)}>
                   <MenuItem value={"false"}>False</MenuItem>
                   <MenuItem value={"true"}>True</MenuItem>
+                  {RepeatedDefaults.map((item, i) => (
+                    <MenuItem value={item} key={`${item}${i}`}>
+                      {item}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -124,10 +139,16 @@ const AddExpenseForm = () => {
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button
-            onClick={handleSubmit}
+            onClick={handleSubmitAndClose}
             variant="contained"
             className="text-black hover:text-white bg-brand-dark-blue">
             Add
+          </Button>
+          <Button
+            onClick={handleSubmitAndReset}
+            variant="contained"
+            className="text-black hover:text-white bg-brand-dark-blue">
+            Add Another
           </Button>
         </DialogActions>
       </Dialog>

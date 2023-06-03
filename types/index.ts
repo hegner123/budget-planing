@@ -3,3 +3,4 @@ export * from "./notifications";
 export * from "./expenses";
 export * from "./forecast";
 export * from "./balance";
+export * from "./income";
