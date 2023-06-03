@@ -1,4 +1,4 @@
-import { ExpenseUpdateObject } from "@budget/types";
+import { ExpenseUpdateObject, ExpenseAddHook } from "@budget/types";
 
 export async function addExpenses({
   user,
@@ -7,14 +7,7 @@ export async function addExpenses({
   repeated,
   date,
   supabaseClient,
-}: {
-  user: string;
-  name: string;
-  amount: number;
-  repeated: string;
-  date: string;
-  supabaseClient: any;
-}) {
+}: ExpenseAddHook) {
   if (!user) throw new Error("No user provided");
   if (!name) throw new Error("No name provided");
   if (!amount) throw new Error("No amount provided");
@@ -35,7 +28,7 @@ export async function getExpenses({
   user,
   supabaseClient,
 }: {
-  user: any;
+  user: string;
   supabaseClient: any;
 }) {
   let { data, error } = await supabaseClient
@@ -49,7 +42,7 @@ export async function deleteExpenses({
   id,
   supabaseClient,
 }: {
-  id: any;
+  id: string;
   supabaseClient: any;
 }) {
   let { data, error } = await supabaseClient

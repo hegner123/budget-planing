@@ -4,25 +4,18 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { getBalance, addBalance, deleteBalance } from "@budget/supabaseTables";
 import { refreshedBalanceAtom } from "@budget/store/state";
 import { useAtom } from "jotai";
-import { AppUser } from "@budget/types";
+
 import { useSession } from "@budget/hooks/auth/useSession";
-import { notificationMessageAtom } from "@budget/store/state";
-import { useSnackbar } from "notistack";
 
 export const useBalance = () => {
   const [balance, setBalance] = useState<any>(null);
   const [fetchedBalance, setFetched] = useState(false);
-
   const [, setRefreshedBalance] = useAtom(refreshedBalanceAtom);
   const supabase = createClientComponentClient();
   const [connected, setConnected] = useState(false);
-  const [counter, setCounter] = useState(0);
   const { user } = useSession();
-  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    if (connected) return;
-
     const LiveBalance = supabase
       .channel("balance")
       .on(
@@ -34,7 +27,7 @@ export const useBalance = () => {
         }
       )
       .subscribe();
-    setConnected(true);
+
     function handleUpdatedData(data: any) {
       switch (data.eventType) {
         case "INSERT":
@@ -82,14 +75,13 @@ export const useBalance = () => {
         .then((res): any => {
           setBalance(res.data);
           setFetched(true);
-          enqueueSnackbar("Balance loaded", { variant: "success" });
         })
         .catch((err) => {
           console.log(err);
         });
     }
     fetched = true;
-  }, [fetchedBalance, user, supabase, enqueueSnackbar]);
+  }, [fetchedBalance, user, supabase]);
 
   function addBalanceHook(data: any) {
     addBalance({ ...data, supabaseClient: supabase });

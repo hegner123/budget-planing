@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import React, { useState, useEffect } from "react";
 import { useBalance } from "@budget/hooks/balance/useBalance";
 import { useExpenses } from "@budget/hooks/expenses/useExpenses";
@@ -29,8 +28,8 @@ import {
   GridEventListener,
 } from "@mui/x-data-grid";
 
-import { darken, lighten, styled } from "@mui/material/styles";
-import { enqueueSnackbar } from "notistack";
+import { styled } from "@mui/material/styles";
+import { useSnackbar } from "notistack";
 
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   "& .super-app-theme--balance": {
@@ -60,6 +59,7 @@ export default function Dashboard() {
   const [refreshedBalance] = useAtom(refreshedBalanceAtom);
   const [refreshedExpenses] = useAtom(refreshedExpensesAtom);
   const [refreshedIncome] = useAtom(refreshedIncomeAtom);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     setBalanceData(parseData(balance, "balance"));
@@ -107,16 +107,17 @@ export default function Dashboard() {
       setLoading(false);
     }
     function setTableData(balanceData: any, expenseData: any, incomeData: any) {
-      sessionStorage.removeItem("compiledData");
+      // sessionStorage.removeItem("compiledData");
       let combined = [...balanceData, ...expenseData, ...incomeData];
       let sorted = combined.sort((a: any, b: any) => {
         return new Date(a.date).getTime() - new Date(b.date).getTime();
       });
       setData(sorted);
       setCompiledData(sorted as any);
-      sessionStorage.setItem("compiledData", JSON.stringify(sorted));
+      // sessionStorage.setItem("compiledData", JSON.stringify(sorted));
+      enqueueSnackbar("Data loaded", { variant: "success" });
     }
-  }, [balanceData, expenseData, incomeData, setCompiledData]);
+  }, [balanceData, expenseData, incomeData, setCompiledData, enqueueSnackbar]);
 
   function prepDelete(id: string, type: string) {
     setDeleteEntry(id);
@@ -154,7 +155,7 @@ export default function Dashboard() {
     event: any, // MuiEvent<React.MouseEvent<HTMLElement>>
     details: any // GridCallbackDetails
   ) => {
-    enqueueSnackbar(`${params.row.type}`, { variant: "success" });
+    enqueueSnackbar(`${params.field}`, { variant: "success" });
     updateCell(params.row.type, params.row.id, params.field, params.value);
   };
   return (
@@ -182,7 +183,6 @@ export default function Dashboard() {
               field: "delete",
               headerName: "Delete",
               type: "actions",
-
               getActions: (params) => [
                 <GridActionsCellItem
                   key={params.id}

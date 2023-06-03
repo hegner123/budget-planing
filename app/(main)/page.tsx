@@ -1,7 +1,6 @@
 "use client";
 
 import CircularProgress from "@mui/material/CircularProgress";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSession } from "@budget/hooks/auth/useSession";

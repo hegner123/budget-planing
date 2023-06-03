@@ -22,8 +22,8 @@ import { useSession } from "@budget/hooks/auth/useSession";
 const AddExpenseForm = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [name, setName] = useState<any>("");
-  const [amount, setAmount] = useState<any>("");
-  const [repeated, setRepeated] = useState<boolean>(false);
+  const [amount, setAmount] = useState<number>(0);
+  const [repeated, setRepeated] = useState<string>("");
   const [date, setDate] = useState<any>(null);
 
   const { addExpense } = useExpenses();
@@ -60,17 +60,13 @@ const AddExpenseForm = () => {
 
   const resetForm = () => {
     setName("");
-    setAmount("");
-    setRepeated(false);
+    setAmount(0);
+    setRepeated("");
     setDate(null);
   };
 
   const handleRepeatChange = (newValue: any) => {
-    if (newValue === "true") {
-      setRepeated(true);
-    } else {
-      setRepeated(false);
-    }
+    setRepeated(newValue);
   };
   return (
     <>
@@ -105,7 +101,7 @@ const AddExpenseForm = () => {
                 }}
                 type="number"
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                onChange={(e: any) => setAmount(e.target.value)}
                 className="w-full mt-5"
               />
               <FormControl className="mt-5" fullWidth>
@@ -116,8 +112,6 @@ const AddExpenseForm = () => {
                   value={repeated}
                   label="Repeated"
                   onChange={(e) => handleRepeatChange(e.target.value)}>
-                  <MenuItem value={"false"}>False</MenuItem>
-                  <MenuItem value={"true"}>True</MenuItem>
                   {RepeatedDefaults.map((item, i) => (
                     <MenuItem value={item} key={`${item}${i}`}>
                       {item}

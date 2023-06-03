@@ -41,7 +41,7 @@ export async function updateBalance({
   return { data, error };
 }
 
-export async function deleteBalance(id: any, supabaseClient: any) {
+export async function deleteBalance(id: string, supabaseClient: any) {
   let { data, error } = await supabaseClient
     .from("Balance")
     .delete()

@@ -1,27 +1,20 @@
-import { IncomeUpdateObject } from "@budget/types";
+import { IncomeUpdateObject, IncomeAddHook } from "@budget/types";
 export async function addIncome({
   user,
   name,
-  amount,
+  income,
   repeated,
   date,
   supabaseClient,
-}: {
-  user: any;
-  name: string;
-  amount: string;
-  repeated: string;
-  date: string;
-  supabaseClient: any;
-}) {
+}: IncomeAddHook) {
   if (!name) throw new Error("No name provided");
-  if (!amount) throw new Error("No amount provided");
+  if (!income) throw new Error("No amount provided");
 
   const { data, error } = await supabaseClient.from("Income").insert([
     {
       user: `${user}`,
       name: `${name}`,
-      amount: `${amount}`,
+      income: `${income}`,
       repeated: repeated,
       date: `${date}`,
     },
@@ -30,7 +23,13 @@ export async function addIncome({
   return { data, error };
 }
 
-export async function getIncomes(user: any, supabaseClient: any) {
+export async function getIncomes({
+  user,
+  supabaseClient,
+}: {
+  user: string;
+  supabaseClient: any;
+}) {
   const { data, error } = await supabaseClient
     .from("Income")
     .select("*")
@@ -39,7 +38,13 @@ export async function getIncomes(user: any, supabaseClient: any) {
   return { data, error };
 }
 
-export async function deleteIncome(id: any, supabaseClient: any) {
+export async function deleteIncome({
+  id,
+  supabaseClient,
+}: {
+  id: string;
+  supabaseClient: any;
+}) {
   let { data, error } = await supabaseClient
     .from("Income")
     .delete()

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, SyntheticEvent } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import { RepeatedDefaults } from "@budget/forecast/forecast";
@@ -23,12 +23,12 @@ import { useSession } from "@budget/hooks/auth/useSession";
 const AddIncomeForm = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [name, setName] = useState<any>("");
-  const [amount, setAmount] = useState<any>("");
-  const [repeated, setRepeated] = useState<boolean>(false);
+  const [income, setIncome] = useState<number>(0);
+  const [repeated, setRepeated] = useState<string>("");
   const [date, setDate] = useState<any>(null);
-
   const { addIncomeSubmit } = useIncome();
   const { user } = useSession();
+
   function handleOpen() {
     setOpen(true);
   }
@@ -40,7 +40,7 @@ const AddIncomeForm = () => {
   const handleSubmit = () => {
     const formSubmit = {
       name: name,
-      amount: amount,
+      income: income,
       repeated: repeated,
       date: date,
       user: user,
@@ -58,17 +58,13 @@ const AddIncomeForm = () => {
     resetForm();
   };
 
-  const handleRepeatChange = (newValue: any) => {
-    if (newValue === "true") {
-      setRepeated(true);
-    } else {
-      setRepeated(false);
-    }
+  const handleRepeatChange = (event: SelectChangeEvent) => {
+    setRepeated(event.target.value);
   };
   const resetForm = () => {
     setName("");
-    setAmount("");
-    setRepeated(false);
+    setIncome(0);
+    setRepeated("");
     setDate(null);
   };
   return (
@@ -94,18 +90,18 @@ const AddIncomeForm = () => {
                 className="w-full mt-5"
               />
               <TextField
-                id="amount"
-                label="Amount"
+                id="income"
+                label="Income"
                 variant="outlined"
+                type="number"
+                value={income}
+                onChange={(e: any) => setIncome(e.target.value)}
+                className="w-full mt-5"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">$</InputAdornment>
                   ),
                 }}
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="w-full mt-5"
               />
 
               <FormControl className="mt-5" fullWidth>
@@ -115,9 +111,7 @@ const AddIncomeForm = () => {
                   id="select-label"
                   value={repeated}
                   label="Repeated"
-                  onChange={(e) => handleRepeatChange(e.target.value)}>
-                  <MenuItem value={"false"}>False</MenuItem>
-                  <MenuItem value={"true"}>True</MenuItem>
+                  onChange={handleRepeatChange}>
                   {RepeatedDefaults.map((item, i) => (
                     <MenuItem value={item} key={`${item}${i}`}>
                       {item}

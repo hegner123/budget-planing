@@ -11,7 +11,14 @@ import { useSession } from "@budget/hooks/auth/useSession";
 import { useAtom } from "jotai";
 import { refreshedIncomeAtom } from "@budget/store/state";
 import { useSnackbar } from "notistack";
-import { IncomeUpdateObject, IncomeUpdateHook } from "@budget/types/income";
+import {
+  IncomeUpdateObject,
+  IncomeUpdateHook,
+  IncomeAdd,
+  IncomeAddHook,
+  IncomeEntry,
+  IncomePayload,
+} from "@budget/types/income";
 
 export const useIncome = () => {
   const [income, setIncome] = useState<any>(null);
@@ -31,65 +38,71 @@ export const useIncome = () => {
         { event: "*", schema: "public", table: "Income" },
         (payload) => {
           console.log("Change received!", payload);
-          handleUpdatedData(payload);
+          handleUpdatedData(payload as IncomePayload);
           setConnected(true);
         }
       )
       .subscribe();
 
-    function handleUpdatedData(data: any) {
+    function handleUpdatedData(data: IncomePayload) {
       switch (data.eventType) {
         case "INSERT":
           let newIncome = [data.new, ...income];
-          setRefreshedIncome(newIncome as any);
-          setIncome(newIncome);
-          enqueueSnackbar("Income added", { variant: "success" });
+          setRefreshedIncome(newIncome as IncomeEntry[]);
+          setIncome(newIncome as IncomeEntry[]);
           break;
         case "UPDATE":
-          const updatedIncome = income.map((entry: any) => {
+          const updatedIncome = income.map((entry: IncomeEntry) => {
             if (entry.uuid === data.new.uuid) {
               return data.new;
             }
             return entry;
           });
-          setRefreshedIncome(updatedIncome);
-          setIncome(updatedIncome);
-          enqueueSnackbar("Income updated", { variant: "success" });
+          setRefreshedIncome(updatedIncome as IncomeEntry[]);
+          setIncome(updatedIncome as IncomeEntry[]);
           break;
         case "DELETE":
           const filteredIncome = income.filter(
-            (entry: any) => entry.uuid !== data.old.uuid
+            (entry: IncomeEntry) => entry.uuid !== data.old.uuid
           );
-          setRefreshedIncome(filteredIncome);
-          setIncome(filteredIncome);
-          enqueueSnackbar("Income deleted", { variant: "success" });
+          setRefreshedIncome(filteredIncome as IncomeEntry[]);
+          setIncome(filteredIncome as IncomeEntry[]);
+
           break;
         default:
           console.log("No event type found");
       }
     }
-  }, [connected, supabase, income, setRefreshedIncome, enqueueSnackbar]);
+    return () => {
+      LiveIncome.unsubscribe();
+    };
+  }, [connected, supabase, income, setRefreshedIncome]);
 
   useEffect(() => {
     if (fetchedIncome) return;
     if (!user) return;
-    getIncomes(user, supabase)
+    getIncomes({ user, supabaseClient: supabase } as {
+      user: string;
+      supabaseClient: any;
+    })
       .then((res: any) => {
         setFetched(true);
         setIncome(res.data);
-        enqueueSnackbar("Income loaded", { variant: "success" });
       })
-      .catch((err: any) => {
-        console.log(err);
+      .catch((err: string) => {
+        console.log(err as string);
       });
-  }, [fetchedIncome, supabase, user, enqueueSnackbar]);
+  }, [fetchedIncome, supabase, user]);
 
-  function addIncomeSubmit(data: any) {
-    addIncome({ ...data, supabaseClient: supabase });
+  function addIncomeSubmit(data: IncomeAdd) {
+    addIncome({ ...data, supabaseClient: supabase } as IncomeAddHook);
   }
 
   function deleteIncomeEntry(id: string) {
-    deleteIncome(id, supabase);
+    deleteIncome({ id, supabaseClient: supabase } as {
+      id: string;
+      supabaseClient: any;
+    });
   }
 
   function updateIncomeEntry({ id, column, value }: IncomeUpdateHook) {

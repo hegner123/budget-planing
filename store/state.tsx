@@ -1,7 +1,7 @@
 "use strict";
 import { Provider, createStore, atom } from "jotai";
 import dayjs from "dayjs";
-import { ForecastLength } from "@budget/types/forecast";
+
 
 const budgetStore = createStore();
 const loadingAtom = atom(true);
@@ -16,8 +16,8 @@ const refreshedExpensesAtom = atom([]);
 const refreshedIncomeAtom = atom([]);
 const configForecastAtom = atom<any>({});
 const configForecastStartAtom = atom<any>(dayjs(new Date()));
-const configForecastDurationAtom = atom<any>(0);
-const showDebugModalAtom = atom(0);
+const configForecastDurationAtom = atom<number>(0);
+const showDebugModalAtom = atom<boolean>(false);
 
 export {
   loadingAtom,

@@ -7,12 +7,17 @@ import {
   updateExpense,
 } from "@budget/supabaseTables";
 import { refreshedExpensesAtom } from "@budget/store/state";
-
+import {
+  ExpensePayload,
+  ExpenseEntry,
+  ExpenseUpdateObject,
+  ExpenseUpdateHook,
+  ExpenseAdd,
+  ExpenseAddHook,
+} from "@budget/types";
 import { useAtom } from "jotai";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useSession } from "@budget/hooks/auth/useSession";
-import { useSnackbar } from "notistack";
-import { ExpenseUpdateObject, ExpenseUpdateHook } from "@budget/types";
 
 export const useExpenses = () => {
   const [expenses, setExpenses] = useState<any>(null);
@@ -20,7 +25,7 @@ export const useExpenses = () => {
   const [fetchedExpenses, setFetched] = useState(false);
   const [, setRefreshedExpenses] = useAtom(refreshedExpensesAtom);
   const supabase = createClientComponentClient();
-  const { enqueueSnackbar } = useSnackbar();
+
   const { user } = useSession();
 
   useEffect(() => {
@@ -32,60 +37,68 @@ export const useExpenses = () => {
         { event: "*", schema: "public", table: "Expenses" },
         (payload) => {
           console.log("Change received!", payload);
-          handleUpdatedData(payload);
+          handleUpdatedData(payload as ExpensePayload);
         }
       )
       .subscribe();
-    function handleUpdatedData(data: any) {
+    function handleUpdatedData(data: ExpensePayload) {
       switch (data.eventType) {
         case "INSERT":
           let newExpenses = [data.new, ...expenses];
-          setRefreshedExpenses(newExpenses as any);
-          setExpenses(newExpenses);
+          setRefreshedExpenses(newExpenses as ExpenseEntry[]);
+          setExpenses(newExpenses as ExpenseEntry[]);
           break;
         case "UPDATE":
-          const updatedExpenses = expenses.map((entry: any) => {
+          const updatedExpenses = expenses.map((entry: ExpenseEntry) => {
             if (entry.uuid === data.new.uuid) {
               return data.new;
             }
             return entry;
           });
-          setRefreshedExpenses(updatedExpenses);
-          setExpenses(updatedExpenses);
+          setRefreshedExpenses(updatedExpenses as ExpenseEntry[]);
+          setExpenses(updatedExpenses as ExpenseEntry[]);
           break;
         case "DELETE":
           const filteredExpenses = expenses.filter(
-            (entry: any) => entry.uuid !== data.old.uuid
+            (entry: ExpenseEntry) => entry.uuid !== data.old.uuid
           );
-          setRefreshedExpenses(filteredExpenses);
-          setExpenses(filteredExpenses);
+          setRefreshedExpenses(filteredExpenses as ExpenseEntry[]);
+          setExpenses(filteredExpenses as ExpenseEntry[]);
           break;
         default:
           console.log("No event type found");
       }
     }
+    return () => {
+      LiveExpenses.unsubscribe();
+    };
   }, [connected, expenses, supabase, setRefreshedExpenses]);
 
   useEffect(() => {
     if (fetchedExpenses) return;
     if (!user) return;
-    getExpenses({ user: user, supabaseClient: supabase })
+    getExpenses({ user: user, supabaseClient: supabase } as {
+      user: string;
+      supabaseClient: any;
+    })
       .then((res: any) => {
         setExpenses(res.data);
         setFetched(true);
-        // enqueueSnackbar(`Expenses loaded`, { variant: "success" });
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((err: string) => {
+        console.log(err as string);
       });
-  }, [fetchedExpenses, supabase, user, enqueueSnackbar]);
+  }, [fetchedExpenses, supabase, user]);
 
-  function addExpense(data: any) {
-    addExpenses({ ...data, supabaseClient: supabase });
+  function addExpense(data: ExpenseAdd) {
+    addExpenses({ ...data, supabaseClient: supabase } as ExpenseAddHook);
   }
 
   function deleteExpense(id: string) {
-    deleteExpenses({ id, supabaseClient: supabase });
+    deleteExpenses({ id, supabaseClient: supabase } as {
+      id: string;
+      supabaseClient: any;
+    });
   }
 
   function updateExpenses({ id, column, value }: ExpenseUpdateHook) {
