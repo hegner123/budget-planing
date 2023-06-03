@@ -1,22 +1,44 @@
 "use client";
 import { useEffect, useState } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import {
+  SupabaseClient,
+  createClientComponentClient,
+} from "@supabase/auth-helpers-nextjs";
 import { getBalance, addBalance, deleteBalance } from "@budget/supabaseTables";
 import { refreshedBalanceAtom } from "@budget/store/state";
 import { useAtom } from "jotai";
-
+import useSWR from "swr";
 import { useSession } from "@budget/hooks/auth/useSession";
 
 export const useBalance = () => {
   const [balance, setBalance] = useState<any>(null);
   const [fetchedBalance, setFetched] = useState(false);
   const [, setRefreshedBalance] = useAtom(refreshedBalanceAtom);
-  const supabase = createClientComponentClient();
+  const supabaseClient = createClientComponentClient();
   const [connected, setConnected] = useState(false);
   const { user } = useSession();
+  const { data, error, isLoading } = useSWR(`balance/${user}`, () =>
+    getBalance(user, supabaseClient)
+  );
+
+  async function getBalance(user: string, supabaseClient: any) {
+    if (!user) return;
+    let { data, error } = await supabaseClient
+      .from("Balance")
+      .select("*")
+      .eq("user", user);
+    return { data, error };
+  }
 
   useEffect(() => {
-    const LiveBalance = supabase
+    if (data) {
+      setBalance(data.data);
+      setFetched(true);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    const LiveBalance = supabaseClient
       .channel("balance")
       .on(
         "postgres_changes",
@@ -60,34 +82,13 @@ export const useBalance = () => {
     return () => {
       LiveBalance.unsubscribe();
     };
-  }, [connected, supabase, balance, setRefreshedBalance]);
-
-  useEffect(() => {
-    let fetched = false;
-    if (fetchedBalance) {
-      fetched = true;
-      return;
-    }
-    if (!user) return;
-
-    if (user && !fetchedBalance && !fetched) {
-      getBalance(user, supabase)
-        .then((res): any => {
-          setBalance(res.data);
-          setFetched(true);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    fetched = true;
-  }, [fetchedBalance, user, supabase]);
+  }, [connected, supabaseClient, balance, setRefreshedBalance]);
 
   function addBalanceHook(data: any) {
-    addBalance({ ...data, supabaseClient: supabase });
+    addBalance({ ...data, supabaseClient });
   }
   function deleteBalanceEntry(id: string) {
-    deleteBalance(id, supabase);
+    deleteBalance(id, supabaseClient);
   }
 
   return {

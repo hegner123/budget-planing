@@ -19,6 +19,7 @@ import {
   IncomeEntry,
   IncomePayload,
 } from "@budget/types/income";
+import useSWR from "swr";
 
 export const useIncome = () => {
   const [income, setIncome] = useState<any>(null);
@@ -27,11 +28,31 @@ export const useIncome = () => {
   const [, setRefreshedIncome] = useAtom(refreshedIncomeAtom);
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useSession();
-  const supabase = createClientComponentClient();
+  const supabaseClient = createClientComponentClient();
+
+  const { data, error, isLoading } = useSWR(`/income/${user}`, () =>
+    getIncome(user, supabaseClient)
+  );
+
+  async function getIncome(user: string, supabaseClient: any) {
+    if (!user) return;
+    let { data, error } = await supabaseClient
+      .from("Income")
+      .select("*")
+      .eq("user", user);
+    return { data, error };
+  }
+
+  useEffect(() => {
+    if (data) {
+      setIncome(data?.data);
+      setFetched(true);
+    }
+  }, [data, isLoading]);
 
   useEffect(() => {
     if (connected) return;
-    const LiveIncome = supabase
+    const LiveIncome = supabaseClient
       .channel("income")
       .on(
         "postgres_changes",
@@ -76,30 +97,14 @@ export const useIncome = () => {
     return () => {
       LiveIncome.unsubscribe();
     };
-  }, [connected, supabase, income, setRefreshedIncome]);
-
-  useEffect(() => {
-    if (fetchedIncome) return;
-    if (!user) return;
-    getIncomes({ user, supabaseClient: supabase } as {
-      user: string;
-      supabaseClient: any;
-    })
-      .then((res: any) => {
-        setFetched(true);
-        setIncome(res.data);
-      })
-      .catch((err: string) => {
-        console.log(err as string);
-      });
-  }, [fetchedIncome, supabase, user]);
+  }, [connected, supabaseClient, income, setRefreshedIncome]);
 
   function addIncomeSubmit(data: IncomeAdd) {
-    addIncome({ ...data, supabaseClient: supabase } as IncomeAddHook);
+    addIncome({ ...data, supabaseClient } as IncomeAddHook);
   }
 
   function deleteIncomeEntry(id: string) {
-    deleteIncome({ id, supabaseClient: supabase } as {
+    deleteIncome({ id, supabaseClient } as {
       id: string;
       supabaseClient: any;
     });
@@ -110,7 +115,7 @@ export const useIncome = () => {
       id,
       column,
       value,
-      supabaseClient: supabase,
+      supabaseClient,
     } as IncomeUpdateObject);
   }
 
