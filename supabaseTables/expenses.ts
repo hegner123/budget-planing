@@ -24,6 +24,7 @@ export async function addExpenses({
 
   return { data, error };
 }
+
 export async function getExpenses({
   user,
   supabaseClient,
@@ -58,7 +59,7 @@ export async function updateExpense({
   value,
   supabaseClient,
 }: ExpenseUpdateObject) {
-  const { data, error } = await supabaseClient
+  let { data, error } = await supabaseClient
     .from("Expenses")
     .update({ [column]: `${value}` })
     .eq("uuid", id);

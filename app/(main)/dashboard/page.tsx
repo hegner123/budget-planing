@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useBalance } from "@budget/hooks/balance/useBalance";
 import { useExpenses } from "@budget/hooks/expenses/useExpenses";
 import { useIncome } from "@budget/hooks/income/useIncome";
@@ -21,7 +21,6 @@ import {
   refreshedIncomeAtom,
   compiledDataAtom,
 } from "@budget/store/state";
-import { renderRepeatingEditInputCell } from "@budget/components/customCellEditing/repeatedSelect";
 import {
   DataGrid,
   GridActionsCellItem,
@@ -103,18 +102,17 @@ export default function Dashboard() {
   useEffect(() => {
     if (balanceData && expenseData && incomeData) {
       setTableData(balanceData, expenseData, incomeData);
-
       setLoading(false);
     }
+
     function setTableData(balanceData: any, expenseData: any, incomeData: any) {
-      // sessionStorage.removeItem("compiledData");
       let combined = [...balanceData, ...expenseData, ...incomeData];
       let sorted = combined.sort((a: any, b: any) => {
         return new Date(a.date).getTime() - new Date(b.date).getTime();
       });
       setData(sorted);
       setCompiledData(sorted as any);
-      // sessionStorage.setItem("compiledData", JSON.stringify(sorted));
+      localStorage.setItem("compiledData", JSON.stringify(sorted));
       enqueueSnackbar("Data loaded", { variant: "success" });
     }
   }, [balanceData, expenseData, incomeData, setCompiledData, enqueueSnackbar]);
@@ -131,6 +129,7 @@ export default function Dashboard() {
     let year = date.getFullYear();
     return `${month}/${day}/${year}`;
   }
+
   const updateCell = (
     type: string,
     id: string,
@@ -150,14 +149,26 @@ export default function Dashboard() {
         break;
     }
   };
+
   const handleSaveEvent: GridEventListener<"rowClick"> = (
     params: any, // GridRowParams
     event: any, // MuiEvent<React.MouseEvent<HTMLElement>>
     details: any // GridCallbackDetails
   ) => {
-    enqueueSnackbar(`${params.field}`, { variant: "success" });
+    enqueueSnackbar(`${params.field} : ${params.value}`, {
+      variant: "success",
+    });
+
     updateCell(params.row.type, params.row.id, params.field, params.value);
   };
+
+  const processRowUpdate = useCallback(async (newRow) => {
+    console.log("newrow", newRow);
+    // const response = await updateCell(newRow);
+    enqueueSnackbar("User successfully saved", { variant: "success" });
+    // return response;
+  }, []);
+
   return (
     <main className="p-5 dashboard-main">
       <h2 className="self-end mt-2 mb-2 text-3xl text-white">Overview</h2>
@@ -209,12 +220,14 @@ export default function Dashboard() {
                       params.value.slice(1)}
                 </p>
               ),
-              renderEditCell: renderRepeatingEditInputCell,
+
               type: "singleSelect",
+              valueOptions: ["none", "weekly", "biweekly", "monthly", "yearly"],
             },
           ]}
           rows={data ? data : []}
           getRowClassName={(params) => `super-app-theme--${params.row.type}`}
+          processRowUpdate={processRowUpdate}
           onCellEditStop={handleSaveEvent}
         />
       </div>

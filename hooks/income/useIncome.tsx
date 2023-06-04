@@ -48,7 +48,10 @@ export const useIncome = () => {
       setIncome(data?.data);
       setFetched(true);
     }
-  }, [data, isLoading]);
+    if (error) {
+      enqueueSnackbar("Error fetching income", { variant: "error" });
+    }
+  }, [data, error, enqueueSnackbar]);
 
   useEffect(() => {
     if (connected) return;

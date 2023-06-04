@@ -13,10 +13,10 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ConfigForecast } from "@budget/components/configForecast/configForecast";
 import { enqueueSnackbar } from "notistack";
 import dayjs from "dayjs";
-import { get } from "http";
+
 
 const Forecast = () => {
-  const [compiledData, setCompiledData] = useAtom(compiledDataAtom);
+  const [, setCompiledData] = useAtom(compiledDataAtom);
   const [forecastStartDate] = useAtom(configForecastStartAtom);
   const [forecastLength, setForecastLength] = useAtom(
     configForecastDurationAtom
@@ -24,39 +24,35 @@ const Forecast = () => {
   const { forecastData, getForecastData } = useForecast();
 
   useEffect(() => {
-    sessionStorage.getItem("compiledData")
-      ? setCompiledData(JSON.parse(sessionStorage.getItem("compiledData")!))
-      : setCompiledData([]);
+    setCompiledData(JSON.parse(localStorage.getItem("compiledData")!));
   }, [setCompiledData]);
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <main className="p-5 dashboard-main">
-        <div className="grid grid-cols-12 gap-5 mb-5">
-          <h1 className="mt-5 mb-5 text-6xl col-span-full">Forecast</h1>
-          <Card className="col-span-6 p-5 max-h-fit">
-            <h2 className="mb-5 text-2xl">Forecast Length</h2>
-            <ConfigForecast getData={getForecastData} />
-          </Card>
-          <Card className="col-span-4 p-5">
-            <h2 className="mb-5 text-2xl">Forecast Dates</h2>
-            <ul>
-              {forecastLength && (
+    <section className="p-5 dashboard-main">
+      <div className="grid grid-cols-12 gap-5 mb-5">
+        <h1 className="mt-5 mb-5 text-6xl col-span-full">Forecast</h1>
+        <Card className="col-span-6 p-5 max-h-fit">
+          <h2 className="mb-5 text-2xl">Forecast Length</h2>
+          <ConfigForecast getData={getForecastData} />
+        </Card>
+        <Card className="col-span-4 p-5">
+          <h2 className="mb-5 text-2xl">Forecast Dates</h2>
+          <ul>
+            {/* {forecastLength && (
                 <li>Forecast Length: {JSON.stringify(forecastLength)} days</li>
-              )}
+              )} */}
 
-              {forecastData &&
-                forecastData.map((item: any) => (
-                  <li key={dayjs(item.date).format("YYYY/MM/DD")}>
-                    {dayjs(item.date).format("YYYY/MM/DD")} :{" "}
-                    {`\$${item.balance}`}
-                  </li>
-                ))}
-            </ul>
-          </Card>
-        </div>
-      </main>
-    </LocalizationProvider>
+            {forecastData &&
+              forecastData.map((item: any) => (
+                <li key={dayjs(item.date).format("YYYY/MM/DD")}>
+                  {dayjs(item.date).format("YYYY/MM/DD")} :{" "}
+                  {`\$${item.balance}`}
+                </li>
+              ))}
+          </ul>
+        </Card>
+      </div>
+    </section>
   );
 };
 

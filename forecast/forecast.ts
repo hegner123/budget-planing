@@ -6,15 +6,29 @@ export class BudgetForecast {
     this.data = data;
   }
   getForecast() {
+    console.log(this.data);
+    // Init forecastList
+
     let forecastList = [];
+
+    // Filter compiled data into balance, income, and expenses
+
     const balance = this.data.filter((entry: any) => entry.type === "balance");
-    const balanceLength = balance.length;
-    let startingBalance = parseAmount(balance[balanceLength - 1].balance);
+    const income = this.data.filter((entry: any) => entry.type === "income");
     const expenses = this.data.filter(
       (entry: any) => entry.type === "expenses"
     );
 
-    const income = this.data.filter((entry: any) => entry.type === "income");
+    // Balance Length
+
+    const balanceLength = balance.length;
+
+    // Assign most recent balance
+    console.log(balance);
+    console.log(balanceLength);
+    let startingBalance = trimAndFloat(balance[balanceLength - 1]?.balance);
+
+    // Assign starting date
     const startDateDayjs = dayjs(this.startDate);
 
     for (let i = 0; i < this.length; i++) {
@@ -43,7 +57,6 @@ export class BudgetForecast {
       date: any
     ) {
       let newBalance = startingBalance;
-
       let newExpenses = expenses.filter((entry: any) => {
         return dayjs(entry.date).date() === dayjs(date).date();
       });
@@ -54,20 +67,21 @@ export class BudgetForecast {
       let newExpensesTotal;
       if (newExpenses.length > 1) {
         newExpensesTotal = newExpenses.reduce((a: any, b: any) => {
-          return a + parseAmount(b.expenses);
+          return a + trimAndFloat(b.expenses);
         }, 0);
       } else if (newExpenses.length === 1) {
-        newExpensesTotal = parseAmount(newExpenses[0].expenses);
+        newExpensesTotal = trimAndFloat(newExpenses[0].expenses);
       } else {
         newExpensesTotal = 0;
       }
+
       let newIncomeTotal;
       if (newIncome.length > 1) {
         newIncomeTotal = newIncome.reduce((a: any, b: any) => {
-          return a + parseAmount(b.income);
+          return a + trimAndFloat(b.income);
         }, 0);
       } else if (newIncome.length === 1) {
-        newIncomeTotal = parseAmount(newIncome[0].income);
+        newIncomeTotal = trimAndFloat(newIncome[0].income);
       } else {
         newIncomeTotal = 0;
       }
@@ -77,7 +91,7 @@ export class BudgetForecast {
       return newBalance;
     }
 
-    function parseAmount(amount: string) {
+    function trimAndFloat(amount: string) {
       return parseFloat(amount.slice(1));
     }
 

@@ -19,12 +19,19 @@ export const useForecast = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   function getForecastData() {
+    enqueueSnackbar("Forecasting...", { variant: "info" });
+
     const forecast = new BudgetForecast(
       forecastDuration,
       configForecastStart,
       compiledData
     );
-    setForecastData(forecast.getForecast());
+
+    if (forecastDuration && configForecastStart && compiledData) {
+      setForecastData(forecast.getForecast());
+    } else {
+      enqueueSnackbar("Error forecasting", { variant: "error" });
+    }
   }
 
   return { forecastData, getForecastData };

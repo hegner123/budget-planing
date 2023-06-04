@@ -60,6 +60,7 @@ export const useExpenses = () => {
         }
       )
       .subscribe();
+
     function handleUpdatedData(data: ExpensePayload) {
       switch (data.eventType) {
         case "INSERT":
@@ -105,12 +106,17 @@ export const useExpenses = () => {
   }
 
   function updateExpenses({ id, column, value }: ExpenseUpdateHook) {
+    console.log(id);
+    console.log({ [column]: value });
+    console.log(value);
     updateExpense({
       id,
       column,
       value,
       supabaseClient,
-    } as ExpenseUpdateObject);
+    } as ExpenseUpdateObject).then((res) => {
+      console.log(res);
+    });
   }
 
   return {
