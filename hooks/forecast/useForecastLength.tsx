@@ -9,7 +9,7 @@ import {
   configForecastStartAtom,
 } from "@budget/store/state";
 export const useForecastLength = () => {
-  const [length, setLength] = useState<any>(0);
+  const [length, setLength] = useState<any>("");
   const [unit, setUnit] = useState<any>("");
   const [startDate, setStartDate] = useAtom<any>(configForecastStartAtom);
   const [endDate, setEndDate] = useState<any>(null);

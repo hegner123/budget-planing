@@ -1,38 +1,15 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useAtom } from "jotai";
-import {
-  compiledDataAtom,
-  configForecastAtom,
-  configForecastDurationAtom,
-  configForecastStartAtom,
-} from "@budget/store/state";
+import { useState, useCallback } from "react";
 import { useSnackbar } from "notistack";
-import { BudgetForecast } from "@budget/forecast/forecast";
+import { budgetForecast } from "@budget/hooks/forecast/forecast";
+import { useAtom } from "jotai";
+import { forecastListAtom } from "@budget/store/state";
 
 export const useForecast = () => {
-  const [compiledData] = useAtom<any>(compiledDataAtom);
-  const [configForecast] = useAtom<any>(configForecastAtom);
-  const [configForecastStart] = useAtom<any>(configForecastStartAtom);
-  const [forecastDuration] = useAtom(configForecastDurationAtom);
   const [forecastData, setForecastData] = useState<any>([]);
+  const [forecastList, setForecastList] = useAtom(forecastListAtom);
   const { enqueueSnackbar } = useSnackbar();
-
-  function getForecastData() {
-    enqueueSnackbar("Forecasting...", { variant: "info" });
-
-    const forecast = new BudgetForecast(
-      forecastDuration,
-      configForecastStart,
-      compiledData
-    );
-
-    if (forecastDuration && configForecastStart && compiledData) {
-      setForecastData(forecast.getForecast());
-    } else {
-      enqueueSnackbar("Error forecasting", { variant: "error" });
-    }
-  }
+  const getForecastData = "test";
 
   return { forecastData, getForecastData };
 };

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import { RepeatedDefaults } from "@budget/forecast/forecast";
+import { RepeatedDefaults } from "@budget/hooks/forecast/forecast";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";

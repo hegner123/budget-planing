@@ -20,7 +20,7 @@ export default function Navigation() {
         </div>
         <div>{user ? <LoggedInLinks /> : <LoggedOutLinks />}</div>
       </nav>
-      {!loading && <DebugDialog />}
+      <DebugDialog />
     </>
   );
 }

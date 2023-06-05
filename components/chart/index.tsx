@@ -9,9 +9,10 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import dayjs from "dayjs";
 import { Line } from "react-chartjs-2";
 
-export default function Chart() {
+export default function Chart({ forecastData, x, y, title }) {
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -29,30 +30,19 @@ export default function Chart() {
       },
       title: {
         display: true,
-        text: "Budget Forecasting",
+        text: title,
       },
     },
   };
 
-  const labels = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-  ];
-
   const data = {
-    labels: labels,
+    labels: forecastData.map((item) => dayjs(item.date).format("MM/DD")),
     datasets: [
       {
         label: "Balance",
-
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: forecastData.map((item) => item.balance),
         fill: false,
-        borderColor: "rgb(255, 255, 255)",
+        borderColor: "rgb(0, 0, 0)",
         tension: 0.1,
       },
     ],

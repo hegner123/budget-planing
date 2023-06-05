@@ -5,50 +5,94 @@ import {
   compiledDataAtom,
   configForecastStartAtom,
   configForecastDurationAtom,
+  forecastListAtom,
 } from "@budget/store/state";
 import { useForecast } from "@budget/hooks/forecast/useForecast";
 import Card from "@mui/material/Card";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ConfigForecast } from "@budget/components/configForecast/configForecast";
-import { enqueueSnackbar } from "notistack";
+import { ToggleButtonGroup, ToggleButton } from "@mui/material";
+import { useSnackbar } from "notistack";
+import Chart from "@budget/components/chart";
 import dayjs from "dayjs";
 
-
 const Forecast = () => {
-  const [, setCompiledData] = useAtom(compiledDataAtom);
+  const [compiledData, setCompiledData] = useAtom(compiledDataAtom);
   const [forecastStartDate] = useAtom(configForecastStartAtom);
   const [forecastLength, setForecastLength] = useAtom(
     configForecastDurationAtom
   );
-  const { forecastData, getForecastData } = useForecast();
+  const [forecastList, setForecastList] = useAtom(forecastListAtom);
+  const [forecastDisplay, setForecastDisplay] = useState<any>("list");
+  const { getForecastData } = useForecast();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     setCompiledData(JSON.parse(localStorage.getItem("compiledData")!));
-  }, [setCompiledData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      setForecastList([]);
+    };
+  }, [setForecastList]);
+
+  function handleDisplayChange(event: any, newDisplay: any) {
+    setForecastDisplay(newDisplay);
+  }
 
   return (
     <section className="p-5 dashboard-main">
       <div className="grid grid-cols-12 gap-5 mb-5">
         <h1 className="mt-5 mb-5 text-6xl col-span-full">Forecast</h1>
-        <Card className="col-span-6 p-5 max-h-fit">
+        <div className="col-span-full ">
+          <ToggleButtonGroup
+            color="primary"
+            exclusive
+            value={forecastDisplay}
+            onChange={handleDisplayChange}>
+            <ToggleButton
+              value={"list"}
+              sx={{ border: "1px solid #b4b4b4", color: "#fff" }}>
+              List
+            </ToggleButton>
+            <ToggleButton
+              value={"chart"}
+              sx={{ border: "1px solid #b4b4b4", color: "#fff" }}>
+              Chart
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </div>
+        <Card className="col-span-3 p-5 max-h-fit">
           <h2 className="mb-5 text-2xl">Forecast Length</h2>
-          <ConfigForecast getData={getForecastData} />
+          <ConfigForecast
+            getData={getForecastData}
+            compiledData={compiledData}
+          />
         </Card>
-        <Card className="col-span-4 p-5">
-          <h2 className="mb-5 text-2xl">Forecast Dates</h2>
+        <Card className="col-span-9 p-5">
+          <h2 className="mb-5 text-2xl">Forecast</h2>
           <ul>
             {/* {forecastLength && (
                 <li>Forecast Length: {JSON.stringify(forecastLength)} days</li>
               )} */}
 
-            {forecastData &&
-              forecastData.map((item: any) => (
+            {forecastDisplay === "list" &&
+              forecastList &&
+              forecastList.map((item: any) => (
                 <li key={dayjs(item.date).format("YYYY/MM/DD")}>
                   {dayjs(item.date).format("YYYY/MM/DD")} :{" "}
                   {`\$${item.balance}`}
                 </li>
               ))}
+            {forecastDisplay === "chart" && (
+              <Chart
+                forecastData={forecastList}
+                x="date"
+                y="balance"
+                title="Forecast"
+              />
+            )}
           </ul>
         </Card>
       </div>

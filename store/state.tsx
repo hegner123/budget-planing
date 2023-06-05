@@ -18,6 +18,7 @@ const configForecastAtom = atom<any>({});
 const configForecastStartAtom = atom<any>(dayjs(new Date()));
 const configForecastDurationAtom = atom<number>(0);
 const showDebugModalAtom = atom<boolean>(false);
+const forecastListAtom = atom<any>([]);
 
 export {
   loadingAtom,
@@ -34,6 +35,7 @@ export {
   configForecastStartAtom,
   configForecastDurationAtom,
   showDebugModalAtom,
+  forecastListAtom,
 };
 
 const JotaiProvider = ({ children }: any) => {

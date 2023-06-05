@@ -12,6 +12,7 @@ import {
   refreshedIncomeAtom,
   configForecastAtom,
   configForecastDurationAtom,
+  forecastListAtom,
 } from "@budget/store/state";
 import Fab from "@mui/material/Fab";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -29,6 +30,7 @@ export default function DebugDialog() {
   const [refreshedIncome] = useAtom(refreshedIncomeAtom);
   const [configForecast] = useAtom(configForecastAtom);
   const [configForecastDuration] = useAtom(configForecastDurationAtom);
+  const [forecastList] = useAtom(forecastListAtom);
   const { user } = useSession();
 
   return (
@@ -82,8 +84,8 @@ export default function DebugDialog() {
           <pre>{JSON.stringify(refreshedIncome, null, 2)}</pre>
         </div>
         <div className="px-4 mt-5">
-          <h2>Config Forecast</h2>
-          <pre>{JSON.stringify(configForecast, null, 2)}</pre>
+          <h2>Forecast</h2>
+          <pre>{JSON.stringify(forecastList, null, 2)}</pre>
         </div>
         <div className="px-4 mt-5">
           <h2>Config Forecast Duration</h2>

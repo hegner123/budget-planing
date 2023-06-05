@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
@@ -11,13 +11,16 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useForecastLength } from "@budget/hooks/forecast/useForecastLength";
+import { budgetForecast } from "@budget/hooks/forecast/forecast";
 import { useAtom } from "jotai";
 import {
   configForecastDurationAtom,
   configForecastStartAtom,
+  forecastListAtom,
 } from "@budget/store/state";
+import { useSnackbar } from "notistack";
 
-export const ConfigForecast = ({ getData }: any) => {
+export const ConfigForecast = ({ getData, compiledData }: any) => {
   const {
     setLength,
     setUnit,
@@ -29,6 +32,24 @@ export const ConfigForecast = ({ getData }: any) => {
   } = useForecastLength();
   const [, setForecastLength] = useAtom(configForecastDurationAtom);
   const [, setForecastStart] = useAtom(configForecastStartAtom);
+  const [, setForecastList] = useAtom(forecastListAtom);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const forecastData = useCallback(
+    (forecastDuration, configForecastStart, compiledData) => {
+      if (forecastDuration && configForecastStart && compiledData) {
+        enqueueSnackbar("Forecasting...", { variant: "info" });
+        return budgetForecast(
+          forecastDuration,
+          configForecastStart,
+          compiledData
+        );
+      } else {
+        enqueueSnackbar("Error forecasting", { variant: "error" });
+      }
+    },
+    [enqueueSnackbar]
+  );
 
   function handleChange(event: SelectChangeEvent) {
     setUnit(event.target.value);
@@ -38,7 +59,8 @@ export const ConfigForecast = ({ getData }: any) => {
     e.preventDefault();
     setForecastLength(forecastDuration);
     setForecastStart(startDate);
-    getData();
+    const forecast = forecastData(forecastDuration, startDate, compiledData);
+    setForecastList(forecast);
   }
 
   return (
@@ -46,14 +68,16 @@ export const ConfigForecast = ({ getData }: any) => {
       <TextField
         label="Forecast Length"
         value={length}
+        placeholder="0"
         onChange={(e) => setLength(e.target.value)}
         type="number"
         className="col-span-6 mt-5"
       />
       <FormControl fullWidth className="col-span-6 mt-5">
-        <InputLabel id="forecast-unit">Unit</InputLabel>
+        <InputLabel id="forecast-unit">Time Scale</InputLabel>
         <Select
           labelId="forecast-unit"
+          placeholder="Months"
           value={unit}
           label="Unit"
           onChange={handleChange}>
