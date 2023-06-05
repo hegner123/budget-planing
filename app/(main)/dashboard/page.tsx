@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useState, useEffect, useCallback } from "react";
+import dayjs from "dayjs";
 import { useBalance } from "@budget/hooks/balance/useBalance";
 import { useExpenses } from "@budget/hooks/expenses/useExpenses";
 import { useIncome } from "@budget/hooks/income/useIncome";
@@ -25,10 +26,13 @@ import {
   DataGrid,
   GridActionsCellItem,
   GridEventListener,
+  GridRowModel,
+  GridCellParams,
 } from "@mui/x-data-grid";
 
 import { styled } from "@mui/material/styles";
 import { useSnackbar } from "notistack";
+import { updateBalance } from "@budget/supabaseTables";
 
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   "& .super-app-theme--balance": {
@@ -124,49 +128,55 @@ export default function Dashboard() {
   }
 
   function formatDate(date: any) {
-    let day = date.getDate();
+    let day = date.getDate() + 1;
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
     return `${month}/${day}/${year}`;
   }
 
-  const updateCell = (
-    type: string,
-    id: string,
-    column: string,
-    value: string
-  ) => {
-    switch (type) {
-      case "balance":
-        break;
-      case "expenses":
-        updateExpenses({ id: id, column: column, value: value });
-        break;
-      case "income":
-        updateIncomeEntry({ id: id, column: column, value: value });
-        break;
-      default:
-        break;
-    }
-  };
+  const processRowUpdate = useCallback(
+    (newRow: any) =>
+      new Promise((resolve, reject) => {
+        switch (newRow.type) {
+          case "balance":
+            try {
+              updateBalance(newRow).then((res) => {
+                resolve(res.data);
+              });
+            } catch (error) {
+              reject(error);
+            }
+            break;
+          case "expenses":
+            try {
+              updateExpenses(newRow).then((res) => {
+                resolve(res.data);
+              });
+            } catch (error) {
+              reject(error);
+            }
 
-  const handleSaveEvent: GridEventListener<"rowClick"> = (
-    params: any, // GridRowParams
-    event: any, // MuiEvent<React.MouseEvent<HTMLElement>>
-    details: any // GridCallbackDetails
-  ) => {
-    enqueueSnackbar(`${params.field} : ${params.value}`, {
-      variant: "success",
-    });
+            break;
+          case "income":
+            try {
+              updateIncomeEntry(newRow).then((res) => {
+                resolve(res.data);
+              });
+            } catch (error) {
+              console.log(error);
+            }
+            break;
+          default:
+            break;
+        }
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
-    updateCell(params.row.type, params.row.id, params.field, params.value);
-  };
-
-  const processRowUpdate = useCallback(async (newRow) => {
-    console.log("newrow", newRow);
-    // const response = await updateCell(newRow);
-    enqueueSnackbar("User successfully saved", { variant: "success" });
-    // return response;
+  const handleRowUpdateError = useCallback(async (error) => {
+    enqueueSnackbar(`${error}`, { variant: "error" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -203,11 +213,33 @@ export default function Dashboard() {
                 />,
               ],
             },
-            { field: "name", headerName: "Name", flex: 1 },
-            { field: "balance", headerName: "Balance", flex: 1 },
-            { field: "income", headerName: "Income", flex: 1 },
-            { field: "expenses", headerName: "Expenses", flex: 1 },
-            { field: "date", headerName: "Date", flex: 1 },
+            { field: "name", headerName: "Name", flex: 1, editable: true },
+            {
+              field: "balance",
+              headerName: "Balance",
+              flex: 1,
+              editable: true,
+            },
+            { field: "income", headerName: "Income", flex: 1, editable: true },
+            {
+              field: "expenses",
+              headerName: "Expenses",
+              flex: 1,
+              editable: true,
+            },
+            {
+              field: "date",
+              headerName: "Date",
+              flex: 1,
+              valueGetter: (params) => {
+                return new Date(params.value);
+              },
+              valueParser: (value: any, params: GridCellParams) => {
+                return dayjs(value).format("MM/DD/YYYY");
+              },
+              editable: true,
+              type: "date",
+            },
             {
               field: "repeated",
               headerName: "Repeated",
@@ -228,7 +260,7 @@ export default function Dashboard() {
           rows={data ? data : []}
           getRowClassName={(params) => `super-app-theme--${params.row.type}`}
           processRowUpdate={processRowUpdate}
-          onCellEditStop={handleSaveEvent}
+          onProcessRowUpdateError={handleRowUpdateError}
         />
       </div>
       <DeleteDialog open={openDialog} close={() => setOpenDialog(false)} />

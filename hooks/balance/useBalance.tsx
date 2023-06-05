@@ -91,10 +91,21 @@ export const useBalance = () => {
     deleteBalance(id, supabaseClient);
   }
 
+  async function updateBalance(newRow: any) {
+    const { data, error } = await updateBalance({
+      newRow,
+      supabaseClient,
+    });
+    if (data === null && error === null) {
+      return { data: newRow, error: null };
+    }
+    return { data, error };
+  }
+
   return {
     balance,
     fetchedBalance,
-
+    updateBalance,
     addBalanceHook,
     deleteBalanceEntry,
   };

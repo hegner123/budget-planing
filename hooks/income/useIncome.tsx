@@ -113,13 +113,15 @@ export const useIncome = () => {
     });
   }
 
-  function updateIncomeEntry({ id, column, value }: IncomeUpdateHook) {
-    updateIncome({
-      id,
-      column,
-      value,
+  async function updateIncomeEntry(newRow) {
+    const { data, error } = await updateIncome({
+      newRow,
       supabaseClient,
-    } as IncomeUpdateObject);
+    });
+    if (data === null && error === null) {
+      return { data: newRow, error: null };
+    }
+    return { data, error };
   }
 
   return {

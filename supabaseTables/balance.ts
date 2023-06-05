@@ -28,23 +28,24 @@ export async function getBalance(user: string, supabaseClient: any) {
   return { data, error };
 }
 
-export async function updateBalance({
-  id,
-  column,
-  value,
-  supabaseClient,
-}: BalanceUpdateObject) {
-  const { data, error } = await supabaseClient
-    .from("Balance")
-    .update({ [column]: `${value}` })
-    .eq("uuid", id);
-  return { data, error };
-}
-
 export async function deleteBalance(id: string, supabaseClient: any) {
   let { data, error } = await supabaseClient
     .from("Balance")
     .delete()
+    .eq("uuid", id);
+  return { data, error };
+}
+
+export async function updateBalance({ newRow, supabaseClient }) {
+  const { id, name, balance, repeated, date } = newRow;
+  const { data, error } = await supabaseClient
+    .from("Balance")
+    .update({
+      name: `${name}`,
+      amount: `${parseFloat(balance.slice(1))}`,
+      repeated: `${repeated}`,
+      date: `${date}`,
+    })
     .eq("uuid", id);
   return { data, error };
 }

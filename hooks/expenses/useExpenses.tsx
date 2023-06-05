@@ -105,18 +105,15 @@ export const useExpenses = () => {
     });
   }
 
-  function updateExpenses({ id, column, value }: ExpenseUpdateHook) {
-    console.log(id);
-    console.log({ [column]: value });
-    console.log(value);
-    updateExpense({
-      id,
-      column,
-      value,
+  async function updateExpenses(newRow) {
+    const { data, error } = await updateExpense({
+      newRow,
       supabaseClient,
-    } as ExpenseUpdateObject).then((res) => {
-      console.log(res);
     });
+    if (data === null && error === null) {
+      return { data: newRow, error: null };
+    }
+    return { data, error };
   }
 
   return {

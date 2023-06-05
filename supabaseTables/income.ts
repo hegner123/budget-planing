@@ -52,15 +52,16 @@ export async function deleteIncome({
   return { data, error };
 }
 
-export async function updateIncome({
-  id,
-  column,
-  value,
-  supabaseClient,
-}: IncomeUpdateObject) {
+export async function updateIncome({ newRow, supabaseClient }: any) {
+  const { id, name, income, repeated, date } = newRow;
   const { data, error } = await supabaseClient
     .from("Income")
-    .update({ [column]: `${value}` })
+    .update({
+      name: `${name}`,
+      amount: `${parseFloat(income.slice(1))}`,
+      repeated: `${repeated}`,
+      date: `${date}`,
+    })
     .eq("uuid", id);
   return { data, error };
 }
