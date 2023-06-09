@@ -24,9 +24,10 @@ export const useExpenses = () => {
   const [expenses, setExpenses] = useState<any>(null);
   const [connected, setConnected] = useState(false);
   const [fetchedExpenses, setFetched] = useState(false);
+  const [expenseLog, setExpenseLog] = useState<string>("");
 
-  const supabaseClient = createClientComponentClient();
   const { user } = useSession();
+  const supabaseClient = createClientComponentClient();
   const { data, error, isLoading } = useSWR(`/expenses/${user}`, () =>
     getExpenses(user, supabaseClient)
   );
@@ -119,6 +120,7 @@ export const useExpenses = () => {
   return {
     expenses,
     fetchedExpenses,
+    expenseLog,
     addExpense,
     deleteExpense,
     updateExpenses,

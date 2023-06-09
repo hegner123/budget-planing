@@ -17,9 +17,6 @@ import {
   loadingAtom,
   deleteEntryAtom,
   deleteEntryTypeAtom,
-  refreshedBalanceAtom,
-  refreshedExpensesAtom,
-  refreshedIncomeAtom,
   compiledDataAtom,
 } from "@budget/store/state";
 import {
@@ -59,24 +56,13 @@ export default function Dashboard() {
   const [, setDeleteEntry] = useAtom(deleteEntryAtom);
   const [, setDeleteEntryType] = useAtom(deleteEntryTypeAtom);
   const [, setCompiledData] = useAtom(compiledDataAtom);
-  const [refreshedBalance] = useAtom(refreshedBalanceAtom);
-  const [refreshedExpenses] = useAtom(refreshedExpensesAtom);
-  const [refreshedIncome] = useAtom(refreshedIncomeAtom);
+
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     setBalanceData(parseData(balance, "balance"));
     setExpenseData(parseData(expenses, "expenses"));
     setIncomeData(parseData(income, "income"));
-    if (refreshedBalance.length > 0) {
-      setBalanceData(parseData(refreshedBalance, "balance"));
-    }
-    if (refreshedExpenses.length > 0) {
-      setExpenseData(parseData(refreshedExpenses, "expenses"));
-    }
-    if (refreshedIncome.length > 0) {
-      setIncomeData(parseData(refreshedIncome, "income"));
-    }
 
     function parseData(data: any, type: string) {
       let parsedData = data?.map((item: any) => {
@@ -98,9 +84,6 @@ export default function Dashboard() {
     fetchedBalance,
     fetchedExpenses,
     fetchedIncome,
-    refreshedBalance,
-    refreshedExpenses,
-    refreshedIncome,
   ]);
 
   useEffect(() => {

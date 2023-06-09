@@ -25,6 +25,7 @@ export const useIncome = () => {
   const [income, setIncome] = useState<any>(null);
   const [fetchedIncome, setFetched] = useState(false);
   const [connected, setConnected] = useState(false);
+  const [incomeLog, setIncomeLog] = useState<any>("");
 
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useSession();
@@ -103,7 +104,12 @@ export const useIncome = () => {
   }, [connected, supabaseClient, income]);
 
   function addIncomeSubmit(data: IncomeAdd) {
-    addIncome({ ...data, supabaseClient } as IncomeAddHook);
+    addIncome({
+      ...data,
+      supabaseClient,
+    } as IncomeAddHook).then((res) => {
+      setIncomeLog(JSON.stringify(res));
+    });
   }
 
   function deleteIncomeEntry(id: string) {
@@ -127,6 +133,7 @@ export const useIncome = () => {
   return {
     income,
     fetchedIncome,
+    incomeLog,
     addIncomeSubmit,
     deleteIncomeEntry,
     updateIncomeEntry,

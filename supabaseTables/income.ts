@@ -14,7 +14,7 @@ export async function addIncome({
     {
       user: `${user}`,
       name: `${name}`,
-      income: `${income}`,
+      amount: `${income}`,
       repeated: repeated,
       date: `${date}`,
     },
