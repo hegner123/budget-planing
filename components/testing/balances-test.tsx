@@ -16,15 +16,17 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 import { useSession } from "@budget/hooks/auth/useSession";
-import { useExpenses } from "@budget/hooks/expenses/useExpenses";
+import { useBalance } from "@budget/hooks/balance/useBalance";
+import { useSnackbar } from "notistack";
 
-const TestExpenseForm = () => {
+const TestBalanceForm = () => {
   const [name, setName] = useState<string>("");
-  const [expense, setExpense] = useState<number>(0);
+  const [balance, setBalance] = useState<number>(0);
   const [repeated, setRepeated] = useState<string>("");
   const [date, setDate] = useState<any>(null);
   const { user } = useSession();
-  const { addExpense, expenseLog } = useExpenses();
+  const { addBalance, balanceLog } = useBalance();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleClose = () => {
     resetForm();
@@ -32,13 +34,19 @@ const TestExpenseForm = () => {
 
   const handleSubmit = () => {
     const formSubmit = {
-      name: name,
-      amount: expense,
-      repeated: repeated,
-      date: date,
-      user: user,
+      name: name as string,
+      amount: balance as number,
+      date: date as string,
+      user: user as string,
     };
-    addExpense(formSubmit);
+    addBalance(formSubmit)
+      .then((res) => {
+        console.log(res);
+        enqueueSnackbar("Balance Added", { variant: "success" });
+      })
+      .catch((err) => {
+        enqueueSnackbar(err.message, { variant: "error" });
+      });
   };
 
   const handleSubmitAndClose = () => {
@@ -56,7 +64,7 @@ const TestExpenseForm = () => {
   };
   const resetForm = () => {
     setName("");
-    setExpense(0);
+    setBalance(0);
     setRepeated("");
     setDate(null);
   };
@@ -64,7 +72,7 @@ const TestExpenseForm = () => {
     <Box className="grid grid-cols-12 bg-white col-span-full">
       <Box className="col-span-4 p-10 rounded">
         <form>
-          <h3 className="text-2xl text-black">Add Expense</h3>
+          <h3 className="text-2xl text-black">Add Balance</h3>
           <TextField
             id="name"
             label="Name"
@@ -78,8 +86,8 @@ const TestExpenseForm = () => {
             label="Income"
             variant="outlined"
             type="number"
-            value={expense}
-            onChange={(e: any) => setExpense(e.target.value)}
+            value={balance}
+            onChange={(e: any) => setBalance(e.target.value)}
             className="w-full mt-5"
             InputProps={{
               startAdornment: (
@@ -132,13 +140,13 @@ const TestExpenseForm = () => {
       <Box className="col-span-8 p-10 rounded">
         <ul>
           <li className="text-black">Name: {name}</li>
-          <li className="text-black">Expense: {expense}</li>
+          <li className="text-black">Balance: {balance}</li>
           <li className="text-black">Date: {JSON.stringify(date)}</li>
         </ul>
-        <p className="text-black">Log: {expenseLog}</p>
+        <p className="text-black">Log: {balanceLog}</p>
       </Box>
     </Box>
   );
 };
 
-export { TestExpenseForm };
+export { TestBalanceForm };

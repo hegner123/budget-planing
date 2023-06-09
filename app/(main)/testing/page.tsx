@@ -1,5 +1,7 @@
 "use client";
 import { TestIncomeForm } from "@budget/components/testing/income-test";
+import { TestExpenseForm } from "@budget/components/testing/expenses-test";
+import { TestBalanceForm } from "@budget/components/testing/balances-test";
 import { useState } from "react";
 import Select, { SelectChangeEvent } from "@mui/material/Select/Select";
 import MenuItem from "@mui/material/MenuItem/MenuItem";
@@ -29,6 +31,8 @@ export default function TestPage() {
       </Box>
 
       {selected === "income" && <TestIncomeForm />}
+      {selected === "expense" && <TestExpenseForm />}
+      {selected === "balance" && <TestBalanceForm />}
     </div>
   );
 }

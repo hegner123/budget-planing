@@ -13,7 +13,7 @@ import { useSession } from "@budget/hooks/auth/useSession";
 export const useBalance = () => {
   const [balance, setBalance] = useState<any>(null);
   const [fetchedBalance, setFetched] = useState(false);
-
+  const [balanceLog, setBalanceLog] = useState<any>(null);
   const supabaseClient = createClientComponentClient();
   const [connected, setConnected] = useState(false);
   const { user } = useSession();
@@ -84,8 +84,23 @@ export const useBalance = () => {
     };
   }, [connected, supabaseClient, balance]);
 
-  function addBalanceHook(data: any) {
-    addBalance({ ...data, supabaseClient });
+  async function addBalance({
+    name,
+    amount,
+    user,
+    date,
+  }: {
+    name: string;
+    amount: number;
+    user: string;
+    date: string;
+  }) {
+    if (!user) return console.log("No user");
+    const { data, error } = await supabaseClient
+      .from("Balance")
+      .insert([{ name: name, amount: amount, date: date, user: user }]);
+    setBalanceLog(data);
+    return { data, error };
   }
   function deleteBalanceEntry(id: string) {
     deleteBalance(id, supabaseClient);
@@ -105,8 +120,9 @@ export const useBalance = () => {
   return {
     balance,
     fetchedBalance,
+    balanceLog,
     updateBalance,
-    addBalanceHook,
+    addBalance,
     deleteBalanceEntry,
   };
 };
