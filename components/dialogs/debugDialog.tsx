@@ -6,10 +6,6 @@ import {
   notificationMessageAtom,
   deleteEntryAtom,
   deleteEntryTypeAtom,
-  needsRefreshAtom,
-  refreshedBalanceAtom,
-  refreshedExpensesAtom,
-  refreshedIncomeAtom,
   configForecastAtom,
   configForecastDurationAtom,
   forecastListAtom,
@@ -24,10 +20,6 @@ export default function DebugDialog() {
   const [notificationMessage] = useAtom(notificationMessageAtom);
   const [deleteEntry] = useAtom(deleteEntryAtom);
   const [deleteEntryType] = useAtom(deleteEntryTypeAtom);
-  const [needsRefresh] = useAtom(needsRefreshAtom);
-  const [refreshedBalance] = useAtom(refreshedBalanceAtom);
-  const [refreshedExpenses] = useAtom(refreshedExpensesAtom);
-  const [refreshedIncome] = useAtom(refreshedIncomeAtom);
   const [configForecast] = useAtom(configForecastAtom);
   const [configForecastDuration] = useAtom(configForecastDurationAtom);
   const [forecastList] = useAtom(forecastListAtom);
@@ -54,7 +46,6 @@ export default function DebugDialog() {
           <h2>Compiled Data</h2>
           <pre>{JSON.stringify(compiledData, null, 2)}</pre>
         </div>
-
         <div className="px-4 mt-5">
           <h2>Notification Message</h2>
           <pre>{JSON.stringify(notificationMessage, null, 2)}</pre>
@@ -67,22 +58,7 @@ export default function DebugDialog() {
           <h2>Delete Entry Type</h2>
           <pre>{JSON.stringify(deleteEntryType, null, 2)}</pre>
         </div>
-        <div className="px-4 mt-5">
-          <h2>Needs Refresh</h2>
-          <pre>{JSON.stringify(needsRefresh, null, 2)}</pre>
-        </div>
-        <div className="px-4 mt-5">
-          <h2>Refreshed Balance</h2>
-          <pre>{JSON.stringify(refreshedBalance, null, 2)}</pre>
-        </div>
-        <div className="px-4 mt-5">
-          <h2>Refreshed Expenses</h2>
-          <pre>{JSON.stringify(refreshedExpenses, null, 2)}</pre>
-        </div>
-        <div className="px-4 mt-5">
-          <h2>Refreshed Income</h2>
-          <pre>{JSON.stringify(refreshedIncome, null, 2)}</pre>
-        </div>
+
         <div className="px-4 mt-5">
           <h2>Forecast</h2>
           <pre>{JSON.stringify(forecastList, null, 2)}</pre>

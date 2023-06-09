@@ -1,10 +1,10 @@
 "use client";
-import TestingComponent from "@budget/components/testing";
-import Chart from "@budget/components/chart";
+import { AddIncomeForm } from "@budget/components/addIncome/addIncome";
+
 export default function TestPage() {
   return (
     <div className="grid grid-cols-12 gap-2 p-5">
-      <Chart />
+      <AddIncomeForm />
     </div>
   );
 }

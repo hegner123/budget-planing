@@ -7,7 +7,7 @@ import {
   updateExpense,
 } from "@budget/supabaseTables";
 import useSWR from "swr";
-import { refreshedExpensesAtom } from "@budget/store/state";
+
 import {
   ExpensePayload,
   ExpenseEntry,
@@ -24,7 +24,7 @@ export const useExpenses = () => {
   const [expenses, setExpenses] = useState<any>(null);
   const [connected, setConnected] = useState(false);
   const [fetchedExpenses, setFetched] = useState(false);
-  const [, setRefreshedExpenses] = useAtom(refreshedExpensesAtom);
+
   const supabaseClient = createClientComponentClient();
   const { user } = useSession();
   const { data, error, isLoading } = useSWR(`/expenses/${user}`, () =>
@@ -65,7 +65,7 @@ export const useExpenses = () => {
       switch (data.eventType) {
         case "INSERT":
           let newExpenses = [data.new, ...expenses];
-          setRefreshedExpenses(newExpenses as ExpenseEntry[]);
+
           setExpenses(newExpenses as ExpenseEntry[]);
           break;
         case "UPDATE":
@@ -75,14 +75,14 @@ export const useExpenses = () => {
             }
             return entry;
           });
-          setRefreshedExpenses(updatedExpenses as ExpenseEntry[]);
+
           setExpenses(updatedExpenses as ExpenseEntry[]);
           break;
         case "DELETE":
           const filteredExpenses = expenses.filter(
             (entry: ExpenseEntry) => entry.uuid !== data.old.uuid
           );
-          setRefreshedExpenses(filteredExpenses as ExpenseEntry[]);
+
           setExpenses(filteredExpenses as ExpenseEntry[]);
           break;
         default:
@@ -92,7 +92,7 @@ export const useExpenses = () => {
     return () => {
       LiveExpenses.unsubscribe();
     };
-  }, [connected, expenses, supabaseClient, setRefreshedExpenses]);
+  }, [connected, expenses, supabaseClient]);
 
   function addExpense(data: ExpenseAdd) {
     addExpenses({ ...data, supabaseClient } as ExpenseAddHook);

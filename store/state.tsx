@@ -10,10 +10,7 @@ const showNotificationAtom = atom(false);
 const notificationMessageAtom = atom("");
 const deleteEntryAtom = atom("");
 const deleteEntryTypeAtom = atom("");
-const needsRefreshAtom = atom(false);
-const refreshedBalanceAtom = atom([]);
-const refreshedExpensesAtom = atom([]);
-const refreshedIncomeAtom = atom([]);
+
 const configForecastAtom = atom<any>({});
 const configForecastStartAtom = atom<any>(dayjs(new Date()));
 const configForecastDurationAtom = atom<number>(0);
@@ -27,10 +24,6 @@ export {
   notificationMessageAtom,
   deleteEntryAtom,
   deleteEntryTypeAtom,
-  needsRefreshAtom,
-  refreshedBalanceAtom,
-  refreshedExpensesAtom,
-  refreshedIncomeAtom,
   configForecastAtom,
   configForecastStartAtom,
   configForecastDurationAtom,

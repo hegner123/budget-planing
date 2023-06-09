@@ -9,7 +9,7 @@ import {
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useSession } from "@budget/hooks/auth/useSession";
 import { useAtom } from "jotai";
-import { refreshedIncomeAtom } from "@budget/store/state";
+
 import { useSnackbar } from "notistack";
 import {
   IncomeUpdateObject,
@@ -25,7 +25,7 @@ export const useIncome = () => {
   const [income, setIncome] = useState<any>(null);
   const [fetchedIncome, setFetched] = useState(false);
   const [connected, setConnected] = useState(false);
-  const [, setRefreshedIncome] = useAtom(refreshedIncomeAtom);
+
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useSession();
   const supabaseClient = createClientComponentClient();
@@ -72,7 +72,7 @@ export const useIncome = () => {
       switch (data.eventType) {
         case "INSERT":
           let newIncome = [data.new, ...income];
-          setRefreshedIncome(newIncome as IncomeEntry[]);
+
           setIncome(newIncome as IncomeEntry[]);
           break;
         case "UPDATE":
@@ -82,14 +82,14 @@ export const useIncome = () => {
             }
             return entry;
           });
-          setRefreshedIncome(updatedIncome as IncomeEntry[]);
+
           setIncome(updatedIncome as IncomeEntry[]);
           break;
         case "DELETE":
           const filteredIncome = income.filter(
             (entry: IncomeEntry) => entry.uuid !== data.old.uuid
           );
-          setRefreshedIncome(filteredIncome as IncomeEntry[]);
+
           setIncome(filteredIncome as IncomeEntry[]);
 
           break;
@@ -100,7 +100,7 @@ export const useIncome = () => {
     return () => {
       LiveIncome.unsubscribe();
     };
-  }, [connected, supabaseClient, income, setRefreshedIncome]);
+  }, [connected, supabaseClient, income]);
 
   function addIncomeSubmit(data: IncomeAdd) {
     addIncome({ ...data, supabaseClient } as IncomeAddHook);

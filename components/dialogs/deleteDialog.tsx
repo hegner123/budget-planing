@@ -13,6 +13,7 @@ import { deleteEntryAtom, deleteEntryTypeAtom } from "@budget/store/state";
 import { notificationMessageAtom } from "@budget/store/state";
 import { useSession } from "@budget/hooks/auth/useSession";
 import { useAtom } from "jotai";
+
 const DeleteDialog = ({ open, close }: { open: any; close: any }) => {
   const [deleteEntry, setDeleteEntry] = useAtom(deleteEntryAtom);
   const [deleteEntryType, setDeleteEntryType] = useAtom(deleteEntryTypeAtom);

@@ -11,7 +11,7 @@ import duration from "dayjs/plugin/duration";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import { ForecastLength } from "@budget/types/forecast";
+
 
 const TestingComponent = () => {
   const [field1, setField1] = useState<any>("");
@@ -82,7 +82,6 @@ const TestingComponent = () => {
               onChange={(newValue) => setStartDate(newValue)}
               className="w-full col-span-6 "
             />
-
             <Button
               className="col-span-2 text-white border-2 border-black border-solid bg-slate-700 hover:text-black hover:bg-slate-300"
               onClick={handleSubmit}>
@@ -101,11 +100,9 @@ const TestingComponent = () => {
               ForecastDiff:{" "}
               {JSON.stringify(startDate?.diff(endDate, "day") * -1)}
             </p>
-
             <p className="col-span-5">
               {JSON.stringify(configForecastDuration)}
             </p>
-
             <p className="col-span-full">{results}</p>
           </Card>
         </div>

@@ -5,7 +5,7 @@ import {
   createClientComponentClient,
 } from "@supabase/auth-helpers-nextjs";
 import { getBalance, addBalance, deleteBalance } from "@budget/supabaseTables";
-import { refreshedBalanceAtom } from "@budget/store/state";
+
 import { useAtom } from "jotai";
 import useSWR from "swr";
 import { useSession } from "@budget/hooks/auth/useSession";
@@ -13,7 +13,7 @@ import { useSession } from "@budget/hooks/auth/useSession";
 export const useBalance = () => {
   const [balance, setBalance] = useState<any>(null);
   const [fetchedBalance, setFetched] = useState(false);
-  const [, setRefreshedBalance] = useAtom(refreshedBalanceAtom);
+
   const supabaseClient = createClientComponentClient();
   const [connected, setConnected] = useState(false);
   const { user } = useSession();
@@ -54,7 +54,7 @@ export const useBalance = () => {
       switch (data.eventType) {
         case "INSERT":
           let newBalance = [data.new, ...balance];
-          setRefreshedBalance(newBalance as any);
+
           setBalance(newBalance);
           break;
         case "UPDATE":
@@ -64,14 +64,14 @@ export const useBalance = () => {
             }
             return entry;
           });
-          setRefreshedBalance(updatedBalance);
+
           setBalance(updatedBalance);
           break;
         case "DELETE":
           const filteredBalance = balance?.filter(
             (entry: any) => entry.uuid !== data.old.uuid
           );
-          setRefreshedBalance(filteredBalance);
+
           setBalance(filteredBalance);
           break;
         default:
@@ -82,7 +82,7 @@ export const useBalance = () => {
     return () => {
       LiveBalance.unsubscribe();
     };
-  }, [connected, supabaseClient, balance, setRefreshedBalance]);
+  }, [connected, supabaseClient, balance]);
 
   function addBalanceHook(data: any) {
     addBalance({ ...data, supabaseClient });
