@@ -30,6 +30,7 @@ import {
 import { styled } from "@mui/material/styles";
 import { useSnackbar } from "notistack";
 import { updateBalance } from "@budget/supabaseTables";
+import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
 
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   "& .super-app-theme--balance": {
@@ -56,8 +57,42 @@ export default function Dashboard() {
   const [, setDeleteEntry] = useAtom(deleteEntryAtom);
   const [, setDeleteEntryType] = useAtom(deleteEntryTypeAtom);
   const [, setCompiledData] = useAtom(compiledDataAtom);
+  const { updatedBalance, updatedIncome, updatedExpense } = useSubscribe(
+    balance,
+    income,
+    expenses
+  );
 
   const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    if (updatedBalance) {
+      enqueueSnackbar("Balance Updated", { variant: "success" });
+      setBalanceData(parseData(updatedBalance, "balance"));
+    }
+    if (updatedIncome) {
+      enqueueSnackbar("Income Updated", { variant: "success" });
+      setIncomeData(parseData(updatedIncome, "income"));
+    }
+    if (updatedExpense) {
+      enqueueSnackbar("Expense Updated", { variant: "success" });
+      setExpenseData(parseData(updatedExpense, "expenses"));
+    }
+
+    function parseData(data: any, type: string) {
+      let parsedData = data?.map((item: any) => {
+        return {
+          id: item.uuid,
+          name: item.name,
+          [type]: `$${item.amount}`,
+          date: formatDate(new Date(item.date)),
+          repeated: item.repeated,
+          type: type,
+        };
+      });
+      return parsedData;
+    }
+  }, [updatedBalance, updatedIncome, updatedExpense, enqueueSnackbar]);
 
   useEffect(() => {
     setBalanceData(parseData(balance, "balance"));

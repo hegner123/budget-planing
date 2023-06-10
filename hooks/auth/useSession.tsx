@@ -6,7 +6,7 @@ export const useSession = () => {
   const getSession = useCallback(async () => {
     const { data, error }: { data: any; error: any } =
       await supabase.auth.getSession();
-    return { data: data.session.user.id, error: error };
+    return { data: data, error: error };
   }, [supabase.auth]);
 
   return { getSession };

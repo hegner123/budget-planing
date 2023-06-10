@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RepeatedDefaults } from "@budget/hooks/forecast/forecast";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -27,9 +27,13 @@ const AddExpenseForm = () => {
   const [date, setDate] = useState<any>(null);
 
   const { addExpense } = useExpenses();
+  const [user, setUser] = useState<any>("");
   const { getSession } = useSession();
-  const [user, setUser] = useState<any>(() => getSession());
-
+  useEffect(() => {
+    getSession().then((res) => {
+      setUser(res.data.session.user.id);
+    });
+  }, [getSession]);
   function handleOpen() {
     setOpen(true);
   }

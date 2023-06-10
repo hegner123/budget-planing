@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import { RepeatedDefaults } from "@budget/hooks/forecast/forecast";
@@ -24,9 +24,16 @@ const TestBalanceForm = () => {
   const [balance, setBalance] = useState<number>(0);
   const [repeated, setRepeated] = useState<string>("");
   const [date, setDate] = useState<any>(null);
-  const { user } = useSession();
+  const [user, setUser] = useState<any>("");
+  const { getSession } = useSession();
   const { addBalance, balanceLog } = useBalance();
   const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    getSession().then((res) => {
+      setUser(res.data.session.user.id);
+    });
+  }, [getSession]);
 
   const handleClose = () => {
     resetForm();
@@ -95,22 +102,6 @@ const TestBalanceForm = () => {
               ),
             }}
           />
-
-          <FormControl className="mt-5" fullWidth>
-            <InputLabel id="repeated-label">Repeated</InputLabel>
-            <Select
-              labelId="repeated-label"
-              id="select-label"
-              value={repeated}
-              label="Repeated"
-              onChange={handleRepeatChange}>
-              {RepeatedDefaults.map((item, i) => (
-                <MenuItem value={item} key={`${item}${i}`}>
-                  {item}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
 
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker

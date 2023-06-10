@@ -22,15 +22,18 @@ import {
 import useSWR from "swr";
 
 export const useIncome = () => {
-  const [income, setIncome] = useState<any>(null);
-  const [fetchedIncome, setFetched] = useState(false);
-  const [connected, setConnected] = useState(false);
-  const [incomeLog, setIncomeLog] = useState<any>("");
-
-  const { enqueueSnackbar } = useSnackbar();
-    const { getSession } = useSession();
-    const [user, setUser] = useState<any>(() => getSession());
   const supabaseClient = createClientComponentClient();
+  const [income, setIncome] = useState<any>(null);
+  const [fetchedIncome, setFetched] = useState<any>(false);
+  const [incomeLog, setIncomeLog] = useState<any>("");
+  const { enqueueSnackbar } = useSnackbar();
+  const [user, setUser] = useState<any>("");
+  const { getSession } = useSession();
+  useEffect(() => {
+    getSession().then((res) => {
+      setUser(res.data.session.user.id);
+    });
+  }, [getSession]);
 
   const { data, error, isLoading } = useSWR(`/income/${user}`, () =>
     getIncome(user, supabaseClient)
@@ -54,55 +57,6 @@ export const useIncome = () => {
       enqueueSnackbar("Error fetching income", { variant: "error" });
     }
   }, [data, error, enqueueSnackbar]);
-
-  useEffect(() => {
-    if (connected) return;
-    const LiveIncome = supabaseClient
-      .channel("income")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "Income" },
-        (payload) => {
-          console.log("Change received!", payload);
-          handleUpdatedData(payload as IncomePayload);
-          setConnected(true);
-        }
-      )
-      .subscribe();
-
-    function handleUpdatedData(data: IncomePayload) {
-      switch (data.eventType) {
-        case "INSERT":
-          let newIncome = [data.new, ...income];
-
-          setIncome(newIncome as IncomeEntry[]);
-          break;
-        case "UPDATE":
-          const updatedIncome = income.map((entry: IncomeEntry) => {
-            if (entry.uuid === data.new.uuid) {
-              return data.new;
-            }
-            return entry;
-          });
-
-          setIncome(updatedIncome as IncomeEntry[]);
-          break;
-        case "DELETE":
-          const filteredIncome = income.filter(
-            (entry: IncomeEntry) => entry.uuid !== data.old.uuid
-          );
-
-          setIncome(filteredIncome as IncomeEntry[]);
-
-          break;
-        default:
-          console.log("No event type found");
-      }
-    }
-    return () => {
-      LiveIncome.unsubscribe();
-    };
-  }, [connected, supabaseClient, income]);
 
   function addIncomeSubmit(data: IncomeAdd) {
     addIncome({

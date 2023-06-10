@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -19,10 +19,15 @@ const AddBalanceForm = () => {
   const [amount, setAmount] = useState<any>("");
   const [name, setName] = useState<any>("");
   const [date, setDate] = useState<any>(null);
-    const { getSession } = useSession();
-    const [user, setUser] = useState<any>(() => getSession());
+  const [user, setUser] = useState<any>("");
+  const { getSession } = useSession();
+  useEffect(() => {
+    getSession().then((res) => {
+      setUser(res.data.session.user.id);
+    });
+  }, [getSession]);
 
-    const { addBalance } = useBalance();
+  const { addBalance } = useBalance();
 
   function handleOpen() {
     setOpen(true);

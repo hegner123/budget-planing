@@ -7,16 +7,22 @@ import { useSession } from "@budget/hooks/auth/useSession";
 import useSWR from "swr";
 
 export const useExpenses = () => {
+  const supabaseClient = createClientComponentClient();
   const [expenses, setExpense] = useState<any>(null);
-  const [connected, setConnected] = useState(false);
+
   const [fetchedExpenses, setFetched] = useState(false);
   const [expenseLog, setExpenseLog] = useState<string>("");
+  const [user, setUser] = useState<any>("");
   const { getSession } = useSession();
-  const [user, setUser] = useState<any>(() => getSession());
-  const supabaseClient = createClientComponentClient();
   const { data, error, isLoading } = useSWR(`/expenses/${user}`, () =>
     getExpense(user, supabaseClient)
   );
+
+  useEffect(() => {
+    getSession().then((res) => {
+      setUser(res.data.session.user.id);
+    });
+  }, [getSession]);
 
   async function getExpense(user: string, supabaseClient: any) {
     if (!user) return;
@@ -75,53 +81,6 @@ export const useExpenses = () => {
       setFetched(true);
     }
   }, [data, isLoading]);
-
-  useEffect(() => {
-    if (connected) return;
-    const LiveExpenses = supabaseClient
-      .channel("expense")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "Expenses" },
-        (payload) => {
-          console.log("Change received!", payload);
-          handleUpdatedData(payload as ExpensePayload);
-        }
-      )
-      .subscribe();
-
-    function handleUpdatedData(data: ExpensePayload) {
-      switch (data.eventType) {
-        case "INSERT":
-          let newExpenses = [data.new, ...expenses];
-
-          setExpense(newExpenses as ExpenseEntry[]);
-          break;
-        case "UPDATE":
-          const updatedExpenses = expenses.map((entry: ExpenseEntry) => {
-            if (entry.uuid === data.new.uuid) {
-              return data.new;
-            }
-            return entry;
-          });
-
-          setExpense(updatedExpenses as ExpenseEntry[]);
-          break;
-        case "DELETE":
-          const filteredExpenses = expenses.filter(
-            (entry: ExpenseEntry) => entry.uuid !== data.old.uuid
-          );
-
-          setExpense(filteredExpenses as ExpenseEntry[]);
-          break;
-        default:
-          console.log("No event type found");
-      }
-    }
-    return () => {
-      LiveExpenses.unsubscribe();
-    };
-  }, [connected, expenses, supabaseClient]);
 
   return {
     expenses,
