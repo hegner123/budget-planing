@@ -28,7 +28,8 @@ export const useIncome = () => {
   const [incomeLog, setIncomeLog] = useState<any>("");
 
   const { enqueueSnackbar } = useSnackbar();
-  const { user } = useSession();
+    const { getSession } = useSession();
+    const [user, setUser] = useState<any>(() => getSession());
   const supabaseClient = createClientComponentClient();
 
   const { data, error, isLoading } = useSWR(`/income/${user}`, () =>

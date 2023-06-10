@@ -24,6 +24,7 @@ export const useLogin = () => {
       } as AuthLogin)
         .then(() => {
           router.push("/dashboard");
+          enqueueSnackbar("Logged in", { variant: "success" });
         })
         .catch((err: null | string) => {
           setError(err);

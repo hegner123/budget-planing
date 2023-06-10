@@ -1,38 +1,24 @@
 "use client";
 import { useState, useEffect } from "react";
-import {
-  getExpenses,
-  addExpenses,
-  deleteExpenses,
-  updateExpense,
-} from "@budget/supabaseTables";
-import useSWR from "swr";
-
-import {
-  ExpensePayload,
-  ExpenseEntry,
-  ExpenseUpdateObject,
-  ExpenseUpdateHook,
-  ExpenseAdd,
-  ExpenseAddHook,
-} from "@budget/types";
-import { useAtom } from "jotai";
+import { deleteExpenses, updateExpense } from "@budget/supabaseTables";
+import { ExpensePayload, ExpenseEntry, ExpenseAdd } from "@budget/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useSession } from "@budget/hooks/auth/useSession";
+import useSWR from "swr";
 
 export const useExpenses = () => {
-  const [expenses, setExpenses] = useState<any>(null);
+  const [expenses, setExpense] = useState<any>(null);
   const [connected, setConnected] = useState(false);
   const [fetchedExpenses, setFetched] = useState(false);
   const [expenseLog, setExpenseLog] = useState<string>("");
-
-  const { user } = useSession();
+  const { getSession } = useSession();
+  const [user, setUser] = useState<any>(() => getSession());
   const supabaseClient = createClientComponentClient();
   const { data, error, isLoading } = useSWR(`/expenses/${user}`, () =>
-    getExpenses(user, supabaseClient)
+    getExpense(user, supabaseClient)
   );
 
-  async function getExpenses(user: string, supabaseClient: any) {
+  async function getExpense(user: string, supabaseClient: any) {
     if (!user) return;
     let { data, error } = await supabaseClient
       .from("Expenses")
@@ -41,9 +27,51 @@ export const useExpenses = () => {
     return { data, error };
   }
 
+  async function addExpense({
+    user,
+    name,
+    amount,
+    repeated,
+    date,
+  }: ExpenseAdd) {
+    if (!user) throw new Error("No user provided");
+    if (!name) throw new Error("No name provided");
+    if (!amount) throw new Error("No amount provided");
+
+    const { data, error } = await supabaseClient.from("Expenses").insert([
+      {
+        user: `${user}`,
+        name: `${name}`,
+        amount: `${amount}`,
+        repeated: repeated,
+        date: `${date}`,
+      },
+    ]);
+
+    return { data, error };
+  }
+  async function deleteExpense(id: string) {
+    const { data, error } = await deleteExpenses({ id, supabaseClient } as {
+      id: string;
+      supabaseClient: any;
+    });
+    return { data, error };
+  }
+
+  async function updateExpenses(newRow) {
+    const { data, error } = await updateExpense({
+      newRow,
+      supabaseClient,
+    });
+    if (data === null && error === null) {
+      return { data: newRow, error: null };
+    }
+    return { data, error };
+  }
+
   useEffect(() => {
     if (data) {
-      setExpenses(data?.data);
+      setExpense(data?.data);
       setFetched(true);
     }
   }, [data, isLoading]);
@@ -67,7 +95,7 @@ export const useExpenses = () => {
         case "INSERT":
           let newExpenses = [data.new, ...expenses];
 
-          setExpenses(newExpenses as ExpenseEntry[]);
+          setExpense(newExpenses as ExpenseEntry[]);
           break;
         case "UPDATE":
           const updatedExpenses = expenses.map((entry: ExpenseEntry) => {
@@ -77,14 +105,14 @@ export const useExpenses = () => {
             return entry;
           });
 
-          setExpenses(updatedExpenses as ExpenseEntry[]);
+          setExpense(updatedExpenses as ExpenseEntry[]);
           break;
         case "DELETE":
           const filteredExpenses = expenses.filter(
             (entry: ExpenseEntry) => entry.uuid !== data.old.uuid
           );
 
-          setExpenses(filteredExpenses as ExpenseEntry[]);
+          setExpense(filteredExpenses as ExpenseEntry[]);
           break;
         default:
           console.log("No event type found");
@@ -94,28 +122,6 @@ export const useExpenses = () => {
       LiveExpenses.unsubscribe();
     };
   }, [connected, expenses, supabaseClient]);
-
-  function addExpense(data: ExpenseAdd) {
-    addExpenses({ ...data, supabaseClient } as ExpenseAddHook);
-  }
-
-  function deleteExpense(id: string) {
-    deleteExpenses({ id, supabaseClient } as {
-      id: string;
-      supabaseClient: any;
-    });
-  }
-
-  async function updateExpenses(newRow) {
-    const { data, error } = await updateExpense({
-      newRow,
-      supabaseClient,
-    });
-    if (data === null && error === null) {
-      return { data: newRow, error: null };
-    }
-    return { data, error };
-  }
 
   return {
     expenses,

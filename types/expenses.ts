@@ -1,6 +1,3 @@
-export interface ExpenseAddHook extends ExpenseAdd {
-  supabaseClient: any;
-}
 export interface ExpenseAdd {
   user: string;
   name: string;

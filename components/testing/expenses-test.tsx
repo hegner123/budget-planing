@@ -16,14 +16,15 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 import { useSession } from "@budget/hooks/auth/useSession";
-import { useExpenses } from "@budget/hooks/expenses/useExpenses";
+import { useExpenses } from "@budget/hooks/expense/useExpense";
 
 const TestExpenseForm = () => {
   const [name, setName] = useState<string>("");
   const [expense, setExpense] = useState<number>(0);
   const [repeated, setRepeated] = useState<string>("");
   const [date, setDate] = useState<any>(null);
-  const { user } = useSession();
+  const { getSession } = useSession();
+  const [user, setUser] = useState<any>(() => getSession());
   const { addExpense, expenseLog } = useExpenses();
 
   const handleClose = () => {

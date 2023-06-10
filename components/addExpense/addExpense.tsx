@@ -16,7 +16,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useExpenses } from "@budget/hooks/expenses/useExpenses";
+import { useExpenses } from "@budget/hooks/expense/useExpense";
 import { useSession } from "@budget/hooks/auth/useSession";
 
 const AddExpenseForm = () => {
@@ -27,7 +27,8 @@ const AddExpenseForm = () => {
   const [date, setDate] = useState<any>(null);
 
   const { addExpense } = useExpenses();
-  const { user } = useSession();
+  const { getSession } = useSession();
+  const [user, setUser] = useState<any>(() => getSession());
 
   function handleOpen() {
     setOpen(true);

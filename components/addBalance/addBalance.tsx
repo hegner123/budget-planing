@@ -19,9 +19,10 @@ const AddBalanceForm = () => {
   const [amount, setAmount] = useState<any>("");
   const [name, setName] = useState<any>("");
   const [date, setDate] = useState<any>(null);
-  const { user } = useSession();
+    const { getSession } = useSession();
+    const [user, setUser] = useState<any>(() => getSession());
 
-  const { addBalanceHook } = useBalance();
+    const { addBalance } = useBalance();
 
   function handleOpen() {
     setOpen(true);
@@ -32,7 +33,7 @@ const AddBalanceForm = () => {
   };
 
   const handleSubmit = () => {
-    addBalanceHook({
+    addBalance({
       name: name,
       amount: amount,
       date: date,

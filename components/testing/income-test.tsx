@@ -22,7 +22,8 @@ const TestIncomeForm = () => {
   const [income, setIncome] = useState<number>(0);
   const [repeated, setRepeated] = useState<string>("");
   const [date, setDate] = useState<any>(null);
-  const { user } = useSession();
+  const { getSession } = useSession();
+  const [user, setUser] = useState<any>(() => getSession());
   const { addIncomeSubmit, incomeLog } = useIncome();
 
   const handleClose = () => {
@@ -53,12 +54,14 @@ const TestIncomeForm = () => {
   const handleRepeatChange = (event: SelectChangeEvent) => {
     setRepeated(event.target.value);
   };
+
   const resetForm = () => {
     setName("");
     setIncome(0);
     setRepeated("");
     setDate(null);
   };
+
   return (
     <Box className="grid grid-cols-12 bg-white col-span-full">
       <Box className="col-span-4 p-10 rounded">
