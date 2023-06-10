@@ -12,24 +12,34 @@ import usePasswordReset from "@budget/hooks/auth/usePasswordReset";
 import { loadingAtom } from "@budget/store/state";
 import { useAtom } from "jotai";
 import type { Session } from "@supabase/auth-helpers-nextjs";
+import { useSession } from "@budget/hooks/auth/useSession";
+import { usePathname } from "next/navigation";
 
 const LoginPage = ({ session }: { session: Session | null }) => {
+  const pathname = usePathname();
   const { email, password, error, setEmail, setPassword, handleSubmit } =
     useLogin();
   const [showPasswordReset, setShowPasswordReset] = useState(false);
   const [passwordResetEmail, setPasswordResetEmail] = useState("");
+  const [user, setUser] = useState("");
   const { handlePasswordReset } = usePasswordReset();
-  const [, setLoadingAtom] = useAtom(loadingAtom);
-
+  const { getSession } = useSession();
   const supabase = createClientComponentClient();
   const router = useRouter();
-  useEffect(() => {
-    setLoadingAtom(false);
-  }, [setLoadingAtom]);
 
-  return session ? (
-    <button onClick={() => console.log(0)}>Sign out</button>
-  ) : (
+  useEffect(() => {
+    getSession().then((res) => {
+      setUser(res.data.session?.user.id);
+    });
+  }, [getSession, pathname]);
+
+  useEffect(() => {
+    if (user) {
+      router.push("/dashboard");
+    }
+  }, [user, router]);
+
+  return (
     <>
       <main className="justify-center min-w-full mt-10 main-min-h site-width site_grid">
         <div className="w-full col-span-4 col-start-6">

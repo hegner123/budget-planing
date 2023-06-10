@@ -17,14 +17,12 @@ import dayjs from "dayjs";
 
 const Forecast = () => {
   const [compiledData, setCompiledData] = useAtom(compiledDataAtom);
-  const [forecastStartDate] = useAtom(configForecastStartAtom);
-  const [forecastLength, setForecastLength] = useAtom(
-    configForecastDurationAtom
-  );
   const [forecastList, setForecastList] = useAtom(forecastListAtom);
   const [forecastDisplay, setForecastDisplay] = useState<any>("list");
   const { getForecastData } = useForecast();
   const { enqueueSnackbar } = useSnackbar();
+  const options = { style: "currency", currency: "USD" };
+  const numberFormat = new Intl.NumberFormat("en-US", options);
 
   useEffect(() => {
     setCompiledData(JSON.parse(localStorage.getItem("compiledData")!));
@@ -63,14 +61,14 @@ const Forecast = () => {
             </ToggleButton>
           </ToggleButtonGroup>
         </div>
-        <Card className="col-span-3 p-5 max-h-fit">
+        <Card className="col-span-4 p-5 max-h-fit">
           <h2 className="mb-5 text-2xl">Forecast Length</h2>
           <ConfigForecast
             getData={getForecastData}
             compiledData={compiledData}
           />
         </Card>
-        <Card className="col-span-9 p-5">
+        <Card className="col-span-8 p-5">
           <h2 className="mb-5 text-2xl">Forecast</h2>
           <ul>
             {/* {forecastLength && (
@@ -79,10 +77,10 @@ const Forecast = () => {
 
             {forecastDisplay === "list" &&
               forecastList &&
-              forecastList.map((item: any) => (
-                <li key={dayjs(item.date).format("YYYY/MM/DD")}>
-                  {dayjs(item.date).format("YYYY/MM/DD")} :{" "}
-                  {`\$${item.balance}`}
+              forecastList.map((item: any, i) => (
+                <li key={i}>
+                  {dayjs(item.date).format("YYYY/MM/DD")}
+                  {` ${numberFormat.format(item.balance)}`}
                 </li>
               ))}
             {forecastDisplay === "chart" && (

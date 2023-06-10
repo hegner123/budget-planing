@@ -8,8 +8,46 @@ export function budgetForecast(length: number, startDate: string, data: any) {
   // Filter compiled data into balance, income, and expenses
 
   const balance = data.filter((entry: any) => entry.type === "balance");
-  const income = data.filter((entry: any) => entry.type === "income");
-  const expenses = data.filter((entry: any) => entry.type === "expenses");
+  const rawIncome = data.filter((entry: any) => entry.type === "income");
+  const rawExpenses = data.filter((entry: any) => entry.type === "expenses");
+
+  // Entries
+
+  type FunctionA = (entries: any[], b: number) => any[] | FunctionA;
+  const repeatedEntries: FunctionA = (entries, length) => {
+    let newRepeatedEntries = [];
+    entries.forEach((entry) => {
+      if (entry.repeated !== "None") {
+        newRepeatedEntries.push(entry);
+      }
+      if (entry.repeated === "Weekly") {
+        let newEntry = { ...entry };
+        newEntry.date = RepeatedDefaultsMap.weekly(entry.date);
+        newRepeatedEntries.push(newEntry);
+      }
+      if (entry.repeated === "Biweekly") {
+        let newEntry = { ...entry };
+        newEntry.date = RepeatedDefaultsMap.biweekly(entry.date);
+        newRepeatedEntries.push(newEntry);
+      }
+      if (entry.repeated === "Monthly") {
+        let newEntry = { ...entry };
+        newEntry.date = RepeatedDefaultsMap.monthly(entry.date);
+        newRepeatedEntries.push(newEntry);
+      }
+      if (entry.repeated === "Yearly") {
+        let newEntry = { ...entry };
+        newEntry.date = RepeatedDefaultsMap.yearly(entry.date);
+        newRepeatedEntries.push(newEntry);
+      }
+    });
+    return newRepeatedEntries;
+  };
+
+  // Create Repeated Income and Expenses
+
+  const income = repeatedEntries(rawIncome, length);
+  const expenses = repeatedEntries(rawExpenses, length);
 
   // Balance Length
 
@@ -32,7 +70,7 @@ export function budgetForecast(length: number, startDate: string, data: any) {
         expenses,
         income,
         newDate
-      );
+      ) as any;
     }
     const forecastEntry = {
       date: newDate,
@@ -42,16 +80,16 @@ export function budgetForecast(length: number, startDate: string, data: any) {
   }
 
   function calculateBalance(
-    startingBalance: number,
+    startingBalance: any,
     expenses: any,
     income: any,
     date: any
   ) {
-    let newBalance = startingBalance;
+    let newBalance: any = startingBalance;
     let newExpenses = expenses.filter((entry: any) => {
       return dayjs(entry.date).date() === dayjs(date).date();
     });
-    console.log(newExpenses);
+
     let newIncome = income.filter((entry: any) => {
       return dayjs(entry.date).date() === dayjs(date).date();
     });
@@ -79,7 +117,6 @@ export function budgetForecast(length: number, startDate: string, data: any) {
     }
 
     newBalance = newBalance - newExpensesTotal + newIncomeTotal;
-
     return newBalance;
   }
 

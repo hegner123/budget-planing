@@ -146,10 +146,7 @@ export default function Dashboard() {
   }
 
   function formatDate(date: any) {
-    let day = date.getDate() + 1;
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
-    return `${month}/${day}/${year}`;
+    return `${dayjs(date).add(1, "day").format("MM/DD/YYYY")}`;
   }
 
   const processRowUpdate = useCallback(
@@ -272,7 +269,7 @@ export default function Dashboard() {
               ),
 
               type: "singleSelect",
-              valueOptions: ["none", "weekly", "biweekly", "monthly", "yearly"],
+              valueOptions: ["None", "Weekly", "Biweekly", "Monthly", "Yearly"],
             },
           ]}
           rows={data ? data : []}
