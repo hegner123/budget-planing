@@ -11,9 +11,21 @@ export function budgetForecast(length: number, startDate: string, data: any) {
   const rawIncome = data.filter((entry: any) => entry.type === "income");
   const rawExpenses = data.filter((entry: any) => entry.type === "expenses");
 
-  // Entries
+  const refreshIncome = rawIncome.map((entry: any) => {
+    let refreshedEntry = { ...entry };
+    refreshedEntry.date = dayjs(entry.date).month(dayjs().month());
+    return refreshedEntry;
+  });
+  const refreshExpenses = rawExpenses.map((entry: any) => {
+    let refreshedEntry = { ...entry };
+    refreshedEntry.date = dayjs(entry.date).month(dayjs().month());
+    return refreshedEntry;
+  });
 
-  type FunctionA = (entries: any[], b: number) => any[] | FunctionA;
+  // Entries
+  // repeat entries based on repeated value
+
+  type FunctionA = (entries: any[], b: number) => any[];
   const repeatedEntries: FunctionA = (entries, length) => {
     let newRepeatedEntries = [];
     entries.forEach((entry) => {
@@ -21,24 +33,32 @@ export function budgetForecast(length: number, startDate: string, data: any) {
         newRepeatedEntries.push(entry);
       }
       if (entry.repeated === "Weekly") {
-        let newEntry = { ...entry };
-        newEntry.date = RepeatedDefaultsMap.weekly(entry.date);
-        newRepeatedEntries.push(newEntry);
+        for (let i = 0; i < length; i++) {
+          let newEntry = { ...entry };
+          newEntry.date = RepeatedDefaultsMap.weekly(entry.date, i + 1);
+          newRepeatedEntries.push(newEntry);
+        }
       }
       if (entry.repeated === "Biweekly") {
-        let newEntry = { ...entry };
-        newEntry.date = RepeatedDefaultsMap.biweekly(entry.date);
-        newRepeatedEntries.push(newEntry);
+        for (let i = 0; i < length; i++) {
+          let newEntry = { ...entry };
+          newEntry.date = RepeatedDefaultsMap.biweekly(entry.date, i + 1);
+          newRepeatedEntries.push(newEntry);
+        }
       }
       if (entry.repeated === "Monthly") {
-        let newEntry = { ...entry };
-        newEntry.date = RepeatedDefaultsMap.monthly(entry.date);
-        newRepeatedEntries.push(newEntry);
+        for (let i = 0; i < length; i++) {
+          let newEntry = { ...entry };
+          newEntry.date = RepeatedDefaultsMap.monthly(entry.date, i + 1);
+          newRepeatedEntries.push(newEntry);
+        }
       }
       if (entry.repeated === "Yearly") {
-        let newEntry = { ...entry };
-        newEntry.date = RepeatedDefaultsMap.yearly(entry.date);
-        newRepeatedEntries.push(newEntry);
+        for (let i = 0; i < length; i++) {
+          let newEntry = { ...entry };
+          newEntry.date = RepeatedDefaultsMap.yearly(entry.date, i + 1);
+          newRepeatedEntries.push(newEntry);
+        }
       }
     });
     return newRepeatedEntries;
@@ -46,8 +66,8 @@ export function budgetForecast(length: number, startDate: string, data: any) {
 
   // Create Repeated Income and Expenses
 
-  const income = repeatedEntries(rawIncome, length);
-  const expenses = repeatedEntries(rawExpenses, length);
+  const income = repeatedEntries(refreshIncome, length);
+  const expenses = repeatedEntries(refreshExpenses, length);
 
   // Balance Length
 
@@ -142,8 +162,8 @@ export const RepeatedDefaults = [
 ];
 
 export const RepeatedDefaultsMap = {
-  weekly: (date: any) => dayjs(date).add(1, "week"),
-  biweekly: (date: any) => dayjs(date).add(2, "week"),
-  monthly: (date: any) => dayjs(date).add(1, "month"),
-  yearly: (date: any) => dayjs(date).add(1, "year"),
+  weekly: (date: any, length: number) => dayjs(date).add(1 * length, "week"),
+  biweekly: (date: any, length: number) => dayjs(date).add(2 * length, "week"),
+  monthly: (date: any, length: number) => dayjs(date).add(1 * length, "month"),
+  yearly: (date: any, length: number) => dayjs(date).add(1 * length, "year"),
 };
