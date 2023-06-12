@@ -13,12 +13,12 @@ export function budgetForecast(length: number, startDate: string, data: any) {
 
   const refreshIncome = rawIncome.map((entry: any) => {
     let refreshedEntry = { ...entry };
-    refreshedEntry.date = dayjs(entry.date).month(dayjs().month());
+    refreshedEntry.date = dayjs().format("MM/DD/YYYY");
     return refreshedEntry;
   });
   const refreshExpenses = rawExpenses.map((entry: any) => {
     let refreshedEntry = { ...entry };
-    refreshedEntry.date = dayjs(entry.date).month(dayjs().month());
+    refreshedEntry.date = dayjs().format("MM/DD/YYYY");
     return refreshedEntry;
   });
 
@@ -26,6 +26,7 @@ export function budgetForecast(length: number, startDate: string, data: any) {
   // repeat entries based on repeated value
 
   type FunctionA = (entries: any[], b: number) => any[];
+
   const repeatedEntries: FunctionA = (entries, length) => {
     let newRepeatedEntries = [];
     entries.forEach((entry) => {
@@ -40,11 +41,9 @@ export function budgetForecast(length: number, startDate: string, data: any) {
         }
       }
       if (entry.repeated === "Biweekly") {
-        for (let i = 0; i < length; i++) {
-          let newEntry = { ...entry };
-          newEntry.date = RepeatedDefaultsMap.biweekly(entry.date, i + 1);
-          newRepeatedEntries.push(newEntry);
-        }
+        let newEntry = { ...entry };
+        newEntry.date = RepeatedDefaultsMap.biweekly(entry.date, 1);
+        newRepeatedEntries.push(newEntry);
       }
       if (entry.repeated === "Monthly") {
         for (let i = 0; i < length; i++) {
@@ -67,6 +66,7 @@ export function budgetForecast(length: number, startDate: string, data: any) {
   // Create Repeated Income and Expenses
 
   const income = repeatedEntries(refreshIncome, length);
+  console.log(income);
   const expenses = repeatedEntries(refreshExpenses, length);
 
   // Balance Length
@@ -143,7 +143,6 @@ export function budgetForecast(length: number, startDate: string, data: any) {
   function trimAndFloat(amount: string) {
     return parseFloat(amount.slice(1));
   }
-
   return forecastList;
 }
 
@@ -163,7 +162,10 @@ export const RepeatedDefaults = [
 
 export const RepeatedDefaultsMap = {
   weekly: (date: any, length: number) => dayjs(date).add(1 * length, "week"),
-  biweekly: (date: any, length: number) => dayjs(date).add(2 * length, "week"),
+  biweekly: (date: any, length: number) =>
+    dayjs(date)
+      .add(2 * length, "week")
+      .format("M"),
   monthly: (date: any, length: number) => dayjs(date).add(1 * length, "month"),
   yearly: (date: any, length: number) => dayjs(date).add(1 * length, "year"),
 };

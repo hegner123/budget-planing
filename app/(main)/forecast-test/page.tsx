@@ -24,6 +24,7 @@ import { budgetForecast } from "@budget/hooks/forecast/forecast";
 const Forecast = () => {
   const [compiledData, setCompiledData] = useAtom(compiledDataAtom);
   const [forecastList, setForecastList] = useAtom(forecastListAtom);
+
   const [forecastDisplay, setForecastDisplay] = useState<any>("list");
   const {
     setLength,
@@ -37,7 +38,6 @@ const Forecast = () => {
   const [, setForecastLength] = useAtom(configForecastDurationAtom);
   const [forecastStart, setForecastStart] = useAtom(configForecastStartAtom);
   const [isSet, setIsSet] = useState(false);
-  const { getForecastData } = useForecast();
   const { enqueueSnackbar } = useSnackbar();
   const options = { style: "currency", currency: "USD" };
   const numberFormat = new Intl.NumberFormat("en-US", options);
@@ -48,7 +48,7 @@ const Forecast = () => {
   //     setForecastStart(dayjs());
   //     setLength(1);
   //     setUnit("month");
-  //     const forecast = forecastData(forecastDuration, startDate, compiledData);
+  // const forecast = forecastData(forecastDuration, startDate, compiledData);
   //     setForecastList(forecast);
   //   }
   //   setIsSet(true);
@@ -58,21 +58,27 @@ const Forecast = () => {
 
   useEffect(() => {
     if (!isSet) {
-      setCompiledData(JSON.parse(localStorage.getItem("compiledData")!));
+      loadLocalData();
       setForecastStart(dayjs());
       const forecast = forecastData(forecastDuration, startDate, compiledData);
       setForecastList(forecast);
     }
     setIsSet(true);
 
+    async function loadLocalData() {
+      const compiled = await JSON.parse(localStorage.getItem("compiledData"));
+      setCompiledData(compiled);
+      return compiled;
+    }
     function forecastData(forecastDuration, configForecastStart, compiledData) {
       if (forecastDuration && configForecastStart && compiledData) {
         enqueueSnackbar("Forecasting...", { variant: "info" });
-        return budgetForecast(
+        let forecast = budgetForecast(
           forecastDuration,
           configForecastStart,
           compiledData
         );
+        return forecast;
       } else {
         enqueueSnackbar("Error forecasting", { variant: "error" });
       }
@@ -88,6 +94,7 @@ const Forecast = () => {
     forecastDuration,
     compiledData,
     enqueueSnackbar,
+    setForecastList,
   ]);
 
   function handleDisplayChange(event: any, newDisplay: any) {
