@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Dialog from "@mui/material/Dialog";
+import CircularProgress from "@mui/material/CircularProgress";
 import usePasswordReset from "@budget/hooks/auth/usePasswordReset";
 import { loadingAtom } from "@budget/store/state";
 import { useAtom } from "jotai";
@@ -24,6 +25,7 @@ const LoginPage = ({ session }: { session: Session | null }) => {
   const [user, setUser] = useState("");
   const { handlePasswordReset } = usePasswordReset();
   const { getSession } = useSession();
+  const [loading, setLoading] = useAtom(loadingAtom);
   const supabase = createClientComponentClient();
   const router = useRouter();
 
@@ -39,7 +41,11 @@ const LoginPage = ({ session }: { session: Session | null }) => {
     }
   }, [user, router]);
 
-  return (
+  return loading ? (
+    <div className="min-h-screen w-[100%] grid place-items-center">
+      <CircularProgress />
+    </div>
+  ) : (
     <>
       <main className="justify-center min-w-full mt-10 main-min-h site-width site_grid">
         <div className="w-full col-span-4 col-start-6">
@@ -110,5 +116,8 @@ const LoginPage = ({ session }: { session: Session | null }) => {
     </>
   );
 };
+  
+  
+
 
 export default LoginPage;

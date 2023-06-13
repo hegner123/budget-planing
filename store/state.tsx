@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 const budgetStore = createStore();
 const loadingAtom = atom(true);
 const compiledDataAtom = atom([]);
+const loggedInUserAtom = atom<string>("");
 const showNotificationAtom = atom(false);
 const notificationMessageAtom = atom("");
 const deleteEntryAtom = atom("");
@@ -29,6 +30,7 @@ export {
   configForecastDurationAtom,
   showDebugModalAtom,
   forecastListAtom,
+  loggedInUserAtom,
 };
 
 const JotaiProvider = ({ children }: any) => {

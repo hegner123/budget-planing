@@ -33,14 +33,24 @@ import { updateBalance } from "@budget/supabaseTables";
 import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
 
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+  ".super-app-theme--header": {
+    backgroundColor: "#000000",
+    color: "#ffffff",
+  },
+  ".super-app-theme--header button": {
+    color: "#ffffff",
+  },
   "& .super-app-theme--balance": {
-    backgroundColor: "#dde0fe",
+    backgroundColor: "#3c3e4f",
+    color: "#ffffff",
   },
   "& .super-app-theme--income": {
-    backgroundColor: "#ddfee8",
+    backgroundColor: "#404d45",
+    color: "#ffffff",
   },
   "& .super-app-theme--expenses": {
-    backgroundColor: "#fee7dd",
+    backgroundColor: "#372821",
+    color: "#ffffff",
   },
 }));
 
@@ -222,25 +232,40 @@ export default function Dashboard() {
               getActions: (params) => [
                 <GridActionsCellItem
                   key={params.id}
-                  icon={<DeleteIcon />}
+                  icon={<DeleteIcon className="text-white" />}
                   onClick={() => prepDelete(`${params.id}`, params.row.type)}
                   label="Delete"
                 />,
               ],
+              headerClassName: "super-app-theme--header",
             },
-            { field: "name", headerName: "Name", flex: 1, editable: true },
+            {
+              field: "name",
+              headerName: "Name",
+              flex: 1,
+              editable: true,
+              headerClassName: "super-app-theme--header",
+            },
             {
               field: "balance",
               headerName: "Balance",
               flex: 1,
               editable: true,
+              headerClassName: "super-app-theme--header",
             },
-            { field: "income", headerName: "Income", flex: 1, editable: true },
+            {
+              field: "income",
+              headerName: "Income",
+              flex: 1,
+              editable: true,
+              headerClassName: "super-app-theme--header",
+            },
             {
               field: "expenses",
               headerName: "Expenses",
               flex: 1,
               editable: true,
+              headerClassName: "super-app-theme--header",
             },
             {
               field: "date",
@@ -254,6 +279,7 @@ export default function Dashboard() {
               },
               editable: true,
               type: "date",
+              headerClassName: "super-app-theme--header",
             },
             {
               field: "repeated",
@@ -267,6 +293,7 @@ export default function Dashboard() {
                       params.value.slice(1)}
                 </p>
               ),
+              headerClassName: "super-app-theme--header",
 
               type: "singleSelect",
               valueOptions: ["None", "Weekly", "Biweekly", "Monthly", "Yearly"],

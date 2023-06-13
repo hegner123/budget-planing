@@ -9,7 +9,11 @@ import ListItemButton from "@mui/material/ListItemButton";
 import { useExpenses } from "@budget/hooks/expense/useExpense";
 import { useIncome } from "@budget/hooks/income/useIncome";
 import { useBalance } from "@budget/hooks/balance/useBalance";
-import { deleteEntryAtom, deleteEntryTypeAtom } from "@budget/store/state";
+import {
+  deleteEntryAtom,
+  deleteEntryTypeAtom,
+  loggedInUserAtom,
+} from "@budget/store/state";
 import { notificationMessageAtom } from "@budget/store/state";
 import { useSession } from "@budget/hooks/auth/useSession";
 import { useAtom } from "jotai";
@@ -21,7 +25,7 @@ const DeleteDialog = ({ open, close }: { open: any; close: any }) => {
   const { deleteExpense } = useExpenses();
   const { deleteIncomeEntry } = useIncome();
   const { deleteBalanceEntry } = useBalance();
-  const { user } = useSession();
+  const [user] = useAtom(loggedInUserAtom);
 
   function confirmDelete() {
     switch (deleteEntryType) {
