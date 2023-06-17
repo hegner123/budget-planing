@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { refreshDates } from "./lib";
 
 export function budgetForecast(length: number, startDate: string, data: any) {
   // Init forecastList
@@ -11,16 +12,8 @@ export function budgetForecast(length: number, startDate: string, data: any) {
   const rawIncome = data.filter((entry: any) => entry.type === "income");
   const rawExpenses = data.filter((entry: any) => entry.type === "expenses");
 
-  const refreshIncome = rawIncome.map((entry: any) => {
-    let refreshedEntry = { ...entry };
-    refreshedEntry.date = dayjs().format("MM/DD/YYYY");
-    return refreshedEntry;
-  });
-  const refreshExpenses = rawExpenses.map((entry: any) => {
-    let refreshedEntry = { ...entry };
-    refreshedEntry.date = dayjs().format("MM/DD/YYYY");
-    return refreshedEntry;
-  });
+  const refreshIncome = refreshDates(rawIncome);
+  const refreshExpenses = refreshDates(rawExpenses);
 
   // Entries
   // repeat entries based on repeated value

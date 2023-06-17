@@ -10,3 +10,50 @@ Step 2: For each date take either the starting balance or the previous balance a
 
 Step 3: Return the list of daily balances.
 
+
+## Forecast Algorithm
+
+List of incomes with dates and repeated frequency
+
+list of expenses with dates and repeated frequency
+
+starting balance 
+
+starting date
+
+Forecast length 
+
+starting  balance
+
+
+
+Create a list of all incomes derived from frequency and forecast length
+
+    refresh date to current month
+    
+
+
+create a lost of all expenses derived from frequency and forecast length
+
+create a list with the starting balance
+
+for each day in forecast length
+
+find any matching dates in income
+
+Total matching income
+
+add income to balance
+
+find any matching dates in expenses
+
+total matching expenses
+
+substract expenses from balance
+
+display date, balance, list of matching incomes, and list of matching expenses
+
+
+
+
+
