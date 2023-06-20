@@ -1,7 +1,6 @@
-export interface ForecastConfig {
-  start: Date;
-  duration: String;
-}
+import { Dayjs } from "dayjs";
+import { ExpenseEntry } from "./expenses";
+import { IncomeEntry } from "./income";
 
 export interface ForecastLength {
   days: Number;
@@ -13,11 +12,9 @@ export interface ForecastLength {
   years: Number;
 }
 
-export interface Forecast {
-  dates: ForecastData[];
-}
-
-export interface ForecastData {
-  date: Date;
-  [key: string]: any;
+export interface ForecastEntry {
+  date: String | Dayjs;
+  balance: String;
+  incomes: IncomeEntry[];
+  expenses: ExpenseEntry[];
 }

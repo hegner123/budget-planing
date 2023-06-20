@@ -34,23 +34,23 @@ import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
 
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   ".super-app-theme--header": {
-    backgroundColor: "#000000",
-    color: "#ffffff",
+    backgroundColor: "#ffffff",
+    color: "#1f1f1f",
   },
   ".super-app-theme--header button": {
-    color: "#ffffff",
+    color: "#1f1f1f",
   },
   "& .super-app-theme--balance": {
-    backgroundColor: "#3c3e4f",
-    color: "#ffffff",
+    backgroundColor: "#d2d6fd",
+    color: "#1f1f1f",
   },
   "& .super-app-theme--income": {
-    backgroundColor: "#404d45",
-    color: "#ffffff",
+    backgroundColor: "#e8fff1",
+    color: "#1f1f1f",
   },
   "& .super-app-theme--expenses": {
-    backgroundColor: "#372821",
-    color: "#ffffff",
+    backgroundColor: "#fbdada",
+    color: "#1f1f1f",
   },
 }));
 
@@ -213,7 +213,7 @@ export default function Dashboard() {
           <AddIncomeForm />
           <AddExpenseForm />
         </ButtonGroup>
-        <Link href="/forecast" className="self-end ml-auto">
+        <Link href="/forecast-test" className="self-end ml-auto">
           <Button
             variant="contained"
             className="text-black bg-[#1976d2] border-[#1976d2] hover:text-white hover:bg-black hover:border-white border-solid border-2">
@@ -232,7 +232,7 @@ export default function Dashboard() {
               getActions: (params) => [
                 <GridActionsCellItem
                   key={params.id}
-                  icon={<DeleteIcon className="text-white" />}
+                  icon={<DeleteIcon />}
                   onClick={() => prepDelete(`${params.id}`, params.row.type)}
                   label="Delete"
                 />,

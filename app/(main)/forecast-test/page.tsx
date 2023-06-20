@@ -7,11 +7,9 @@ import {
   configForecastDurationAtom,
   forecastListAtom,
 } from "@budget/store/state";
-import { useForecast } from "@budget/hooks/forecast/useForecast";
-import { useForecastLength } from "@budget/hooks/forecast/useForecastLength";
-import Card from "@mui/material/Card";
-import { ConfigForecast } from "@budget/components/configForecast/configForecast";
+
 import {
+  Card,
   ToggleButtonGroup,
   ToggleButton,
   SelectChangeEvent,
@@ -19,120 +17,41 @@ import {
 import { useSnackbar } from "notistack";
 import Chart from "@budget/components/chart";
 import dayjs from "dayjs";
-import { budgetForecast } from "@budget/hooks/forecast/forecast";
+import { useForecastBudget } from "@budget/hooks/forecast/useForecast";
 
 const Forecast = () => {
   const [compiledData, setCompiledData] = useAtom(compiledDataAtom);
   const [forecastList, setForecastList] = useAtom(forecastListAtom);
+  const today = dayjs().format("MM/DD/YYYY");
 
   const [forecastDisplay, setForecastDisplay] = useState<any>("list");
-  const {
-    setLength,
-    setUnit,
-    setStartDate,
-    length,
-    unit,
-    startDate,
-    forecastDuration,
-  } = useForecastLength();
-  const [, setForecastLength] = useAtom(configForecastDurationAtom);
-  const [forecastStart, setForecastStart] = useAtom(configForecastStartAtom);
-  const [isSet, setIsSet] = useState(false);
+
+  const [forecastLength, setForecastLength] = useAtom(
+    configForecastDurationAtom
+  );
+
   const { enqueueSnackbar } = useSnackbar();
   const options = { style: "currency", currency: "USD" };
   const numberFormat = new Intl.NumberFormat("en-US", options);
-
-  // useEffect(() => {
-  //   if (!isSet) {
-  //     setCompiledData(JSON.parse(localStorage.getItem("compiledData")!));
-  //     setForecastStart(dayjs());
-  //     setLength(1);
-  //     setUnit("month");
-  // const forecast = forecastData(forecastDuration, startDate, compiledData);
-  //     setForecastList(forecast);
-  //   }
-  //   setIsSet(true);
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isSet]);
-
-  useEffect(() => {
-    if (!isSet) {
-      loadLocalData();
-      setForecastStart(dayjs());
-      const forecast = forecastData(forecastDuration, startDate, compiledData);
-      setForecastList(forecast);
-    }
-    setIsSet(true);
-
-    async function loadLocalData() {
-      const compiled = await JSON.parse(localStorage.getItem("compiledData"));
-      setCompiledData(compiled);
-      return compiled;
-    }
-    function forecastData(forecastDuration, configForecastStart, compiledData) {
-      if (forecastDuration && configForecastStart && compiledData) {
-        enqueueSnackbar("Forecasting...", { variant: "info" });
-        let forecast = budgetForecast(
-          forecastDuration,
-          configForecastStart,
-          compiledData
-        );
-        return forecast;
-      } else {
-        enqueueSnackbar("Error forecasting", { variant: "error" });
-      }
-    }
-  }, [
-    forecastList,
-    isSet,
-    setCompiledData,
-    setForecastStart,
-    setLength,
-    setUnit,
-    startDate,
-    forecastDuration,
-    compiledData,
-    enqueueSnackbar,
-    setForecastList,
-  ]);
+  const forecastBudget = useForecastBudget();
 
   function handleDisplayChange(event: any, newDisplay: any) {
     setForecastDisplay(newDisplay);
   }
 
-  // const forecastData = useCallback(
-  //   (forecastDuration, configForecastStart, compiledData) => {
-  //     if (forecastDuration && configForecastStart && compiledData) {
-  //       enqueueSnackbar("Forecasting...", { variant: "info" });
-  //       return budgetForecast(
-  //         forecastDuration,
-  //         configForecastStart,
-  //         compiledData
-  //       );
-  //     } else {
-  //       enqueueSnackbar("Error forecasting", { variant: "error" });
-  //     }
-  //   },
-  //   [enqueueSnackbar]
-  // );
-
-  // function handleChange(event: SelectChangeEvent) {
-  //   setUnit(event.target.value);
-  // }
-
-  // function handleSubmit(e: any) {
-  //   e.preventDefault();
-  //   setForecastLength(forecastDuration);
-  //   setForecastStart(startDate);
-  //   const forecast = forecastData(forecastDuration, startDate, compiledData);
-  //   setForecastList(forecast);
-  // }
+  useEffect(() => {
+    let data = localStorage.getItem("compiledData");
+    setCompiledData(JSON.parse(data));
+    if (forecastLength && today && compiledData) {
+      setForecastList(forecastBudget(forecastLength, today, compiledData));
+    }
+  }, []);
 
   return (
     <section className="p-5 dashboard-main">
       <div className="grid grid-cols-12 gap-5 mb-5">
         <h1 className="mt-5 mb-5 text-6xl col-span-full">Forecast</h1>
+
         <div className="col-span-full ">
           <ToggleButtonGroup
             color="primary"
@@ -151,21 +70,15 @@ const Forecast = () => {
             </ToggleButton>
           </ToggleButtonGroup>
         </div>
-        <Card className="col-span-4 p-5 max-h-fit">
-          <h2 className="mb-5 text-2xl">Forecast Length</h2>
-        </Card>
+
         <Card className="col-span-8 p-5">
           <h2 className="mb-5 text-2xl">Forecast</h2>
           <ul>
-            {/* {forecastLength && (
-                <li>Forecast Length: {JSON.stringify(forecastLength)} days</li>
-              )} */}
-
             {forecastDisplay === "list" &&
-              forecastList &&
+              // forecastList &&
               forecastList.map((item: any, i) => (
                 <li key={i}>
-                  {dayjs(item.date).format("YYYY/MM/DD")}
+                  {dayjs(item.date).format("MM/DD/YYYY")}
                   {` ${numberFormat.format(item.balance)}`}
                 </li>
               ))}

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 import TextField, { TextFieldProps } from "@mui/material/TextField";
-import { RepeatedDefaults } from "@budget/hooks/forecast/forecast";
+import { RepeatedDefaults } from "@budget/hooks/forecast/useForecast";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";

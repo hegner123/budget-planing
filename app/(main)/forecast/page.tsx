@@ -7,7 +7,7 @@ import {
   configForecastDurationAtom,
   forecastListAtom,
 } from "@budget/store/state";
-import { useForecast } from "@budget/hooks/forecast/useForecast";
+import { useForecastBudget } from "@budget/hooks/forecast/useForecast";
 import Card from "@mui/material/Card";
 import { ConfigForecast } from "@budget/components/configForecast/configForecast";
 import { ToggleButtonGroup, ToggleButton } from "@mui/material";
@@ -19,7 +19,7 @@ const Forecast = () => {
   const [compiledData, setCompiledData] = useAtom(compiledDataAtom);
   const [forecastList, setForecastList] = useAtom(forecastListAtom);
   const [forecastDisplay, setForecastDisplay] = useState<any>("list");
-  const { getForecastData } = useForecast();
+  const forecastBudget = useForecastBudget();
   const { enqueueSnackbar } = useSnackbar();
   const options = { style: "currency", currency: "USD" };
   const numberFormat = new Intl.NumberFormat("en-US", options);
@@ -64,7 +64,7 @@ const Forecast = () => {
         <Card className="col-span-4 p-5 max-h-fit">
           <h2 className="mb-5 text-2xl">Forecast Length</h2>
           <ConfigForecast
-            getData={getForecastData}
+            getData={forecastBudget}
             compiledData={compiledData}
           />
         </Card>
