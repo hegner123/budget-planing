@@ -42,8 +42,10 @@ const Forecast = () => {
   useEffect(() => {
     let data = localStorage.getItem("compiledData");
     setCompiledData(JSON.parse(data));
+    // console.log("compiled", data);
     if (forecastLength && today && compiledData) {
-      setForecastList(forecastBudget(forecastLength, today, compiledData));
+      const budget = forecastBudget(forecastLength, today, data);
+      setForecastList(budget);
     }
   }, []);
 

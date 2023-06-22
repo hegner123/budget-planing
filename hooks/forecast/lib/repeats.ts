@@ -8,31 +8,46 @@ const repeatedEntries = (entries: Entry[], length: number) => {
 
   entries.forEach((entry) => {
     const repeatedLength = determineRepeatedCount(entry, length);
-    if (entry.repeated !== "None") {
+    console.log(repeatedLength);
+    if (entry.repeated.toLowerCase() !== "none") {
       newRepeatedEntries.push(entry);
     }
-    if (entry.repeated === "Weekly") {
+    if (entry.repeated.toLowerCase() === "weekly") {
       for (let i = 0; i < repeatedLength; i++) {
         let newEntry = { ...entry };
         newEntry.date = RepeatedDefaultsMap.weekly(entry.date, i + 1);
         newRepeatedEntries.push(newEntry);
       }
-    }
-    if (entry.repeated === "Biweekly") {
+    } else if (entry.repeated.toLowerCase() === "biweekly") {
       for (let i = 0; i < repeatedLength; i++) {
         let newEntry = { ...entry };
-        newEntry.date = RepeatedDefaultsMap.biweekly(entry.date, 1);
+        if (i === 0) {
+          newEntry.date = RepeatedDefaultsMap.biweekly(newEntry.date, 1);
+        } else {
+          newEntry.date = RepeatedDefaultsMap.biweekly(
+            newRepeatedEntries[i - 1].date,
+            2
+          );
+        }
         newRepeatedEntries.push(newEntry);
       }
     }
-    if (entry.repeated === "Monthly") {
+    if (entry.repeated.toLowerCase() === "monthly") {
       for (let i = 0; i < repeatedLength; i++) {
         let newEntry = { ...entry };
-        newEntry.date = RepeatedDefaultsMap.monthly(entry.date, i + 1);
+        if (i === 0) {
+          newEntry.date = RepeatedDefaultsMap.monthly(entry.date, i + 1);
+        } else {
+          newEntry.date = RepeatedDefaultsMap.monthly(
+            newRepeatedEntries[i - 1].date,
+            i + 1
+          );
+        }
+
         newRepeatedEntries.push(newEntry);
       }
     }
-    if (entry.repeated === "Yearly") {
+    if (entry.repeated.toLowerCase() === "yearly") {
       for (let i = 0; i < repeatedLength; i++) {
         let newEntry = { ...entry };
         newEntry.date = RepeatedDefaultsMap.yearly(entry.date, i + 1);
@@ -40,7 +55,9 @@ const repeatedEntries = (entries: Entry[], length: number) => {
       }
     }
   });
-  return newRepeatedEntries;
+  return newRepeatedEntries.filter(
+    (entry) => dayjs(entry.date).format("YYYYMMDD") > dayjs().format("YYYYMMDD")
+  );
 };
 
 const RepeatedDefaultsMap = {
@@ -63,24 +80,26 @@ const RepeatedDefaultsMap = {
 };
 
 const determineRepeatedCount = (entry: Entry, length: number) => {
-  switch (entry.repeated) {
-    case "Weekly":
-      return weeklyRepeats(length, entry.repeated);
-    case "Biweekly":
-      return biWeeklyRepeats(length, entry.repeated);
-    case "Monthly":
-      return monthRepeats(length, entry.repeated);
-    case "Yearly":
-      return yearRepeats(length, entry.repeated);
+  const weeklyRepeats = (length, unit) =>
+    dayjs.duration(length, unit).asWeeks();
+  const biWeeklyRepeats = (length, unit) =>
+    dayjs.duration(length, unit).asWeeks() / 2;
+  const monthRepeats = (length, unit) =>
+    dayjs.duration(length, unit).asMonths();
+  const yearRepeats = (length, unit) => dayjs.duration(length, unit).asYears();
+  switch (entry.repeated.toLowerCase()) {
+    case "weekly":
+      return parseInt(weeklyRepeats(length, "d").toFixed(0), 10);
+    case "biweekly":
+      return parseInt(biWeeklyRepeats(length, "d").toFixed(0), 10);
+    case "monthly":
+      return parseInt(monthRepeats(length, "d").toFixed(0), 10);
+    case "yearly":
+      return parseInt(yearRepeats(length, "d").toFixed(0), 10);
     default:
       return 0;
   }
 };
 
-const weeklyRepeats = (length, unit) => dayjs.duration(length, unit).asWeeks();
-const biWeeklyRepeats = (length, unit) =>
-  dayjs.duration(length, unit).asWeeks() / 2;
-const monthRepeats = (length, unit) => dayjs.duration(length, unit).asMonths();
-const yearRepeats = (length, unit) => dayjs.duration(length, unit).asYears();
 
 export { repeatedEntries };

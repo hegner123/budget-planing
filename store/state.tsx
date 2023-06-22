@@ -13,7 +13,7 @@ const deleteEntryAtom = atom("");
 const deleteEntryTypeAtom = atom("");
 const configForecastAtom = atom<any>({});
 const configForecastStartAtom = atom<any>(dayjs(new Date()));
-const configForecastDurationAtom = atom<number>(30);
+const configForecastDurationAtom = atom<number>(60);
 const showDebugModalAtom = atom<boolean>(false);
 const forecastListAtom = atom<any>([]);
 

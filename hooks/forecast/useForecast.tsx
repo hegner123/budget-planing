@@ -1,3 +1,4 @@
+import { useState } from "react";
 import dayjs from "dayjs";
 import {
   refreshDates,
@@ -6,55 +7,51 @@ import {
 } from "./lib";
 import { ExpenseEntry, ForecastEntry, IncomeEntry } from "@budget/types";
 
-import Forecast from "@budget/app/(main)/forecast/page";
-
 export function useForecastBudget() {
-  function forecastBudget(length: number, startDate: string, data: any) {
-    const today = dayjs().format("MM/DD/YYYY");
+  const today = dayjs().format("MM/DD/YYYY");
+
+  const incomePlaceholder: IncomeEntry = {
+    income: 0,
+    created_at: today,
+    date: today,
+    id: 1,
+    name: "placeholder",
+    repeated: "none",
+    user: "placeholder",
+    uuid: "placeholder",
+  };
+  const expensesPlaceholder: ExpenseEntry = {
+    amount: 0,
+    created_at: today,
+    date: today,
+    id: 1,
+    name: "placeholder",
+    repeated: "none",
+    user: "placeholder",
+    uuid: "placeholder",
+  };
+  const [forecastList, setForecastList] = useState<ForecastEntry[]>([]);
+  function forecastBudget(length: number, startDate: string, stringData: any) {
     // Init forecastList
-    const incomePlaceholder: IncomeEntry = {
-      income: 0,
-      created_at: today,
-      date: today,
-      id: 1,
-      name: "placeholder",
-      repeated: "none",
-      user: "placeholder",
-      uuid: "placeholder",
-    };
-    const expensesPlaceholder: ExpenseEntry = {
-      amount: 0,
-      created_at: today,
-      date: today,
-      id: 1,
-      name: "placeholder",
-      repeated: "none",
-      user: "placeholder",
-      uuid: "placeholder",
-    };
-
-    let forecastList: ForecastEntry[] = [
-      {
-        date: dayjs().format("MM/DD/YYYY"),
-        balance: "0",
-        incomes: [incomePlaceholder],
-        expenses: [expensesPlaceholder],
-      },
-    ];
-
+    let data = JSON.parse(stringData);
     // Filter compiled data into balance, income, and expenses
 
     const balance = data.filter((entry: any) => entry.type === "balance");
     const rawIncome = data.filter((entry: any) => entry.type === "income");
     const rawExpenses = data.filter((entry: any) => entry.type === "expenses");
 
+    // console.log("rawIncome", rawIncome);
+
     const freshIncome = refreshDates(rawIncome);
     const freshExpenses = refreshDates(rawExpenses);
 
     // Create Repeated Income and Expenses
 
-    const income = repeatedEntries(freshIncome, length);
-    const expenses = repeatedEntries(freshExpenses, length);
+    const repeatedIncome = repeatedEntries(freshIncome, length);
+    const repeatedExpenses = repeatedEntries(freshExpenses, length);
+
+    // console.log("repeatedIncome", repeatedIncome);
+    console.log("repeatedExpenses", repeatedExpenses);
 
     // Balance Length
 
@@ -65,20 +62,31 @@ export function useForecastBudget() {
     const forecastStartDate: String = dayjs(startDate).format("MM/DD/YYYY");
     const startDateDayjs = dayjs(startDate);
 
+    let forecastList: ForecastEntry[] = [];
+
     for (let i = 0; i < length; i++) {
+      let newDate = startDateDayjs.add(i + 1, "day").format("MM/DD/YYYY");
+
+      let newBalance = 1;
       if (i === 0) {
-        let newBalance = balance;
+        const forecastedBalance = createBalanceForecast(
+          repeatedIncome,
+          repeatedExpenses,
+          startDateDayjs.format("MM/DD/YYYY")
+        );
         const forecastEntry = {
-          date: startDateDayjs,
+          date: startDateDayjs.format("MM/DD/YYYY"),
           balance: `${newBalance}`,
           incomes: [incomePlaceholder],
           expenses: [expensesPlaceholder],
         };
-        forecastList.push(forecastEntry as ForecastEntry);
+        forecastList = [forecastEntry];
       }
-      const forecastedBalance = createBalanceForecast();
-      let newDate = startDateDayjs.add(i, "day").format("MM/DD/YYYY");
-      let newBalance = forecastedBalance.balance;
+      const forecastedBalance = createBalanceForecast(
+        repeatedIncome,
+        repeatedExpenses,
+        newDate
+      );
 
       const forecastEntry = {
         date: newDate,
@@ -86,10 +94,32 @@ export function useForecastBudget() {
         incomes: [incomePlaceholder],
         expenses: [expensesPlaceholder],
       };
-      forecastList.push(forecastEntry as ForecastEntry);
+      forecastList.push(forecastEntry);
     }
+    if (forecastList.length > 2) {
+      setForecastList(forecastList);
+    }
+    function createBalanceForecast(incomes, expenses, date) {
+      let dateIncomes = incomes.filter((element) => {
+        // console.log(date);
+        // console.log(element.date);
+        if (
+          dayjs(element.date).format("YYYYMMDD") ===
+          dayjs(date).format("YYYYMMDD")
+        ) {
+          return element;
+        }
+      });
+      // console.log("income", dateIncomes);
+      let dateExpenses = expenses.filter((element) => {
+        // console.log(date);
+        // console.log(element.date);
+        if (dayjs(element.date) === dayjs(date)) {
+          return element;
+        }
+      });
+      // console.log("expenses", dateExpenses);
 
-    function createBalanceForecast() {
       let newBalance = 0;
       let newDate = "";
       let incomeForThisDay = 0;
