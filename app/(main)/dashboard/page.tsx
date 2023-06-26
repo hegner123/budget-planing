@@ -114,7 +114,7 @@ export default function Dashboard() {
         return {
           id: item.uuid,
           name: item.name,
-          [type]: `$${item.amount}`,
+          amount: item.amount,
           date: formatDate(new Date(item.date)),
           repeated: item.repeated,
           type: type,
@@ -247,26 +247,13 @@ export default function Dashboard() {
               headerClassName: "super-app-theme--header",
             },
             {
-              field: "balance",
-              headerName: "Balance",
+              field: "amount",
+              headerName: "Amount",
               flex: 1,
               editable: true,
               headerClassName: "super-app-theme--header",
             },
-            {
-              field: "income",
-              headerName: "Income",
-              flex: 1,
-              editable: true,
-              headerClassName: "super-app-theme--header",
-            },
-            {
-              field: "expenses",
-              headerName: "Expenses",
-              flex: 1,
-              editable: true,
-              headerClassName: "super-app-theme--header",
-            },
+
             {
               field: "date",
               headerName: "Date",

@@ -51,7 +51,7 @@ export function useForecastBudget() {
     const repeatedExpenses = repeatedEntries(freshExpenses, length);
 
     // console.log("repeatedIncome", repeatedIncome);
-    console.log("repeatedExpenses", repeatedExpenses);
+    // console.log("repeatedExpenses", repeatedExpenses);
 
     // Balance Length
 
@@ -66,23 +66,25 @@ export function useForecastBudget() {
 
     for (let i = 0; i < length; i++) {
       let newDate = startDateDayjs.add(i + 1, "day").format("MM/DD/YYYY");
+      let newBalance = balance[balanceLength - 1].balance;
 
-      let newBalance = 1;
       if (i === 0) {
         const forecastedBalance = createBalanceForecast(
+          newBalance,
           repeatedIncome,
           repeatedExpenses,
-          startDateDayjs.format("MM/DD/YYYY")
+          forecastStartDate
         );
         const forecastEntry = {
           date: startDateDayjs.format("MM/DD/YYYY"),
-          balance: `${newBalance}`,
+          balance: forecastedBalance,
           incomes: [incomePlaceholder],
           expenses: [expensesPlaceholder],
         };
         forecastList = [forecastEntry];
       }
       const forecastedBalance = createBalanceForecast(
+        forecastList[i].balance,
         repeatedIncome,
         repeatedExpenses,
         newDate
@@ -90,7 +92,7 @@ export function useForecastBudget() {
 
       const forecastEntry = {
         date: newDate,
-        balance: `${newBalance}`,
+        balance: forecastedBalance,
         incomes: [incomePlaceholder],
         expenses: [expensesPlaceholder],
       };
@@ -99,10 +101,9 @@ export function useForecastBudget() {
     if (forecastList.length > 2) {
       setForecastList(forecastList);
     }
-    function createBalanceForecast(incomes, expenses, date) {
+
+    function createBalanceForecast(balance: Number, incomes, expenses, date) {
       let dateIncomes = incomes.filter((element) => {
-        // console.log(date);
-        // console.log(element.date);
         if (
           dayjs(element.date).format("YYYYMMDD") ===
           dayjs(date).format("YYYYMMDD")
@@ -110,20 +111,26 @@ export function useForecastBudget() {
           return element;
         }
       });
-      // console.log("income", dateIncomes);
+      const incomeTotal = dateIncomes.reduce((acc, cur) => {
+        return acc + cur.amount;
+      }, 0);
+
       let dateExpenses = expenses.filter((element) => {
-        // console.log(date);
-        // console.log(element.date);
-        if (dayjs(element.date) === dayjs(date)) {
+        if (
+          dayjs(element.date).format("YYYYMMDD") ===
+          dayjs(date).format("YYYYMMDD")
+        ) {
           return element;
         }
       });
-      // console.log("expenses", dateExpenses);
+      const expenseTotal = dateExpenses.reduce((acc, cur) => {
+        return acc + cur.amount;
+      }, 0);
 
-      let newBalance = 0;
-      let newDate = "";
-      let incomeForThisDay = 0;
-      let expensesForThisDay = 0;
+      let newBalance = balance + incomeTotal - expenseTotal;
+      let newDate = date;
+      let incomeForThisDay = dateIncomes;
+      let expensesForThisDay = dateExpenses;
 
       return {
         balance: newBalance,
@@ -137,6 +144,7 @@ export function useForecastBudget() {
   }
   return forecastBudget;
 }
+
 
 export const RepeatedDefaults = [
   "None",

@@ -6,53 +6,83 @@ dayjs.extend(duration);
 const repeatedEntries = (entries: Entry[], length: number) => {
   let newRepeatedEntries = [];
 
-  entries.forEach((entry) => {
+  entries.forEach((entry, index) => {
     const repeatedLength = determineRepeatedCount(entry, length);
-    console.log(repeatedLength);
+
     if (entry.repeated.toLowerCase() !== "none") {
       newRepeatedEntries.push(entry);
     }
-    if (entry.repeated.toLowerCase() === "weekly") {
-      for (let i = 0; i < repeatedLength; i++) {
-        let newEntry = { ...entry };
-        newEntry.date = RepeatedDefaultsMap.weekly(entry.date, i + 1);
-        newRepeatedEntries.push(newEntry);
-      }
-    } else if (entry.repeated.toLowerCase() === "biweekly") {
-      for (let i = 0; i < repeatedLength; i++) {
-        let newEntry = { ...entry };
-        if (i === 0) {
-          newEntry.date = RepeatedDefaultsMap.biweekly(newEntry.date, 1);
-        } else {
-          newEntry.date = RepeatedDefaultsMap.biweekly(
-            newRepeatedEntries[i - 1].date,
-            2
-          );
+    switch (entry.repeated.toLowerCase()) {
+      case "weekly":
+        let weeklyEntries = [entry];
+        for (let i = 0; i < repeatedLength; i++) {
+          let newEntry = { ...entry };
+          if (i === 0) {
+            newEntry.date = RepeatedDefaultsMap.weekly(entry.date, i + 1);
+            weeklyEntries.push(newEntry);
+          } else {
+            newEntry.date = RepeatedDefaultsMap.weekly(
+              weeklyEntries[i - 1],
+              i + 1
+            );
+          }
+          newRepeatedEntries.push(newEntry);
         }
-        newRepeatedEntries.push(newEntry);
-      }
-    }
-    if (entry.repeated.toLowerCase() === "monthly") {
-      for (let i = 0; i < repeatedLength; i++) {
-        let newEntry = { ...entry };
-        if (i === 0) {
-          newEntry.date = RepeatedDefaultsMap.monthly(entry.date, i + 1);
-        } else {
-          newEntry.date = RepeatedDefaultsMap.monthly(
-            newRepeatedEntries[i - 1].date,
-            i + 1
-          );
+        break;
+      case "biweekly":
+        let biweeklyEntries = [entry];
+        for (let i = 0; i < repeatedLength; i++) {
+          let newEntry = { ...entry };
+          if (i === 0) {
+            newEntry.date = RepeatedDefaultsMap.biweekly(entry.date, 1);
+            biweeklyEntries.push(newEntry);
+          } else {
+            newEntry.date = RepeatedDefaultsMap.biweekly(
+              biweeklyEntries[i - 1].date,
+              2
+            );
+            biweeklyEntries.push(newEntry);
+          }
+          newRepeatedEntries.push(newEntry);
         }
+        break;
+      case "monthly":
+        let monthlyEntries = [entry];
+        for (let i = 0; i < repeatedLength; i++) {
+          let newEntry = { ...entry };
+          if (i === 0) {
+            newEntry.date = RepeatedDefaultsMap.monthly(entry.date, i + 1);
+            monthlyEntries.push(newEntry);
+          } else {
+            newEntry.date = RepeatedDefaultsMap.monthly(
+              monthlyEntries[i].date,
+              i
+            );
+            monthlyEntries.push(newEntry);
+          }
 
-        newRepeatedEntries.push(newEntry);
-      }
-    }
-    if (entry.repeated.toLowerCase() === "yearly") {
-      for (let i = 0; i < repeatedLength; i++) {
-        let newEntry = { ...entry };
-        newEntry.date = RepeatedDefaultsMap.yearly(entry.date, i + 1);
-        newRepeatedEntries.push(newEntry);
-      }
+          newRepeatedEntries.push(newEntry);
+        }
+        break;
+      case "yearly":
+        let yearlyEntries = [entry];
+        for (let i = 0; i < repeatedLength; i++) {
+          let newEntry = { ...entry };
+          if (i === 0) {
+            newEntry.date = RepeatedDefaultsMap.yearly(entry.date, i + 1);
+            yearlyEntries.push(newEntry);
+          } else {
+            newEntry.date = RepeatedDefaultsMap.yearly(
+              yearlyEntries[i - 1].date,
+              i
+            );
+            yearlyEntries.push(newEntry);
+          }
+          newRepeatedEntries.push(newEntry);
+        }
+        break;
+      default:
+        break;
     }
   });
   return newRepeatedEntries.filter(
