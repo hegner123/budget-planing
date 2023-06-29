@@ -213,13 +213,22 @@ export default function Dashboard() {
           <AddIncomeForm />
           <AddExpenseForm />
         </ButtonGroup>
-        <Link href="/forecast-test" className="self-end ml-auto">
+        <ButtonGroup>
           <Button
             variant="contained"
             className="text-black bg-[#1976d2] border-[#1976d2] hover:text-white hover:bg-black hover:border-white border-solid border-2">
-            Forecast
+            <Link href="/forecast" className="self-end ml-auto">
+              Forecast
+            </Link>
           </Button>
-        </Link>
+          <Button
+            variant="outlined"
+            className="text-[#1976d2]  border-[#1976d2] hover:text-white hover:bg-black hover:border-white border-solid ">
+            <Link href="/forecast-test" className="self-end ml-auto">
+              Forecast-test
+            </Link>
+          </Button>
+        </ButtonGroup>
       </div>
 
       <div className="col-span-10 col-start-2 bg-white">

@@ -73,11 +73,11 @@ export const ConfigForecast = ({ getData, compiledData }: any) => {
           labelId="forecast-unit"
           placeholder="Months"
           value={unit}
-          label="Unit"
+          label="Time Scale"
           onChange={handleChange}>
-          <MenuItem value={"days"}>Days</MenuItem>
-          <MenuItem value={"months"}>Months</MenuItem>
-          <MenuItem value={"years"}>Years</MenuItem>
+          <MenuItem value={"days"}>Day</MenuItem>
+          <MenuItem value={"months"}>Month</MenuItem>
+          <MenuItem value={"years"}>Year</MenuItem>
         </Select>
       </FormControl>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
