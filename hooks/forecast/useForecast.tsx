@@ -139,7 +139,7 @@ export function useForecastBudget() {
 
     return forecastList;
   }
-  return forecastBudget;
+  return { forecastBudget };
 }
 
 

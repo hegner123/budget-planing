@@ -15,13 +15,13 @@ export async function deleteExpenses({
 }
 
 export async function updateExpense({ newRow, supabaseClient }: any) {
-  const { id, name, expenses, repeated, date } = newRow;
+  const { id, name, amount, repeated, date } = newRow;
 
   let { data, error } = await supabaseClient
     .from("Expenses")
     .update({
       name: `${name}`,
-      amount: `${parseFloat(expenses.slice(1))}`,
+      amount: `${parseFloat(amount)}`,
       repeated: `${repeated}`,
       date: `${date}`,
     })

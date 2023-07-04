@@ -10,6 +10,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useForecastLength } from "@budget/hooks/forecast/useForecastLength";
+import { useForecastBudget } from "@budget/hooks/forecast/useForecast";
 import { useAtom } from "jotai";
 import {
   configForecastDurationAtom,
@@ -28,6 +29,7 @@ export const ConfigForecast = ({ getData, compiledData }: any) => {
     startDate,
     forecastDuration,
   } = useForecastLength();
+  const { forecastBudget } = useForecastBudget();
   const [, setForecastLength] = useAtom(configForecastDurationAtom);
   const [, setForecastStart] = useAtom(configForecastStartAtom);
   const [, setForecastList] = useAtom(forecastListAtom);
@@ -37,12 +39,17 @@ export const ConfigForecast = ({ getData, compiledData }: any) => {
   const forecastData = useCallback(
     (forecastDuration, configForecastStart, compiledData) => {
       if (forecastDuration && configForecastStart && compiledData) {
+        const forecast = forecastBudget(
+          forecastDuration,
+          configForecastStart,
+          compiledData
+        );
         enqueueSnackbar("Forecasting...", { variant: "info" });
       } else {
         enqueueSnackbar("Error forecasting", { variant: "error" });
       }
     },
-    [enqueueSnackbar]
+    [enqueueSnackbar, forecastBudget]
   );
 
   function handleChange(event: SelectChangeEvent) {

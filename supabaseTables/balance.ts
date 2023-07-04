@@ -37,15 +37,18 @@ export async function deleteBalance(id: string, supabaseClient: any) {
 }
 
 export async function updateBalance({ newRow, supabaseClient }) {
-  const { id, name, balance, repeated, date } = newRow;
+  const { id, name, amount, repeated, date } = newRow;
   const { data, error } = await supabaseClient
     .from("Balance")
     .update({
+      uuid: id,
       name: `${name}`,
-      amount: `${parseFloat(balance.slice(1))}`,
-      repeated: `${repeated}`,
+      amount: amount,
       date: `${date}`,
     })
     .eq("uuid", id);
+    if (data === null && error === null) {
+      return { newRow, error };
+    }
   return { data, error };
 }
