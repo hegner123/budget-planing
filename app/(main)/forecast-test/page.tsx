@@ -33,7 +33,7 @@ const Forecast = () => {
   const { enqueueSnackbar } = useSnackbar();
   const options = { style: "currency", currency: "USD" };
   const numberFormat = new Intl.NumberFormat("en-US", options);
-  const forecastBudget = useForecastBudget();
+  const { forecastBudget } = useForecastBudget();
 
   function handleDisplayChange(event: any, newDisplay: any) {
     setForecastDisplay(newDisplay);

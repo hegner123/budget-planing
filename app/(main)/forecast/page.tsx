@@ -19,7 +19,7 @@ const Forecast = () => {
   const [compiledData, setCompiledData] = useAtom(compiledDataAtom);
   const [forecastList, setForecastList] = useAtom(forecastListAtom);
   const [forecastDisplay, setForecastDisplay] = useState<any>("list");
-  const forecastBudget = useForecastBudget();
+  const { forecastBudget } = useForecastBudget();
   const { enqueueSnackbar } = useSnackbar();
   const options = { style: "currency", currency: "USD" };
   const numberFormat = new Intl.NumberFormat("en-US", options);

@@ -38,15 +38,18 @@ export const ConfigForecast = ({ getData, compiledData }: any) => {
 
   const forecastData = useCallback(
     (forecastDuration, configForecastStart, compiledData) => {
-      if (forecastDuration && configForecastStart && compiledData) {
-        const forecast = forecastBudget(
-          forecastDuration,
-          configForecastStart,
-          compiledData
-        );
-        enqueueSnackbar("Forecasting...", { variant: "info" });
-      } else {
-        enqueueSnackbar("Error forecasting", { variant: "error" });
+      try {
+        if (forecastDuration && configForecastStart && compiledData) {
+          const forecast = forecastBudget(
+            forecastDuration,
+            configForecastStart,
+            JSON.stringify(compiledData)
+          );
+          enqueueSnackbar("Forecasting...", { variant: "info" });
+          return forecast;
+        }
+      } catch (error) {
+        enqueueSnackbar("Error Forecasting", { variant: "error" });
       }
     },
     [enqueueSnackbar, forecastBudget]
