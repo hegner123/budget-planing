@@ -11,8 +11,9 @@ const refreshDates = (dates: Entry[]) => {
 };
 
 function refreshDate(date: string) {
-  const today = dayjs().month();
-  return dayjs(date).month(today).format("MM/DD/YYYY");
+  const thisMonth = dayjs().month();
+  const thisYear = dayjs().year();
+  return dayjs(date).month(thisMonth).year(thisYear).format("MM/DD/YYYY");
 }
 
 export { refreshDate, refreshDates };

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",
@@ -42,6 +43,8 @@
     "typescript": "^5.0.4"
   },
   "devDependencies": {
-    "encoding": "^0.1.13"
+    "@jest/globals": "^29.6.0",
+    "encoding": "^0.1.13",
+    "ts-jest": "^29.1.1"
   }
 }

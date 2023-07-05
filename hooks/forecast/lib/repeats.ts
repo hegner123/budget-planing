@@ -13,6 +13,22 @@ const repeatedEntries = (entries: Entry[], length: number) => {
       newRepeatedEntries.push(entry);
     }
     switch (entry.repeated.toLowerCase()) {
+      case "daily":
+        let dailyEntries = [entry];
+        for (let i = 0; i < repeatedLength; i++) {
+          let newEntry = { ...entry };
+          if (i === 0) {
+            newEntry.date = RepeatedDefaultsMap.daily(entry.date, i + 1);
+            dailyEntries.push(newEntry);
+          } else {
+            newEntry.date = RepeatedDefaultsMap.daily(
+              dailyEntries[i - 1],
+              i + 1
+            );
+          }
+          newRepeatedEntries.push(newEntry);
+        }
+        break;
       case "weekly":
         let weeklyEntries = [entry];
         for (let i = 0; i < repeatedLength; i++) {
@@ -91,6 +107,10 @@ const repeatedEntries = (entries: Entry[], length: number) => {
 };
 
 const RepeatedDefaultsMap = {
+  daily: (date: any, length: number) =>
+    dayjs(date)
+      .add(1 * length, "day")
+      .format("MM/DD/YYYY"),
   weekly: (date: any, length: number) =>
     dayjs(date)
       .add(1 * length, "week")
@@ -110,6 +130,7 @@ const RepeatedDefaultsMap = {
 };
 
 const determineRepeatedCount = (entry: Entry, length: number) => {
+  const dailyRepeats = (length, unit) => dayjs.duration(length, unit).asDays();
   const weeklyRepeats = (length, unit) =>
     dayjs.duration(length, unit).asWeeks();
   const biWeeklyRepeats = (length, unit) =>
@@ -118,6 +139,8 @@ const determineRepeatedCount = (entry: Entry, length: number) => {
     dayjs.duration(length, unit).asMonths();
   const yearRepeats = (length, unit) => dayjs.duration(length, unit).asYears();
   switch (entry.repeated.toLowerCase()) {
+    case "daily":
+      return parseInt(dailyRepeats(length, "d").toFixed(0), 10);
     case "weekly":
       return parseInt(weeklyRepeats(length, "d").toFixed(0), 10);
     case "biweekly":

@@ -33,7 +33,7 @@ export interface IncomePayload {
 }
 
 export interface IncomeEntry {
-  income: number;
+  amount: number;
   created_at: string;
   date: string;
   id: number;
