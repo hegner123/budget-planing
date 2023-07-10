@@ -11,7 +11,7 @@ export function useForecastBudget() {
   const today = dayjs().format("MM/DD/YYYY");
 
   const incomePlaceholder: IncomeEntry = {
-    income: 0,
+    amount: 0,
     created_at: today,
     date: today,
     id: 1,
