@@ -9,12 +9,15 @@ import {
 import {
   incomeTestEntries,
   expenseTestEntries,
+  expectedIncomeTestEntries,
   testDate,
 } from "./placeholders";
 import dayjs from "dayjs";
 
 describe("expenseTests", () => {
   test("Test expense date filter", () => {
-    expect(incomeDateFilter(incomeTestEntries, testDate)).toBe(1);
+    expect(incomeDateFilter(incomeTestEntries, testDate)).toBe(
+      expectedIncomeTestEntries
+    );
   });
 });
