@@ -10,94 +10,64 @@ const repeatedEntries = (entries: Entry[], length: number, test?: string) => {
   for (let entry of entries) {
     const repeatedLength = determineRepeatedCount(entry, length);
 
-    if (entry.repeated.toLowerCase() !== "none") {
+    if (entry.repeated.toLowerCase() === "none") {
       newRepeatedEntries.push(entry);
     }
     switch (entry.repeated.toLowerCase()) {
       case "daily":
-        let dailyEntries = [];
+        let dailyDates = { ...entry, repeats: [entry.date] };
 
-        for (let i = 0; i < repeatedLength; i++) {
-          let newEntry = { ...entry };
-          if (i === 0) {
-            let newEntryDate = RepeatedDefaultsMap.daily(newEntry.date);
-            newEntry.date = newEntryDate;
-            dailyEntries.push(newEntry);
-          } else {
-            newEntry.date = RepeatedDefaultsMap.daily(dailyEntries[i - 1].date);
-            dailyEntries.push(newEntry);
-          }
-          newRepeatedEntries.push(newEntry);
+        for (let i = 1; i < repeatedLength + 1; i++) {
+          let newEntryDate = RepeatedDefaultsMap.daily(
+            dailyDates.repeats[i - 1]
+          );
+          dailyDates.repeats.push(newEntryDate);
         }
+        newRepeatedEntries.push(dailyDates);
         break;
       case "weekly":
-        let weeklyEntries = [];
-        for (let i = 0; i < repeatedLength; i++) {
-          let newEntry = { ...entry };
-          if (i === 0) {
-            let newEntryDate = RepeatedDefaultsMap.weekly(newEntry.date);
-            newEntry.date = newEntryDate;
-            weeklyEntries.push(newEntry);
-          } else {
-            newEntry.date = RepeatedDefaultsMap.weekly(
-              weeklyEntries[i - 1].date
-            );
-            weeklyEntries.push(newEntry);
-          }
-          newRepeatedEntries.push(newEntry);
+        let weeklyDates = { ...entry, repeats: [entry.date] };
+
+        for (let i = 1; i < repeatedLength + 1; i++) {
+          let newEntryDate = RepeatedDefaultsMap.weekly(
+            weeklyDates.repeats[i - 1]
+          );
+          weeklyDates.repeats.push(newEntryDate);
         }
+        newRepeatedEntries.push(weeklyDates);
         break;
       case "biweekly":
-        let biweeklyEntries = [];
-        for (let i = 0; i < repeatedLength; i++) {
-          let newEntry = { ...entry };
-          if (i === 0) {
-            let newEntryDate = RepeatedDefaultsMap.biweekly(entry.date);
-            newEntry.date = newEntryDate;
-            biweeklyEntries.push(newEntry);
-          } else {
-            newEntry.date = RepeatedDefaultsMap.biweekly(
-              biweeklyEntries[i - 1].date
-            );
-            biweeklyEntries.push(newEntry);
-          }
-          newRepeatedEntries.push(newEntry);
+        let biweeklyDates = { ...entry, repeats: [entry.date] };
+
+        for (let i = 1; i < repeatedLength + 1; i++) {
+          let newEntryDate = RepeatedDefaultsMap.biweekly(
+            biweeklyDates.repeats[i - 1]
+          );
+          biweeklyDates.repeats.push(newEntryDate);
         }
+        newRepeatedEntries.push(biweeklyDates);
         break;
       case "monthly":
-        let monthlyEntries = [];
-        for (let i = 0; i < repeatedLength; i++) {
-          let newEntry = { ...entry };
-          if (i === 0) {
-            let newEntryDate = RepeatedDefaultsMap.monthly(entry.date);
-            newEntry.date = newEntryDate;
-            monthlyEntries.push(newEntry);
-          } else {
-            newEntry.date = RepeatedDefaultsMap.monthly(
-              monthlyEntries[i - 1].date
-            );
-            monthlyEntries.push(newEntry);
-          }
+        let monthlyDates = { ...entry, repeats: [entry.date] };
 
-          newRepeatedEntries.push(newEntry);
+        for (let i = 1; i < repeatedLength + 1; i++) {
+          let newEntryDate = RepeatedDefaultsMap.monthly(
+            monthlyDates.repeats[i - 1]
+          );
+          monthlyDates.repeats.push(newEntryDate);
         }
+        newRepeatedEntries.push(monthlyDates);
         break;
       case "yearly":
-        let yearlyEntries = [];
-        for (let i = 0; i < repeatedLength; i++) {
-          let newEntry = { ...entry };
-          if (i === 0) {
-            let newEntryDate = RepeatedDefaultsMap.yearly(entry.date);
-            newEntry.date = newEntryDate;
-            yearlyEntries.push(newEntry);
-          } else {
-            newEntry.date = RepeatedDefaultsMap.yearly(
-              yearlyEntries[i - 1].date
-            );
-            yearlyEntries.push(newEntry);
-          }
-          newRepeatedEntries.push(newEntry);
+        let yearlyDates = { ...entry, repeats: [entry.date] };
+
+        for (let i = 1; i < repeatedLength + 1; i++) {
+          let newEntryDate = RepeatedDefaultsMap.yearly(
+            yearlyDates.repeats[i - 1]
+          );
+          yearlyDates.repeats.push(newEntryDate);
         }
+        newRepeatedEntries.push(yearlyDates);
         break;
       default:
         break;
@@ -128,10 +98,6 @@ const repeatedEntries = (entries: Entry[], length: number, test?: string) => {
     default:
       return newRepeatedEntries;
   }
-
-  // return newRepeatedEntries.filter(
-  //   (entry) => dayjs(entry.date).format("YYYYMMDD") < dayjs().format("YYYYMMDD")
-  // );
 };
 
 const RepeatedDefaultsMap = {

@@ -3,18 +3,18 @@ import { ExpenseEntry } from "./expenses";
 import { IncomeEntry } from "./income";
 
 export interface ForecastLength {
-  days: Number;
-  hours: Number;
-  milliseconds: Number;
-  minutes: Number;
-  months: Number;
-  seconds: Number;
-  years: Number;
+  days: number;
+  hours: number;
+  milliseconds: number;
+  minutes: number;
+  months: number;
+  seconds: number;
+  years: number;
 }
 
 export interface ForecastEntry {
   date: String | Dayjs;
-  balance: Number;
+  balance: number;
   incomes: IncomeEntry[];
   expenses: ExpenseEntry[];
 }
