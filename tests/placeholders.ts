@@ -8,10 +8,7 @@ const thisYear = dayjs().year();
 const testDate = refreshDate(
   dayjs(testStartDate).month(thisMonth).year(thisYear).format("MM/DD/YYYY")
 );
-const expectedIncomeDate = dayjs(today.add(2, "days").format("MM/DD/YYYY"))
-  .month(thisMonth)
-  .year(thisYear)
-  .format("MM/DD/YYYY");
+
 const dailyEntries = [
   {
     id: "ff1fd50c-aab8-4a4b-a63c-41c56485ad4a",
@@ -119,6 +116,33 @@ const incomeTestEntries = [
     repeated: "Biweekly",
     type: "income",
   },
+  {
+    id: "ff1fd50c-aab8-4a4b-a63c-41c564855d4a",
+    name: "Test Income Biweekly",
+    expenses: "$100",
+    date: dayjs(testDate).add(1, "day").format("MM/DD/YYYY"),
+    repeated: "Biweekly",
+    type: "income",
+  },
+];
+
+const expenseDateTestEntries = [
+  {
+    id: "ff1fd50c-aab8-4a5b-a63c-41c564855d4a",
+    name: "Test Expense Biweekly",
+    expenses: "$100",
+    date: testDate,
+    repeated: "Biweekly",
+    type: "expense",
+  },
+  {
+    id: "ff1fd50c-aab8-4a5b-a63c-41c564855d4a",
+    name: "Test Expense Biweekly",
+    expenses: "$100",
+    date: dayjs(testDate).add(1, "day").format("MM/DD/YYYY"),
+    repeated: "Biweekly",
+    type: "expense",
+  },
 ];
 
 const expectedIncomeTestEntries = [
@@ -126,9 +150,19 @@ const expectedIncomeTestEntries = [
     id: "ff1fd50c-aab8-4a4b-a63c-41c564855d4a",
     name: "Test Income Biweekly",
     expenses: "$100",
-    date: expectedIncomeDate,
+    date: testDate,
     repeated: "Biweekly",
     type: "income",
+  },
+];
+const expectedExpenseTestEntries = [
+  {
+    id: "ff1fd50c-aab8-4a5b-a63c-41c564855d4a",
+    name: "Test Expense Biweekly",
+    expenses: "$100",
+    date: testDate,
+    repeated: "Biweekly",
+    type: "expense",
   },
 ];
 
@@ -141,5 +175,7 @@ export {
   yearlyEntries,
   expenseTestEntries,
   incomeTestEntries,
+  expenseDateTestEntries,
   expectedIncomeTestEntries,
+  expectedExpenseTestEntries,
 };

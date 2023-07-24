@@ -1,23 +1,30 @@
-import { refreshDate, refreshDates } from "../hooks/forecast/lib/refresh";
-import { repeatedEntries } from "../hooks/forecast/lib/repeats";
-import { describe, expect, test } from "@jest/globals";
-import createBalance from "@budget/hooks/forecast/lib/createBalance";
 import {
+  createBalance,
+  refreshDate,
+  refreshDates,
+  repeatedEntries,
   incomeDateFilter,
   expenseDateFilter,
-} from "@budget/hooks/forecast/lib/dateFilter";
+} from "../hooks/forecast/lib";
+import { describe, expect, test } from "@jest/globals";
 import {
   incomeTestEntries,
-  expenseTestEntries,
+  expenseDateTestEntries,
   expectedIncomeTestEntries,
+  expectedExpenseTestEntries,
   testDate,
 } from "./placeholders";
 import dayjs from "dayjs";
 
 describe("expenseTests", () => {
-  test("Test expense date filter", () => {
-    expect(incomeDateFilter(incomeTestEntries, testDate)).toBe(
+  test("Test income date filter", () => {
+    expect(incomeDateFilter(incomeTestEntries, testDate)).toStrictEqual(
       expectedIncomeTestEntries
+    );
+  });
+  test("Test expense date filter", () => {
+    expect(expenseDateFilter(expenseDateTestEntries, testDate)).toStrictEqual(
+      expectedExpenseTestEntries
     );
   });
 });

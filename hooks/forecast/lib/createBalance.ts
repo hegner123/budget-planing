@@ -3,7 +3,7 @@ import { ExpenseEntry, IncomeEntry } from "@budget/types";
 import { incomeDateFilter, expenseDateFilter } from "./dateFilter";
 import { calcIncomeTotal, calcExpenseTotal } from "./totals";
 
-export default function createBalance(
+export function createBalance(
   balance: number,
   incomes,
   expenses,
