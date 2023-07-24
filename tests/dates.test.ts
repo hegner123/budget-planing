@@ -3,28 +3,27 @@ import {
   refreshDate,
   refreshDates,
   repeatedEntries,
-  incomeDateFilter,
-  expenseDateFilter,
+  dateFilter,
 } from "../hooks/forecast/lib";
 import { describe, expect, test } from "@jest/globals";
 import {
-  incomeTestEntries,
-  expenseDateTestEntries,
-  expectedIncomeTestEntries,
-  expectedExpenseTestEntries,
+  incomePostRepeats,
+  expensesPostRepeats,
+  expectedIncomePostRepeats,
+  expectedExpensesPostRepeats,
   testDate,
-} from "./placeholders";
+} from "./vars";
 import dayjs from "dayjs";
 
 describe("expenseTests", () => {
   test("Test income date filter", () => {
-    expect(incomeDateFilter(incomeTestEntries, testDate)).toStrictEqual(
-      expectedIncomeTestEntries
+    expect(dateFilter(incomePostRepeats, testDate)).toStrictEqual(
+      expectedIncomePostRepeats
     );
   });
   test("Test expense date filter", () => {
-    expect(expenseDateFilter(expenseDateTestEntries, testDate)).toStrictEqual(
-      expectedExpenseTestEntries
+    expect(dateFilter(expensesPostRepeats, testDate)).toStrictEqual(
+      expectedExpensesPostRepeats
     );
   });
 });

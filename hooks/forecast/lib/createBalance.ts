@@ -1,35 +1,52 @@
 import dayjs, { Dayjs } from "dayjs";
-import { ExpenseEntry, IncomeEntry } from "@budget/types";
-import { incomeDateFilter, expenseDateFilter } from "./dateFilter";
-import { calcIncomeTotal, calcExpenseTotal } from "./totals";
+import {
+  BudgetEntry,
+  BudgetEntryRepeats,
+  ExpenseEntry,
+  ForecastEntry,
+  IncomeEntry,
+} from "@budget/types";
+import { dateFilter } from "./dateFilter";
+import { calcTotal } from "./totals";
 
 export function createBalance(
   balance: number,
-  incomes,
-  expenses,
+  incomes: BudgetEntryRepeats[],
+  expenses: BudgetEntryRepeats[],
   date,
   i,
   startingBalance
-) {
-  const dateIncomes = incomeDateFilter(incomes, date);
-  const dateExpenses = expenseDateFilter(expenses, date);
-  const incomeTotal = calcIncomeTotal(dateIncomes);
-  const expenseTotal = calcExpenseTotal(dateExpenses);
-  const newBalance = startingBalance + incomeTotal - expenseTotal;
+): ForecastEntry {
+  const dateIncomes = dateFilter(incomes, date);
+  const dateExpenses = dateFilter(expenses, date);
+  const incomeTotal = calcTotal(dateIncomes);
+  const expenseTotal = calcTotal(dateExpenses);
+
+  function newBalance(
+    balance: number,
+    income: number,
+    expenses: number
+  ): number {
+    return balance + income - expenses;
+  }
 
   if (i === 0) {
     return {
-      date: date,
+      date: date as string | Dayjs,
       balance: startingBalance,
-      incomes: dateIncomes as IncomeEntry[],
-      expenses: dateExpenses as ExpenseEntry[],
+      incomes: incomes as BudgetEntryRepeats[],
+      expenses: expenses as BudgetEntryRepeats[],
     };
   } else {
     return {
       date: date as string | Dayjs,
-      balance: newBalance as number,
-      income: dateIncomes as IncomeEntry[],
-      expenses: dateExpenses as ExpenseEntry[] as ExpenseEntry[],
+      balance: newBalance(
+        i > 0 ? balance : startingBalance,
+        incomeTotal,
+        expenseTotal
+      ),
+      incomes: incomes as BudgetEntryRepeats[],
+      expenses: expenses as BudgetEntryRepeats[],
     };
   }
 }

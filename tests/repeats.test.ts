@@ -8,7 +8,7 @@ import {
   biWeeklyEntries,
   monthlyEntries,
   yearlyEntries,
-} from "./placeholders";
+} from "./vars";
 import dayjs from "dayjs";
 
 describe("repeatedEntries", () => {
@@ -17,7 +17,7 @@ describe("repeatedEntries", () => {
       {
         id: "ff1fd50c-aab8-4a4b-a63c-41c56485ad4a",
         name: "Test Daily",
-        expenses: "$1",
+        amount: 1,
         date: dayjs(testDate).format("MM/DD/YYYY"),
         repeated: "Daily",
         type: "expenses",
@@ -34,7 +34,7 @@ describe("repeatedEntries", () => {
       {
         id: "ff1fd50c-aab8-4a4b-a63c-41c56485ad4a",
         name: "Test Weekly",
-        expenses: "$1",
+        amount: 1,
         date: dayjs(testDate).format("MM/DD/YYYY"),
         repeated: "Weekly",
         type: "expenses",
@@ -51,7 +51,7 @@ describe("repeatedEntries", () => {
       {
         id: "ff1fd50c-aab8-4a4b-a63c-41c56485ad4a",
         name: "Test Biweekly",
-        expenses: "$1",
+        amount: 1,
         date: dayjs(testDate).format("MM/DD/YYYY"),
         repeated: "Biweekly",
         type: "expenses",
@@ -68,7 +68,7 @@ describe("repeatedEntries", () => {
       {
         id: "ff1fd50c-aab8-4a4b-a63c-41c56485ad4a",
         name: "Test Monthly",
-        expenses: "$1",
+        amount: 1,
         date: dayjs(testDate).format("MM/DD/YYYY"),
         repeated: "Monthly",
         type: "expenses",
@@ -85,7 +85,7 @@ describe("repeatedEntries", () => {
       {
         id: "ff1fd50c-aab8-4a4b-a63c-41c56485ad4a",
         name: "Test Yearly",
-        expenses: "$1",
+        amount: 1,
         date: dayjs(testDate).format("MM/DD/YYYY"),
         repeated: "Yearly",
         type: "expenses",
