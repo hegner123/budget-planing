@@ -6,52 +6,71 @@ import {
   determineForecastDuration,
 } from "./lib";
 import { incomePlaceholder, expensesPlaceholder } from "./lib/vars";
-import { ExpenseEntry, ForecastEntry, IncomeEntry } from "@budget/types";
-import createBalance from "./lib/createBalance";
+import {
+  BudgetEntry,
+  BudgetEntryRepeats,
+  ExpenseEntry,
+  ForecastEntry,
+  IncomeEntry,
+} from "@budget/types";
+import { createBalance } from "./lib/createBalance";
 
 export function useForecastBudget() {
   const [forecastList, setForecastList] = useState<ForecastEntry[]>([]);
 
   function forecastBudget(length: number, startDate: string, stringData: any) {
-    let data = JSON.parse(stringData);
+    console.log("length", length);
+    console.log("startDate", startDate);
+    console.log("stringData", stringData);
+    let data: BudgetEntry[] = JSON.parse(stringData);
 
-    const rawBalance = data.filter((entry: any) => entry.type === "balance");
+    const rawBalance: BudgetEntry[] = data.filter(
+      (entry: BudgetEntry) => entry.type === "balance"
+    );
     const balanceLength = rawBalance.length;
 
-    const rawIncome = data.filter((entry: any) => entry.type === "income");
-    const rawExpenses = data.filter((entry: any) => entry.type === "expenses");
+    const rawIncome: BudgetEntry[] = data.filter(
+      (entry: BudgetEntry) => entry.type === "income"
+    );
+    const rawExpenses: BudgetEntry[] = data.filter(
+      (entry: BudgetEntry) => entry.type === "expenses"
+    );
 
-    const freshIncome = refreshDates(rawIncome);
-    const freshExpenses = refreshDates(rawExpenses);
+    const freshIncome: BudgetEntry[] = refreshDates(rawIncome as BudgetEntry[]);
+    const freshExpenses: BudgetEntry[] = refreshDates(
+      rawExpenses
+    ) as BudgetEntry[];
 
-    const repeatedIncome = repeatedEntries(freshIncome, length);
-    const repeatedExpenses = repeatedEntries(freshExpenses, length);
+    const repeatedIncome: BudgetEntryRepeats[] = repeatedEntries(
+      freshIncome as BudgetEntry[],
+      length as number
+    );
+    const repeatedExpenses: BudgetEntryRepeats[] = repeatedEntries(
+      freshExpenses as BudgetEntry[],
+      length as number
+    );
 
     const forecastStartDate: String = dayjs(startDate).format("MM/DD/YYYY");
     const startDateDayjs = dayjs(startDate);
 
     let forecastList: ForecastEntry[] = [];
 
-    for (let i = 0; i < length; i++) {
-      let newDate = startDateDayjs.add(i + 1, "day").format("MM/DD/YYYY");
-      let newBalance = rawBalance[balanceLength - 1].amount;
+    for (let i: number = 0; i < length; i++) {
+      let newDate: string = startDateDayjs
+        .add(i + 1, "day")
+        .format("MM/DD/YYYY");
+      let newBalance: number = rawBalance[balanceLength - 1].amount;
 
-      const forecastedBalance = createBalance(
-        forecastList[i].balance,
-        repeatedIncome,
-        repeatedExpenses,
-        newDate,
-        i,
-        newBalance
+      const forecastedBalance: ForecastEntry = createBalance(
+        forecastList[i]?.balance || (newBalance as number),
+        repeatedIncome as BudgetEntryRepeats[],
+        repeatedExpenses as BudgetEntryRepeats[],
+        newDate as string,
+        i as number,
+        newBalance as number
       );
 
-      const forecastEntry = {
-        date: newDate,
-        balance: forecastedBalance.balance,
-        incomes: [forecastBudget[i]?.incomes || incomePlaceholder],
-        expenses: [forecastBudget[i]?.expenses || expensesPlaceholder],
-      };
-      forecastList.push(forecastEntry);
+      forecastList.push(forecastedBalance);
     }
     if (forecastList.length > 2) {
       setForecastList(forecastList);

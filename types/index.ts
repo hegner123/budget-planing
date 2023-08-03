@@ -5,3 +5,4 @@ export * from "./forecast";
 export * from "./balance";
 export * from "./income";
 export * from "./budget";
+export * from "./totals";

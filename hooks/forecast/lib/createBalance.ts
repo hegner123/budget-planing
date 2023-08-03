@@ -1,35 +1,45 @@
 import dayjs, { Dayjs } from "dayjs";
-import { ExpenseEntry, IncomeEntry } from "@budget/types";
-import { incomeDateFilter, expenseDateFilter } from "./dateFilter";
-import { calcIncomeTotal, calcExpenseTotal } from "./totals";
+import {
+  BudgetEntry,
+  BudgetEntryRepeats,
+  ExpenseEntry,
+  ForecastEntry,
+  IncomeEntry,
+} from "@budget/types";
+import { dateFilter } from "./dateFilter";
+import { calcTotals } from "./totals";
+import { newBalance } from "./newBalance";
 
-export default function createBalance(
+export function createBalance(
   balance: number,
-  incomes,
-  expenses,
+  incomes: BudgetEntryRepeats[],
+  expenses: BudgetEntryRepeats[],
   date,
   i,
   startingBalance
-) {
-  const dateIncomes = incomeDateFilter(incomes, date);
-  const dateExpenses = expenseDateFilter(expenses, date);
-  const incomeTotal = calcIncomeTotal(dateIncomes);
-  const expenseTotal = calcExpenseTotal(dateExpenses);
-  const newBalance = startingBalance + incomeTotal - expenseTotal;
+): ForecastEntry {
+  const dateIncomes: BudgetEntryRepeats[] = dateFilter(incomes, date);
+  const dateExpenses: BudgetEntryRepeats[] = dateFilter(expenses, date);
+  const incomeTotal = calcTotals(dateIncomes);
+  const expenseTotal = calcTotals(dateExpenses);
 
   if (i === 0) {
     return {
-      date: date,
+      date: date as string | Dayjs,
       balance: startingBalance,
-      incomes: dateIncomes as IncomeEntry[],
-      expenses: dateExpenses as ExpenseEntry[],
+      incomes: dateIncomes as BudgetEntryRepeats[],
+      expenses: dateExpenses as BudgetEntryRepeats[],
     };
   } else {
     return {
       date: date as string | Dayjs,
-      balance: newBalance as number,
-      income: dateIncomes as IncomeEntry[],
-      expenses: dateExpenses as ExpenseEntry[] as ExpenseEntry[],
+      balance: newBalance(
+        i > 0 ? balance : (startingBalance as number),
+        incomeTotal as number,
+        expenseTotal as number
+      ),
+      incomes: dateIncomes as BudgetEntryRepeats[],
+      expenses: dateExpenses as BudgetEntryRepeats[],
     };
   }
 }

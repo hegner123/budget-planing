@@ -1,8 +1,12 @@
-export interface Entry {
+export interface BudgetEntry {
   id: string;
   name: string;
-  expenses: string;
+  amount: number;
   date: string;
   repeated: string;
   type: string;
+}
+
+export interface BudgetEntryRepeats extends BudgetEntry {
+  repeats: string[];
 }

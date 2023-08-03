@@ -1,21 +1,32 @@
-import { Entry } from "@budget/types";
+import { BudgetEntry, BudgetEntryRepeats } from "@budget/types";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration.js";
 import { refreshDates } from "./refresh";
 dayjs.extend(duration);
 
-const repeatedEntries = (entries: Entry[], length: number, test?: string) => {
-  let newRepeatedEntries = [];
+const repeatedEntries = (
+  entries: BudgetEntry[],
+  length: number,
+  test?: string
+): BudgetEntryRepeats[] => {
+  let newRepeatedEntries: BudgetEntryRepeats[] = [];
 
   for (let entry of entries) {
-    const repeatedLength = determineRepeatedCount(entry, length);
+    const repeatedLength: number = determineRepeatedCount(entry, length);
 
     if (entry.repeated.toLowerCase() === "none") {
-      newRepeatedEntries.push(entry);
+      let entryRepeated: BudgetEntryRepeats = {
+        ...entry,
+        repeats: [entry.date],
+      };
+      newRepeatedEntries.push(entryRepeated);
     }
     switch (entry.repeated.toLowerCase()) {
       case "daily":
-        let dailyDates = { ...entry, repeats: [entry.date] };
+        let dailyDates: BudgetEntryRepeats = {
+          ...entry,
+          repeats: [entry.date],
+        };
 
         for (let i = 1; i < repeatedLength + 1; i++) {
           let newEntryDate = RepeatedDefaultsMap.daily(
@@ -26,7 +37,10 @@ const repeatedEntries = (entries: Entry[], length: number, test?: string) => {
         newRepeatedEntries.push(dailyDates);
         break;
       case "weekly":
-        let weeklyDates = { ...entry, repeats: [entry.date] };
+        let weeklyDates: BudgetEntryRepeats = {
+          ...entry,
+          repeats: [entry.date],
+        };
 
         for (let i = 1; i < repeatedLength + 1; i++) {
           let newEntryDate = RepeatedDefaultsMap.weekly(
@@ -37,7 +51,10 @@ const repeatedEntries = (entries: Entry[], length: number, test?: string) => {
         newRepeatedEntries.push(weeklyDates);
         break;
       case "biweekly":
-        let biweeklyDates = { ...entry, repeats: [entry.date] };
+        let biweeklyDates: BudgetEntryRepeats = {
+          ...entry,
+          repeats: [entry.date],
+        };
 
         for (let i = 1; i < repeatedLength + 1; i++) {
           let newEntryDate = RepeatedDefaultsMap.biweekly(
@@ -48,7 +65,10 @@ const repeatedEntries = (entries: Entry[], length: number, test?: string) => {
         newRepeatedEntries.push(biweeklyDates);
         break;
       case "monthly":
-        let monthlyDates = { ...entry, repeats: [entry.date] };
+        let monthlyDates: BudgetEntryRepeats = {
+          ...entry,
+          repeats: [entry.date],
+        };
 
         for (let i = 1; i < repeatedLength + 1; i++) {
           let newEntryDate = RepeatedDefaultsMap.monthly(
@@ -59,7 +79,10 @@ const repeatedEntries = (entries: Entry[], length: number, test?: string) => {
         newRepeatedEntries.push(monthlyDates);
         break;
       case "yearly":
-        let yearlyDates = { ...entry, repeats: [entry.date] };
+        let yearlyDates: BudgetEntryRepeats = {
+          ...entry,
+          repeats: [entry.date],
+        };
 
         for (let i = 1; i < repeatedLength + 1; i++) {
           let newEntryDate = RepeatedDefaultsMap.yearly(
@@ -108,7 +131,7 @@ const RepeatedDefaultsMap = {
   yearly: (date: any) => dayjs(date).add(1, "year").format("MM/DD/YYYY"),
 };
 
-const determineRepeatedCount = (entry: Entry, length: number) => {
+const determineRepeatedCount = (entry: BudgetEntry, length: number) => {
   const dailyRepeats = (length, unit) => dayjs.duration(length, unit).asDays();
   const weeklyRepeats = (length, unit) =>
     dayjs.duration(length, unit).asWeeks();
@@ -132,6 +155,5 @@ const determineRepeatedCount = (entry: Entry, length: number) => {
       return 0;
   }
 };
-
 
 export { repeatedEntries };
