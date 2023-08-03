@@ -6,9 +6,11 @@ import { testDate } from "./vars";
 
 describe("newBalance test", () => {
   const forecastEntriesString = JSON.stringify(forecastEntries);
+  forecastBudget(30, testDate, forecastEntriesString);
   test("Test newBalance", () => {
     expect(forecastBudget(30, testDate, forecastEntriesString)).toStrictEqual(
       expectedForecast
     );
+    // expect("test").toBe("test");
   });
 });

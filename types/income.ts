@@ -46,3 +46,10 @@ export interface IncomeEntry {
 export interface OldIncomeEntry {
   uuid: string;
 }
+
+
+export interface IncomePeek {
+  name: string;
+  amount: number;
+  repeated: string;
+}

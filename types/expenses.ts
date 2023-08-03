@@ -43,3 +43,8 @@ export interface ExpenseEntry {
 export interface OldExpenseEntry {
   uuid: string;
 }
+export interface ExpensePeek {
+  name: string;
+  amount: number;
+  repeated: string;
+}

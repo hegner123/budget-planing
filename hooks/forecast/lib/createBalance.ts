@@ -2,9 +2,9 @@ import dayjs, { Dayjs } from "dayjs";
 import {
   BudgetEntry,
   BudgetEntryRepeats,
-  ExpenseEntry,
+  ExpensePeek,
   ForecastEntry,
-  IncomeEntry,
+  IncomePeek,
 } from "@budget/types";
 import { dateFilter } from "./dateFilter";
 import { calcTotals } from "./totals";
@@ -23,12 +23,37 @@ export function createBalance(
   const incomeTotal = calcTotals(dateIncomes);
   const expenseTotal = calcTotals(dateExpenses);
 
+  const mappedIncomes: IncomePeek[] = dateIncomes.map((income) => {
+    return {
+      name: income.name,
+      amount: income.amount,
+      repeated: income.repeated,
+    };
+  });
+  const mappedExpenses: ExpensePeek[] = dateExpenses.map((expense) => {
+    return {
+      name: expense.name,
+      amount: expense.amount,
+      repeated: expense.repeated,
+    };
+  });
+
   if (i === 0) {
     return {
       date: date as string | Dayjs,
       balance: startingBalance,
-      incomes: dateIncomes as BudgetEntryRepeats[],
-      expenses: dateExpenses as BudgetEntryRepeats[],
+      balanceDetails: {
+        previousBalance: startingBalance as number,
+        newBalance: newBalance(
+          startingBalance as number,
+          incomeTotal as number,
+          expenseTotal as number
+        ),
+        incomesTotal: incomeTotal as number,
+        incomes: mappedIncomes as IncomePeek[],
+        expensesTotal: expenseTotal as number,
+        expenses: mappedExpenses as ExpensePeek[],
+      },
     };
   } else {
     return {
@@ -38,8 +63,18 @@ export function createBalance(
         incomeTotal as number,
         expenseTotal as number
       ),
-      incomes: dateIncomes as BudgetEntryRepeats[],
-      expenses: dateExpenses as BudgetEntryRepeats[],
+      balanceDetails: {
+        previousBalance: startingBalance as number,
+        newBalance: newBalance(
+          startingBalance as number,
+          incomeTotal as number,
+          expenseTotal as number
+        ),
+        incomesTotal: incomeTotal as number,
+        incomes: mappedIncomes as IncomePeek[],
+        expensesTotal: expenseTotal as number,
+        expenses: mappedExpenses as ExpensePeek[],
+      },
     };
   }
 }

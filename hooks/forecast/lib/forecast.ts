@@ -61,6 +61,5 @@ export function forecastBudget(length: number, startDate: string, stringData: an
 
     forecastList.push(forecastedBalance);
   }
-
   return forecastList;
 }

@@ -1,5 +1,7 @@
 import { Dayjs } from "dayjs";
 import { BudgetEntryRepeats } from "./budget";
+import { IncomePeek } from "./income";
+import { ExpensePeek } from "./expenses";
 
 export interface ForecastLength {
   days: number;
@@ -14,8 +16,14 @@ export interface ForecastLength {
 export interface ForecastEntry {
   date: String | Dayjs;
   balance: number;
-  incomes: BudgetEntryRepeats[];
-  incomesTotal?: number;
-  expenses: BudgetEntryRepeats[];
-  expensesTotal?: number;
+  balanceDetails: balanceDetails;
+}
+
+interface balanceDetails {
+  previousBalance: number;
+  newBalance: number;
+  incomesTotal: number;
+  incomes: IncomePeek[];
+  expensesTotal: number;
+  expenses: ExpensePeek[];
 }
