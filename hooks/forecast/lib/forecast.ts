@@ -10,32 +10,22 @@ import { repeatedEntries } from "./repeats";
 import { createBalance } from "./createBalance";
 import dayjs from "dayjs";
 
-export function forecastBudget(
-  length: number,
-  startDate: string,
-  stringData: any
-) {
-  console.log("length", length);
-  console.log("startDate", startDate);
-  console.log("stringData", stringData);
+export function forecastBudget(length: number, startDate: string, stringData: any) {
   let data: BudgetEntry[] = JSON.parse(stringData);
-  console.log("data", data);
 
   const rawBalance: BudgetEntry[] = data.filter(
     (entry: BudgetEntry) => entry.type === "balance"
   );
-  console.log("rawBalance", rawBalance);
+
   const balanceLength = rawBalance.length;
-  console.log("balanceLength", balanceLength);
 
   const rawIncome: BudgetEntry[] = data.filter(
     (entry: BudgetEntry) => entry.type === "income"
   );
-  console.log("rawIncome", rawIncome);
+
   const rawExpenses: BudgetEntry[] = data.filter(
     (entry: BudgetEntry) => entry.type === "expenses"
   );
-  console.log("rawExpenses", rawExpenses);
 
   const freshIncome: BudgetEntry[] = refreshDates(rawIncome as BudgetEntry[]);
   const freshExpenses: BudgetEntry[] = refreshDates(
@@ -71,7 +61,6 @@ export function forecastBudget(
 
     forecastList.push(forecastedBalance);
   }
-  console.log("forecastList", JSON.stringify(forecastList));
 
   return forecastList;
 }
