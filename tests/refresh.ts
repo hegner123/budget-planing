@@ -1,4 +1,4 @@
-import { refreshDates, refreshDate } from "..//hooks/forecast/lib/refresh";
+import { refreshDates, refreshDate } from "../hooks/forecast/lib/refresh";
 import { BudgetEntry } from "@budget/types";
 import { describe, expect, test } from "@jest/globals";
 import dayjs from "dayjs";

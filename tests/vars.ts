@@ -9,6 +9,8 @@ const testDate = refreshDate(
   dayjs(testStartDate).month(thisMonth).year(thisYear).format("MM/DD/YYYY")
 );
 
+const testLength = 5;
+
 const dailyEntries = [
   {
     id: "ff1fd50c-aab8-4a4b-a63c-41c56485ad4a",
@@ -120,7 +122,7 @@ const incomeTestEntries = [
     id: "ff1fd50c-aab8-4a4b-a63c-41c564855d4a",
     name: "Test Income Biweekly",
     amount: 100,
-    date: dayjs(testDate).add(1, "day").format("MM/DD/YYYY"),
+    date: dayjs(testDate).add(1, "week").format("MM/DD/YYYY"),
     repeated: "Biweekly",
     type: "income",
   },
@@ -318,10 +320,79 @@ const expectedExpensesPostRepeats = [
   },
 ];
 
-const expectedIncomeTotal = 5;
-const expectedExpenseTotal = 5;
+const forecastEntries = [
+  {
+    id: "ff1fd50c-aab8-4a4b-a63c-41c564855d4a",
+    name: "Test balance",
+    amount: 1000,
+    date: dayjs("01/01/2020").format("MM/DD/YYYY"),
+    type: "balance",
+  },
+  {
+    id: "ff1fd50c-aab8-4a4b-a63c-41c564855d4a",
+    name: "Test Income Biweekly",
+    amount: 100,
+    date: testDate,
+    repeated: "Biweekly",
+    type: "income",
+  },
+  {
+    id: "ff1fd50c-aab8-4a4b-a63c-41c564855d4a",
+    name: "Test Income Biweekly",
+    amount: 100,
+    date: dayjs(testDate).add(1, "week").format("MM/DD/YYYY"),
+    repeated: "Biweekly",
+    type: "income",
+  },
+  {
+    id: "ff1fd50c-aab8-4a4b-a63c-41c56485ad4a",
+    name: "Test Daily",
+    amount: 1,
+    date: testDate,
+    repeated: "Daily",
+    type: "expenses",
+  },
+  {
+    id: "ff1fd50c-aab8-4a4b-a63c-41c56485ad4a",
+    name: "Test Weekly",
+    amount: 1,
+    date: testDate,
+    repeated: "Weekly",
+    type: "expenses",
+  },
+  {
+    id: "ff1fd50c-aab8-4a4b-a63c-41c56485ad4a",
+    name: "Test Biweekly",
+    amount: 1,
+    date: testDate,
+    repeated: "Biweekly",
+    type: "expenses",
+  },
+  {
+    id: "ff1fd50c-aab8-4a4b-a63c-41c56485ad4a",
+    name: "Test Monthly",
+    amount: 1,
+    date: testDate,
+    repeated: "Monthly",
+    type: "expenses",
+  },
+  {
+    id: "ff1fd50c-aab8-4a4b-a63c-41c56485ad4a",
+    name: "Test Yearly",
+    amount: 1,
+    date: testDate,
+    repeated: "Yearly",
+    type: "expenses",
+  },
+];
+
+const expectedForecastEntries = "test";
+
+const expectedIncomeTotal = 2;
+const expectedExpenseTotal = 2;
 
 export {
+  testLength,
   testDate,
   dailyEntries,
   weeklyEntries,
@@ -339,4 +410,6 @@ export {
   expensesPostRepeats,
   expectedIncomePostRepeats,
   expectedExpensesPostRepeats,
+  forecastEntries,
+  expectedForecastEntries,
 };

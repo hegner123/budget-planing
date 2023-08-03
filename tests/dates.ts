@@ -1,10 +1,4 @@
-import {
-  createBalance,
-  refreshDate,
-  refreshDates,
-  repeatedEntries,
-  dateFilter,
-} from "../hooks/forecast/lib";
+import { dateFilter } from "../hooks/forecast/lib";
 import { describe, expect, test } from "@jest/globals";
 import {
   incomePostRepeats,
@@ -13,7 +7,6 @@ import {
   expectedExpensesPostRepeats,
   testDate,
 } from "./vars";
-import dayjs from "dayjs";
 
 describe("expenseTests", () => {
   test("Test income date filter", () => {

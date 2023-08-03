@@ -7,7 +7,8 @@ import {
   IncomeEntry,
 } from "@budget/types";
 import { dateFilter } from "./dateFilter";
-import { calcTotal } from "./totals";
+import { calcTotals } from "./totals";
+import { newBalance } from "./newBalance";
 
 export function createBalance(
   balance: number,
@@ -17,36 +18,28 @@ export function createBalance(
   i,
   startingBalance
 ): ForecastEntry {
-  const dateIncomes = dateFilter(incomes, date);
-  const dateExpenses = dateFilter(expenses, date);
-  const incomeTotal = calcTotal(dateIncomes);
-  const expenseTotal = calcTotal(dateExpenses);
-
-  function newBalance(
-    balance: number,
-    income: number,
-    expenses: number
-  ): number {
-    return balance + income - expenses;
-  }
+  const dateIncomes: BudgetEntryRepeats[] = dateFilter(incomes, date);
+  const dateExpenses: BudgetEntryRepeats[] = dateFilter(expenses, date);
+  const incomeTotal = calcTotals(dateIncomes);
+  const expenseTotal = calcTotals(dateExpenses);
 
   if (i === 0) {
     return {
       date: date as string | Dayjs,
       balance: startingBalance,
-      incomes: incomes as BudgetEntryRepeats[],
-      expenses: expenses as BudgetEntryRepeats[],
+      incomes: dateIncomes as BudgetEntryRepeats[],
+      expenses: dateExpenses as BudgetEntryRepeats[],
     };
   } else {
     return {
       date: date as string | Dayjs,
       balance: newBalance(
-        i > 0 ? balance : startingBalance,
-        incomeTotal,
-        expenseTotal
+        i > 0 ? balance : (startingBalance as number),
+        incomeTotal as number,
+        expenseTotal as number
       ),
-      incomes: incomes as BudgetEntryRepeats[],
-      expenses: expenses as BudgetEntryRepeats[],
+      incomes: dateIncomes as BudgetEntryRepeats[],
+      expenses: dateExpenses as BudgetEntryRepeats[],
     };
   }
 }

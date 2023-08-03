@@ -15,5 +15,7 @@ export interface ForecastEntry {
   date: String | Dayjs;
   balance: number;
   incomes: BudgetEntryRepeats[];
+  incomesTotal?: number;
   expenses: BudgetEntryRepeats[];
+  expensesTotal?: number;
 }

@@ -1,7 +1,11 @@
 import { BudgetEntryRepeats } from "@budget/types";
-
-export function calcTotal(entries: BudgetEntryRepeats[]): number {
-  return entries.reduce((acc, cur) => {
-    return acc + cur.amount;
-  }, 0);
+// Expects Entries to be filtered by date before being passed in
+export function calcTotals(entries: BudgetEntryRepeats[]): number {
+  let total = 0;
+  entries.forEach((entry) => {
+    total += entry.amount;
+  });
+  return total;
 }
+
+

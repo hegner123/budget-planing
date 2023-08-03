@@ -19,6 +19,9 @@ export function useForecastBudget() {
   const [forecastList, setForecastList] = useState<ForecastEntry[]>([]);
 
   function forecastBudget(length: number, startDate: string, stringData: any) {
+    console.log("length", length);
+    console.log("startDate", startDate);
+    console.log("stringData", stringData);
     let data: BudgetEntry[] = JSON.parse(stringData);
 
     const rawBalance: BudgetEntry[] = data.filter(
