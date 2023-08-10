@@ -80,7 +80,7 @@ const LoginPage = ({ session }: { session: Session | null }) => {
             />
             <Button
               variant="contained"
-              className="col-span-4 p-2 mt-5 rounded bg-brand-dark-blue text-slate-900"
+              className="col-span-4 p-2 mt-5 text-white rounded btn-primary"
               onClick={(e) => handleSubmit(e)}>
               Login
             </Button>

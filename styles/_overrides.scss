@@ -1,0 +1,8 @@
+.btn-primary[type=button] {
+    background: $dark-blue;
+
+    &:hover {
+        background: $blue;
+    }
+
+}

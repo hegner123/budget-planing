@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { useSession } from "@budget/hooks/auth/useSession";
 import { loadingAtom, loggedInUserAtom } from "@budget/store/state";
 import { useAtom } from "jotai";
+import Button from "@mui/material/Button";
+import Link from "next/link";
 
 export default function Page() {
   const [user, setUser] = useAtom(loggedInUserAtom);
@@ -31,16 +33,26 @@ export default function Page() {
       router.push("/dashboard");
       return;
     }
-    if (user === "error" && !loading) {
-      router.push("/login");
-      return;
-    }
   }, [user, router, loading]);
 
   return (
     <>
-      <main className="grid min-w-full min-h-screen place-items-center">
-        <CircularProgress />
+      <main className="grid min-w-full min-h-screen ">
+        <section className="grid grid-cols-4 grid-rows-3 gap-3">
+          <h2 className="col-start-2 row-start-2 text-6xl">Budget Planning</h2>
+          <div className="flex col-start-3 row-start-2 gap-3 h-fit">
+            <Button variant="contained" className="btn-primary">
+              <Link href="/login" passHref>
+                Login
+              </Link>
+            </Button>
+            <Button variant="contained" className="btn-primary">
+              <Link href="/register" passHref>
+                Register
+              </Link>
+            </Button>
+          </div>
+        </section>
       </main>
     </>
   );

@@ -233,7 +233,7 @@ import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
           <ButtonGroup>
             <Button
               variant="contained"
-              className="text-black bg-[#1976d2] border-[#1976d2] hover:text-white hover:bg-black hover:border-white border-solid border-2">
+              className=" bg-[#1976d2] border-[#1976d2] hover:text-white hover:bg-black hover:border-white border-solid border-2 text-[#1976d2]">
               <Link href="/forecast" className="self-end ml-auto">
                 Forecast
               </Link>

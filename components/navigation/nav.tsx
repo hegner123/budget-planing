@@ -24,13 +24,12 @@ export default function Navigation() {
     <>
       <nav className="flex justify-between p-5 bg-blue-950">
         <div>
-          <Link href="/">
+          <Link href={"/"} passHref>
             <h3 className="text-xl bold">Budget Planning</h3>
           </Link>
         </div>
         <div>{user ? <LoggedInLinks /> : <LoggedOutLinks />}</div>
       </nav>
-      <DebugDialog />
     </>
   );
 }
