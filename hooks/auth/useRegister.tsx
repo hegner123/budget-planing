@@ -26,7 +26,7 @@ const useRegister = () => {
       enqueueSnackbar("Error registering", { variant: "error" });
       return;
     }
-    console.log(data);
+
     return data;
   }
 

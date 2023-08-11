@@ -11,6 +11,3 @@ const testDate = dayjs(testStartDate)
   const addOneDay = dayjs(testDate).add(1 * 4, "day")
       .format("MM/DD/YYYY")
 
-  console.log(testStartDate);
-  console.log(testDate);
-    console.log(addOneDay);

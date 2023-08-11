@@ -122,6 +122,7 @@ import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
             type: type,
           };
         });
+
         return parsedData;
       }
     }, [
@@ -190,6 +191,7 @@ import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
               }
               break;
             case "expenses":
+              console.log("new row", newRow);
               try {
                 updateExpenses(newRow).then((res) => {
                   resolve(res.data);

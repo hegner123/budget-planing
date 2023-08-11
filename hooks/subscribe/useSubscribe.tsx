@@ -7,6 +7,7 @@ const useSubscribe = (balance, income, expense) => {
   const [updatedExpense, setUpdatedExpense] = useState<ExpenseEntry[]>(expense);
   const [connected, setConnected] = useState(false);
   const supabaseClient = createClientComponentClient();
+
   useEffect(() => {
     const LiveBalance = supabaseClient
       .channel("all")
@@ -25,6 +26,7 @@ const useSubscribe = (balance, income, expense) => {
       table: string,
       { updatedBalance, updatedExpense, updatedIncome }
     ) {
+      console.log("table", table);
       switch (table) {
         case "Balance":
           handleUpdatedBalanceData(data, updatedBalance);
@@ -59,8 +61,6 @@ const useSubscribe = (balance, income, expense) => {
           break;
         case "DELETE":
           const filteredBalance = balance?.filter((entry: any) => {
-            console.log(entry);
-            console.log(data.old);
             return entry.id !== data.old.id;
           });
 

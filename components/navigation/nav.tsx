@@ -17,7 +17,6 @@ export default function Navigation() {
   useEffect(() => {
     getSession().then((res) => {
       setUser(res.data.session?.user.id);
-      console.log(res.data);
     });
   }, [getSession, pathname]);
   return (
