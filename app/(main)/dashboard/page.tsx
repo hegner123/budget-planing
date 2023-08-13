@@ -66,6 +66,7 @@ import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
     const [expenseData, setExpenseData] = useState<any>(null);
     const [incomeData, setIncomeData] = useState<any>(null);
     const [data, setData] = useState<any>(null);
+    const [rowUpdating, setRowUpdating] = useState<boolean>(false);
     const [, setDeleteEntry] = useAtom(deleteEntryAtom);
     const [, setDeleteEntryType] = useAtom(deleteEntryTypeAtom);
     const [, setCompiledData] = useAtom(compiledDataAtom);
@@ -136,6 +137,9 @@ import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
 
     useEffect(() => {
       if (balanceData && expenseData && incomeData) {
+        if (rowUpdating) {
+          return;
+        }
         setTableData(balanceData, expenseData, incomeData);
         setLoading(false);
       }
@@ -145,6 +149,7 @@ import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
         expenseData: any,
         incomeData: any
       ) {
+        console.log("setTableData");
         let combined = [...balanceData, ...expenseData, ...incomeData];
         let sorted = combined.sort((a: any, b: any) => {
           return new Date(a.date).getTime() - new Date(b.date).getTime();
@@ -154,6 +159,7 @@ import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
         localStorage.setItem("compiledData", JSON.stringify(sorted));
         enqueueSnackbar("Data loaded", { variant: "success" });
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
       balanceData,
       expenseData,
@@ -179,11 +185,8 @@ import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
             case "balance":
               try {
                 updateBalance({ newRow, supabaseClient }).then((res) => {
-                  resolve({
-                    id: newRow.id,
-                    amount: newRow.amount,
-                    ...res,
-                  });
+                  setRowUpdating(true);
+                  resolve(res.data);
                 });
               } catch (error) {
                 console.log(error);
@@ -194,6 +197,8 @@ import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
               console.log("new row", newRow);
               try {
                 updateExpenses(newRow).then((res) => {
+                  console.log("rowUpdate", res);
+                  setRowUpdating(true);
                   resolve(res.data);
                 });
               } catch (error) {
@@ -204,6 +209,7 @@ import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
             case "income":
               try {
                 updateIncomeEntry(newRow).then((res) => {
+                  setRowUpdating(true);
                   resolve(res.data);
                 });
               } catch (error) {
@@ -213,6 +219,7 @@ import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
             default:
               break;
           }
+          setRowUpdating(false);
         }),
       // eslint-disable-next-line react-hooks/exhaustive-deps
       []
