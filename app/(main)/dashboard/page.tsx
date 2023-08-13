@@ -149,7 +149,6 @@ import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
         expenseData: any,
         incomeData: any
       ) {
-        console.log("setTableData");
         let combined = [...balanceData, ...expenseData, ...incomeData];
         let sorted = combined.sort((a: any, b: any) => {
           return new Date(a.date).getTime() - new Date(b.date).getTime();
@@ -189,19 +188,18 @@ import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
                   resolve(res.data);
                 });
               } catch (error) {
-                console.log(error);
+                console.error(error);
                 reject(error);
               }
               break;
             case "expenses":
-              console.log("new row", newRow);
               try {
                 updateExpenses(newRow).then((res) => {
-                  console.log("rowUpdate", res);
                   setRowUpdating(true);
                   resolve(res.data);
                 });
               } catch (error) {
+                console.error(error);
                 reject(error);
               }
 
@@ -213,7 +211,8 @@ import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
                   resolve(res.data);
                 });
               } catch (error) {
-                console.log(error);
+                console.error(error);
+                reject(error);
               }
               break;
             default:

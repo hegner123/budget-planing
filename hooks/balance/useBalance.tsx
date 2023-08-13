@@ -51,7 +51,7 @@ export const useBalance = () => {
     user: string;
     date: string;
   }) {
-    if (!user) return console.log("No user");
+    // if (!user) return console.log("No user");
     const { data, error } = await supabaseClient
       .from("Balance")
       .insert([{ name: name, amount: amount, date: date, user: user }]);

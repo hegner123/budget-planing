@@ -26,7 +26,6 @@ const useSubscribe = (balance, income, expense) => {
       table: string,
       { updatedBalance, updatedExpense, updatedIncome }
     ) {
-      console.log("table", table);
       switch (table) {
         case "Balance":
           handleUpdatedBalanceData(data, updatedBalance);
@@ -38,7 +37,7 @@ const useSubscribe = (balance, income, expense) => {
           handleUpdatedIncomeData(data, updatedIncome);
           break;
         default:
-          console.log("No table found");
+        // console.log("No table found");
       }
     }
 
@@ -67,7 +66,7 @@ const useSubscribe = (balance, income, expense) => {
           setUpdatedBalance(filteredBalance as BalanceEntry[]);
           break;
         default:
-          console.log("No event type found");
+        // console.log("No event type found");
       }
     }
 
@@ -96,7 +95,7 @@ const useSubscribe = (balance, income, expense) => {
           setUpdatedExpense(filteredExpense as ExpenseEntry[]);
           break;
         default:
-          console.log("No event type found");
+        // console.log("No event type found");
       }
     }
 
@@ -126,7 +125,7 @@ const useSubscribe = (balance, income, expense) => {
 
           break;
         default:
-          console.log("No event type found");
+        // console.log("No event type found");
       }
     }
 

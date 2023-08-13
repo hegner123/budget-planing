@@ -48,7 +48,6 @@ const TestBalanceForm = () => {
     };
     addBalance(formSubmit)
       .then((res) => {
-        console.log(res);
         enqueueSnackbar("Balance Added", { variant: "success" });
       })
       .catch((err) => {
