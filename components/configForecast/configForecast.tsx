@@ -1,5 +1,5 @@
 "use client";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -9,40 +9,40 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { useForecastLength } from "@budget/hooks/forecast/useForecastLength";
+
 import { useForecastBudget } from "@budget/hooks/forecast/useForecast";
 import { useAtom } from "jotai";
-import {
-  configForecastDurationAtom,
-  configForecastStartAtom,
-  forecastListAtom,
-} from "@budget/store/state";
+import { configForecastStartAtom, forecastListAtom } from "@budget/store/state";
 import { useSnackbar } from "notistack";
+import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
 
-export const ConfigForecast = ({ getData, compiledData }: any) => {
-  const {
-    setLength,
-    setUnit,
-    setStartDate,
-    length,
-    unit,
-    startDate,
-    forecastDuration,
-  } = useForecastLength();
+export const ConfigForecast = ({ compiledData }: any) => {
+  dayjs.extend(duration);
+  const [length, setLength] = useState<any>("");
+  const [unit, setUnit] = useState<any>("");
+
+  const [forecastDuration, setForecastDuration] = useState<number>(null);
   const { forecastBudget } = useForecastBudget();
-  const [, setForecastLength] = useAtom(configForecastDurationAtom);
-  const [, setForecastStart] = useAtom(configForecastStartAtom);
+  const [forecastStart, setStartDate] = useAtom(configForecastStartAtom);
   const [, setForecastList] = useAtom(forecastListAtom);
 
   const { enqueueSnackbar } = useSnackbar();
 
+  useEffect(() => {
+    if (length && unit && forecastStart) {
+      setForecastDuration(forecastFindDuration(length, unit, forecastStart));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [length, unit, forecastStart]);
+
   const forecastData = useCallback(
-    (forecastDuration, configForecastStart, compiledData) => {
+    (duration: any, start: any, compiledData: any) => {
       try {
-        if (forecastDuration && configForecastStart && compiledData) {
+        if (duration && start && compiledData) {
           const forecast = forecastBudget(
-            forecastDuration,
-            configForecastStart,
+            duration,
+            start,
             JSON.stringify(compiledData)
           );
           enqueueSnackbar("Forecasting...", { variant: "info" });
@@ -52,20 +52,30 @@ export const ConfigForecast = ({ getData, compiledData }: any) => {
         enqueueSnackbar("Error Forecasting", { variant: "error" });
       }
     },
-    [enqueueSnackbar, forecastBudget]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [enqueueSnackbar, forecastFindDuration]
   );
-
-  function handleChange(event: SelectChangeEvent) {
-    setUnit(event.target.value);
-  }
 
   function handleSubmit(e: any) {
     e.preventDefault();
-    setForecastLength(forecastDuration);
-    setForecastStart(startDate);
-    const forecast = forecastData(forecastDuration, startDate, compiledData);
-    setForecastList(forecast);
+    let forecast = null;
+
+    forecast = forecastData(forecastDuration, forecastStart, compiledData);
+    if (forecast !== null) {
+      setForecastList(forecast);
+    }
   }
+
+  function forecastFindDuration(
+    length: any,
+    unit: any,
+    startDate: any
+  ): number {
+    let endDate = startDate?.add(length, unit);
+    return startDate?.diff(endDate, "day") * -1;
+  }
+
+  console.log("config");
 
   return (
     <form className="grid grid-cols-12 gap-5">
@@ -84,7 +94,7 @@ export const ConfigForecast = ({ getData, compiledData }: any) => {
           placeholder="Months"
           value={unit}
           label="Time Scale"
-          onChange={handleChange}>
+          onChange={(e) => setUnit(e.target.value)}>
           <MenuItem value={"days"}>Day</MenuItem>
           <MenuItem value={"months"}>Month</MenuItem>
           <MenuItem value={"years"}>Year</MenuItem>
@@ -93,8 +103,8 @@ export const ConfigForecast = ({ getData, compiledData }: any) => {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
           label="Forecast Start Date"
-          value={startDate}
-          onChange={(newValue) => startDate(newValue)}
+          value={forecastStart}
+          onChange={(newValue) => setStartDate(newValue)}
           className="col-span-6 mt-5"
         />
       </LocalizationProvider>

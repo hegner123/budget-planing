@@ -64,9 +64,9 @@ export function createBalance(
         expenseTotal as number
       ),
       balanceDetails: {
-        previousBalance: startingBalance as number,
+        previousBalance: balance as number,
         newBalance: newBalance(
-          startingBalance as number,
+          balance as number,
           incomeTotal as number,
           expenseTotal as number
         ),

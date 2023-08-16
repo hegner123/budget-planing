@@ -4,13 +4,18 @@ import useSignOut from "@budget/hooks/auth/useSignOut";
 
 const LoggedInLinks = () => {
   const { signOut } = useSignOut();
+
   return (
     <ul className="flex">
       <li className="px-5">
-        <Link href="/dashboard">Dashboard</Link>
+        <Link href="/dashboard" onClick={(e) => console.log("click", e)}>
+          Dashboard
+        </Link>
       </li>
       <li className="px-5">
-        <Link href="/testing">Testing</Link>
+        <Link href="/forecast" className="self-end ml-auto">
+          Forecast
+        </Link>
       </li>
       <li className="px-5">
         <span

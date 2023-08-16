@@ -3,5 +3,6 @@ export function newBalance(
   income: number,
   expenses: number
 ): number {
-  return balance + income - expenses;
+  let balanceTotal: number = balance + income - expenses;
+  return balanceTotal.toFixed(2) as unknown as number;
 }

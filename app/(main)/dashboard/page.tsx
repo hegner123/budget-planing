@@ -238,22 +238,7 @@ import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
             <AddIncomeForm />
             <AddExpenseForm />
           </ButtonGroup>
-          <ButtonGroup>
-            <Button
-              variant="contained"
-              className=" bg-[#1976d2] border-[#1976d2] hover:text-white hover:bg-black hover:border-white border-solid border-2 text-[#1976d2]">
-              <Link href="/forecast" className="self-end ml-auto">
-                Forecast
-              </Link>
-            </Button>
-            <Button
-              variant="outlined"
-              className="text-[#1976d2]  border-[#1976d2] hover:text-white hover:bg-black hover:border-white border-solid ">
-              <Link href="/forecast-test" className="self-end ml-auto">
-                Forecast-test
-              </Link>
-            </Button>
-          </ButtonGroup>
+
         </div>
 
         <div className="col-span-10 col-start-2 bg-white">

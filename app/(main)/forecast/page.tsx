@@ -1,12 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
-import {
-  compiledDataAtom,
-  configForecastStartAtom,
-  configForecastDurationAtom,
-  forecastListAtom,
-} from "@budget/store/state";
+import { compiledDataAtom, forecastListAtom } from "@budget/store/state";
 import { useForecastBudget } from "@budget/hooks/forecast/useForecast";
 import Card from "@mui/material/Card";
 import { ConfigForecast } from "@budget/components/configForecast/configForecast";
@@ -15,7 +10,7 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useSnackbar } from "notistack";
+
 import Chart from "@budget/components/chart";
 import dayjs from "dayjs";
 import { ExpensePeek, IncomePeek } from "@budget/types";
@@ -24,8 +19,10 @@ const Forecast = () => {
   const [compiledData, setCompiledData] = useAtom(compiledDataAtom);
   const [forecastList, setForecastList] = useAtom(forecastListAtom);
   const [forecastDisplay, setForecastDisplay] = useState<any>("list");
-  const { forecastBudget } = useForecastBudget();
-  const { enqueueSnackbar } = useSnackbar();
+  const balanceGoodColor = "bg-slate-500";
+  const balanceWarningColor = "bg-yellow-700";
+  const balanceDangerColor = "bg-red-700";
+
   const options = { style: "currency", currency: "USD" };
   const numberFormat = new Intl.NumberFormat("en-US", options);
 
@@ -42,6 +39,18 @@ const Forecast = () => {
 
   function handleDisplayChange(event: any, newDisplay: any) {
     setForecastDisplay(newDisplay);
+  }
+
+  function balanceColor(balance: number): string {
+    if (balance < 1000 && balance > 600) {
+      return balanceWarningColor;
+    }
+    if (balance < 600) {
+      return balanceDangerColor;
+    }
+    if (balance > 0) {
+      return balanceGoodColor;
+    }
   }
 
   return (
@@ -68,10 +77,7 @@ const Forecast = () => {
         </div>
         <Card className="col-span-4 p-5 max-h-fit">
           <h2 className="mb-5 text-2xl">Forecast Length</h2>
-          <ConfigForecast
-            getData={forecastBudget}
-            compiledData={compiledData}
-          />
+          <ConfigForecast compiledData={compiledData} />
         </Card>
         <Card className="col-span-8 p-5">
           <h2 className="mb-5 text-2xl">Forecast</h2>
@@ -80,10 +86,12 @@ const Forecast = () => {
               forecastList &&
               forecastList.map((item: any, i: any) => (
                 <li key={i} className="mt-2">
-                  <Accordion classes={"bg-slate-500"}>
+                  <Accordion className={"bg-slate-500"}>
                     <AccordionSummary
-                      className="text-white rounded bg-slate-500"
-                      expandIcon={<ExpandMoreIcon />}
+                      className={`text-white rounded ${balanceColor(
+                        item.balance
+                      )}`}
+                      expandIcon={<ExpandMoreIcon className="text-white" />}
                       aria-controls={`panel${i}a-content`}
                       id={`panel${i}a-header`}>
                       <div className="flex justify-between w-full pr-20">
@@ -99,20 +107,22 @@ const Forecast = () => {
                     <AccordionDetails>
                       <ul className="grid gap-5">
                         <li>
-                          <p>
-                            Previous Balance:{" "}
+                          <p className="text-white">
+                            Previous Balance: $
                             {item.balanceDetails.previousBalance}
                           </p>
                         </li>
                         <li>
-                          <p>New Balance: {item.balanceDetails.newBalance}</p>
+                          <p className="text-white">
+                            New Balance: ${item.balanceDetails.newBalance}
+                          </p>
                         </li>
                         {item.balanceDetails.incomesTotal !== 0 && (
                           <>
                             <li>
                               <ul className="grid w-full grid-cols-2">
                                 <li className="col-start-1">
-                                  <p>
+                                  <p className="text-white mt-[12px]">
                                     Income Total: $
                                     {item.balanceDetails.incomesTotal}
                                   </p>
@@ -120,8 +130,10 @@ const Forecast = () => {
                                 <li className="col-start-2">
                                   <Accordion className="p-0 m-0 ">
                                     <AccordionSummary
-                                      className="text-white border-none rounded bg-slate-500"
-                                      expandIcon={<ExpandMoreIcon />}
+                                      className="text-white border-none rounded bg-slate-600"
+                                      expandIcon={
+                                        <ExpandMoreIcon className="text-white" />
+                                      }
                                       aria-controls={`panel${i}b1-content`}
                                       id={`panel${i}b1-header`}>
                                       <p>Income Details</p>
@@ -148,9 +160,9 @@ const Forecast = () => {
                         {item.balanceDetails.expensesTotal !== 0 && (
                           <>
                             <li>
-                              <ul className="grid grid-cols-2">
+                              <ul className="grid grid-cols-2 items-top">
                                 <li className="col-start-1">
-                                  <p>
+                                  <p className="text-white mt-[12px]">
                                     Expenses Total: $
                                     {item.balanceDetails.expensesTotal}
                                   </p>
@@ -158,8 +170,10 @@ const Forecast = () => {
                                 <li className="col-start-2">
                                   <Accordion>
                                     <AccordionSummary
-                                      className="text-white rounded bg-slate-500"
-                                      expandIcon={<ExpandMoreIcon />}
+                                      className="text-white rounded bg-slate-600"
+                                      expandIcon={
+                                        <ExpandMoreIcon className="text-white" />
+                                      }
                                       aria-controls={`panel${i}b2-content`}
                                       id={`panel${i}b2-header`}>
                                       <p>Expenses Details</p>

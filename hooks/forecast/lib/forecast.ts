@@ -51,7 +51,7 @@ export function forecastBudget(length: number, startDate: string, stringData: an
     let newBalance: number = rawBalance[balanceLength - 1].amount;
 
     const forecastedBalance: ForecastEntry = createBalance(
-      forecastList[i]?.balance || (newBalance as number),
+      forecastList[i - 1]?.balance || (newBalance as number),
       repeatedIncome as BudgetEntryRepeats[],
       repeatedExpenses as BudgetEntryRepeats[],
       newDate as string,
