@@ -99,7 +99,7 @@ import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
             name: item.name,
             [type]: `$${item.amount}`,
             date: formatDate(new Date(item.date)),
-            repeated: item.repeated,
+            repeated: item.repeated ? item.repeated : null,
             type: type,
           };
         });
@@ -185,7 +185,8 @@ import { useSubscribe } from "@budget/hooks/subscribe/useSubscribe";
               try {
                 updateBalance({ newRow, supabaseClient }).then((res) => {
                   setRowUpdating(true);
-                  resolve(res.data);
+                  console.log(res);
+                  resolve(res.newRow);
                 });
               } catch (error) {
                 console.error(error);

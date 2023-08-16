@@ -19,6 +19,7 @@ export async function addBalance({
     .insert([{ name: name, amount: amount, date: date, user: user }]);
   return { data, error };
 }
+
 export async function getBalance(user: string, supabaseClient: any) {
   let { data, error } = await supabaseClient
     .from("Balance")
@@ -37,7 +38,8 @@ export async function deleteBalance(id: string, supabaseClient: any) {
 }
 
 export async function updateBalance({ newRow, supabaseClient }) {
-  const { id, name, amount, repeated, date } = newRow;
+  const { id, name, amount, date } = newRow;
+  console.log(newRow);
   const { data, error } = await supabaseClient
     .from("Balance")
     .update({
@@ -47,8 +49,8 @@ export async function updateBalance({ newRow, supabaseClient }) {
       date: `${date}`,
     })
     .eq("uuid", id);
-    if (data === null && error === null) {
-      return { newRow, error };
-    }
+  if (data === null && error === null) {
+    return { newRow, error };
+  }
   return { data, error };
 }

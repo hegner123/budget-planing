@@ -53,12 +53,12 @@ export async function deleteIncome({
 }
 
 export async function updateIncome({ newRow, supabaseClient }: any) {
-  const { id, name, income, repeated, date } = newRow;
+  const { id, name, amount, repeated, date } = newRow;
   const { data, error } = await supabaseClient
     .from("Income")
     .update({
       name: `${name}`,
-      amount: `${parseFloat(income.slice(1))}`,
+      amount: `${parseFloat(amount.slice(1))}`,
       repeated: `${repeated}`,
       date: `${date}`,
     })

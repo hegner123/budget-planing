@@ -28,12 +28,15 @@ const useSubscribe = (balance, income, expense) => {
     ) {
       switch (table) {
         case "Balance":
+          console.log("Balance");
           handleUpdatedBalanceData(data, updatedBalance);
           break;
         case "Expenses":
+          console.log("Expenses");
           handleUpdatedExpenseData(data, updatedExpense);
           break;
         case "Income":
+          console.log("Income");
           handleUpdatedIncomeData(data, updatedIncome);
           break;
         default:
@@ -45,7 +48,6 @@ const useSubscribe = (balance, income, expense) => {
       switch (data.eventType) {
         case "INSERT":
           let newBalance = [data.new, ...balance];
-
           setUpdatedBalance(newBalance as BalanceEntry[]);
           break;
         case "UPDATE":
