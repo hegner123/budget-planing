@@ -50,7 +50,7 @@ date | No description | date | date
 user | No description | uuid | uuid
 uuid | No description | uuid | uuid
 
-Once you have created the table, you will need to create a .env file in the root directory and add the following variables:
+Once you have created the tables, you will need to create a .env file in the root directory and add the following variables:
 
 ```
 NEXT_PUBLIC_SUPABASE_URL
@@ -58,6 +58,20 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY
 ```
 
 You can find these variables in your Supabase project settings.
+
+You will also need to create a Row Level Security (RLS) policy for each table on supabase. You can configure these settings in the supabase dashboard under Authentication > Policies. The policies should be configured as follows:
+
+All tables should have the following RLS policy:
+
+```
+Policy name: Enable all for authenticated users only
+
+Target Roles: authenticated
+
+Using Expression: True
+
+With Check Expression: True
+``````
 
 
 ## Usage
