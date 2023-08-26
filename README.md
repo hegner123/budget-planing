@@ -9,11 +9,11 @@ To install this application, clone the repository and run the following command 
 ```
 npm install
 ```
-
-This application uses Supabase for it's backend. To use this application, you will need to create a Supabase account and create a new project. Once you have created a project, you will need to create a table called "balances" with the following columns:
+To use this application, you will need to create a Supabase account and create a new project. Once you have created a project, you will need to create a table called "balances" with the following columns:
 
 #### Balances Table
 Name| Description | Data Type | Format
+---------|----------|---------|---------
 id | No description | bigint | int8
 created_at | No description | timestamp with time zone | timestamptz
 name | No description | text | text
@@ -26,6 +26,7 @@ You will also need to create a table called "expenses" with the following column
 
 #### Expenses Table
 Name| Description | Data Type | Format
+---------|----------|---------|---------
 id | No description | bigint | int8
 created_at | No description | timestamp with time zone | timestamptz
 name | No description | text | text
@@ -38,6 +39,7 @@ You will also need to create a table called "incomes" with the following columns
 
 #### Incomes Table
 Name| Description | Data Type | Format
+---------|----------|---------|---------
 id | No description | bigint | int8
 created_at | No description | timestamp with time zone | timestamptz
 name | No description | text | text
@@ -55,6 +57,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 You can find these variables in your Supabase project settings.
 
+
 ## Usage
 
 To use this application, run the following command in the root directory:
@@ -63,11 +66,9 @@ To use this application, run the following command in the root directory:
 npm run dev
 ```
 
-## License
-This application is licensed under the MIT license.
+Once the application is runnning, create a user account with an email and passowrd. 
 
-## Contributing
-If you would like to contribute to this application, please submit a pull request.
+> **Tip**: If you use **Gmail**, you can create a new email by adding a **+** and more characters to your email address. For example, if your email is `email@gmail.com`, you can use `email+1@gmail.com`. This will allow you to create multiple accounts with the same email address, and you will still receive emails sent to the test email at your primary email.
 
 ## Tests
 
@@ -77,7 +78,9 @@ To test this application, run the following command in the root directory:
 npm run test
 ```
 
-## Questions
-If you have any questions about this application, please contact me by [email](mailto:email@email.com).
+## License
+This application is licensed under the MIT license.
 
-You can also find more of my work on [GitHub](https://github.com/hegner123).
+## Contributing
+If you would like to contribute to this application, please submit a pull request.
+
