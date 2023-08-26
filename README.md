@@ -32,6 +32,7 @@ created_at | No description | timestamp with time zone | timestamptz
 name | No description | text | text
 amount | No description | numeric | numeric
 repeated | No description | text | text
+date | No description | date | date
 user | No description | uuid | uuid
 uuid | No description | uuid | uuid
 
@@ -45,6 +46,7 @@ created_at | No description | timestamp with time zone | timestamptz
 name | No description | text | text
 amount | No description | numeric | numeric
 repeated | No description | text | text
+date | No description | date | date
 user | No description | uuid | uuid
 uuid | No description | uuid | uuid
 
