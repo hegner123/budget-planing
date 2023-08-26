@@ -41,7 +41,7 @@ export function createBalance(
   if (i === 0) {
     return {
       date: date as string | Dayjs,
-      balance: startingBalance,
+      balance: startingBalance as number,
       balanceDetails: {
         previousBalance: startingBalance as number,
         newBalance: newBalance(

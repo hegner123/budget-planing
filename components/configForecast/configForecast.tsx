@@ -75,8 +75,6 @@ export const ConfigForecast = ({ compiledData }: any) => {
     return startDate?.diff(endDate, "day") * -1;
   }
 
-  console.log("config");
-
   return (
     <form className="grid grid-cols-12 gap-5">
       <TextField
