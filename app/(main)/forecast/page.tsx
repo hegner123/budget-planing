@@ -10,10 +10,10 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
 import Chart from "@budget/components/chart";
 import dayjs from "dayjs";
-import { ExpensePeek, IncomePeek } from "@budget/types";
+import { IncomeAccordion } from "@budget/components/forecast/incomeAccordion";
+import { ExpenseAccordion } from "@budget/components/forecast/expenseAccordion";
 
 const Forecast = () => {
   const [compiledData, setCompiledData] = useAtom(compiledDataAtom);
@@ -118,85 +118,10 @@ const Forecast = () => {
                           </p>
                         </li>
                         {item.balanceDetails.incomesTotal !== 0 && (
-                          <>
-                            <li>
-                              <ul className="grid w-full grid-cols-2">
-                                <li className="col-start-1">
-                                  <p className="text-white mt-[12px]">
-                                    Income Total: $
-                                    {item.balanceDetails.incomesTotal}
-                                  </p>
-                                </li>
-                                <li className="col-start-2">
-                                  <Accordion className="p-0 m-0 ">
-                                    <AccordionSummary
-                                      className="text-white border-none rounded bg-slate-600"
-                                      expandIcon={
-                                        <ExpandMoreIcon className="text-white" />
-                                      }
-                                      aria-controls={`panel${i}b1-content`}
-                                      id={`panel${i}b1-header`}>
-                                      <p>Income Details</p>
-                                    </AccordionSummary>
-                                    <AccordionDetails>
-                                      <ul>
-                                        {item.balanceDetails.incomes.map(
-                                          (income: IncomePeek, i: any) => (
-                                            <li key={i}>
-                                              <p>
-                                                {income.name}: ${income.amount}
-                                              </p>
-                                            </li>
-                                          )
-                                        )}
-                                      </ul>
-                                    </AccordionDetails>
-                                  </Accordion>
-                                </li>
-                              </ul>
-                            </li>
-                          </>
+                          <IncomeAccordion i={i} item={item} />
                         )}
                         {item.balanceDetails.expensesTotal !== 0 && (
-                          <>
-                            <li>
-                              <ul className="grid grid-cols-2 items-top">
-                                <li className="col-start-1">
-                                  <p className="text-white mt-[12px]">
-                                    Expenses Total: $
-                                    {item.balanceDetails.expensesTotal}
-                                  </p>
-                                </li>
-                                <li className="col-start-2">
-                                  <Accordion>
-                                    <AccordionSummary
-                                      className="text-white rounded bg-slate-600"
-                                      expandIcon={
-                                        <ExpandMoreIcon className="text-white" />
-                                      }
-                                      aria-controls={`panel${i}b2-content`}
-                                      id={`panel${i}b2-header`}>
-                                      <p>Expenses Details</p>
-                                    </AccordionSummary>
-                                    <AccordionDetails>
-                                      <ul>
-                                        {item.balanceDetails.expenses.map(
-                                          (expense: ExpensePeek, i: any) => (
-                                            <li key={i}>
-                                              <p>
-                                                {expense.name}: $
-                                                {expense.amount}
-                                              </p>
-                                            </li>
-                                          )
-                                        )}
-                                      </ul>
-                                    </AccordionDetails>
-                                  </Accordion>
-                                </li>
-                              </ul>
-                            </li>
-                          </>
+                          <ExpenseAccordion i={i} item={item} />
                         )}
                       </ul>
                     </AccordionDetails>
