@@ -18,6 +18,11 @@ const LoggedInLinks = () => {
         </Link>
       </li>
       <li className="px-5">
+        <Link href="/account" className="self-end ml-auto">
+          Account
+        </Link>
+      </li>
+      <li className="px-5">
         <span
           className="text-white hover:cursor-pointer"
           onClick={() => signOut()}>

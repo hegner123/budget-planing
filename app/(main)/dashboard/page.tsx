@@ -222,6 +222,8 @@ export default function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  function handleDeleteSelectedRows() {}
+
   const dayInMonthComparator: GridComparatorFn<Date> = (v1, v2) =>
     v1.getDate() - v2.getDate();
 
@@ -229,6 +231,11 @@ export default function Dashboard() {
     <main className="p-5 dashboard-main">
       <h2 className="self-end mt-2 mb-2 text-3xl text-white">Overview</h2>
       <div className="flex gap-3 mb-2">
+        <ButtonGroup>
+          <Button variant="outlined" onClick={() => handleDeleteSelectedRows()}>
+            Delete
+          </Button>
+        </ButtonGroup>
         <ButtonGroup>
           <AddBalanceForm />
           <AddIncomeForm />
@@ -238,6 +245,7 @@ export default function Dashboard() {
 
       <div className="col-span-10 col-start-2 bg-white">
         <StyledDataGrid
+          checkboxSelection={true}
           columns={[
             {
               field: "delete",
@@ -255,7 +263,7 @@ export default function Dashboard() {
             },
             {
               field: "name",
-              headerName: "Name",
+              headerName: "Label",
               flex: 1,
               editable: true,
               headerClassName: "super-app-theme--header",

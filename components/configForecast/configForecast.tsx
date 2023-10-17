@@ -75,13 +75,21 @@ export const ConfigForecast = ({ compiledData }: any) => {
     return startDate?.diff(endDate, "day") * -1;
   }
 
+  function handleLengthChange(length: any) {
+    if (length < 1) {
+      setLength(1);
+      return;
+    }
+    setLength(length);
+  }
+
   return (
     <form className="grid grid-cols-12 gap-5">
       <TextField
         label="Forecast Length"
         value={length}
-        placeholder="0"
-        onChange={(e) => setLength(e.target.value)}
+        placeholder="1"
+        onChange={(e) => handleLengthChange(e.target.value)}
         type="number"
         className="col-span-6 mt-5"
       />
@@ -109,7 +117,8 @@ export const ConfigForecast = ({ compiledData }: any) => {
       <Button
         onClick={(e) => handleSubmit(e as any)}
         variant="contained"
-        className="text-black bg-[#1976d2] border-[#1976d2] hover:text-white hover:bg-black hover:border-white border-solid border-2 col-span-4 h-fit w-fit self-center col-start-1">
+        className="text-white bg-[#1976d2] border-solid col-span-4 h-fit w-fit self-center col-start-1"
+        disabled={!length || !unit || !forecastStart}>
         Submit
       </Button>
     </form>

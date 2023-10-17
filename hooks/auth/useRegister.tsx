@@ -3,6 +3,7 @@ import { useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
+import { useLogin } from "./useLogin";
 
 const useRegister = () => {
   const [email, setEmail] = useState<String>("");
@@ -10,6 +11,7 @@ const useRegister = () => {
   const [passwordConfirmation, setPasswordConfirmation] = useState<String>("");
   const [error, setError] = useState<any>(null);
   const { enqueueSnackbar } = useSnackbar();
+  const login = useLogin();
   const supabaseClient = createClientComponentClient();
   const router = useRouter();
 
@@ -47,7 +49,11 @@ const useRegister = () => {
 
     registerUser()
       .then(() => {
-        router.push("/dashboard");
+        login.handleSubmit({
+          email: email,
+          password: password,
+          supabaseClient: supabaseClient,
+        });
       })
       .catch((err) => {
         setError(err);

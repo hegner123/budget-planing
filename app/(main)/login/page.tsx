@@ -50,7 +50,7 @@ const LoginPage = ({ session }: { session: Session | null }) => {
       <main className="justify-center min-w-full mt-10 main-min-h site-width site_grid">
         <div className="w-full col-span-4 col-start-6">
           <form className="grid w-full grid-cols-12 gap-6 p-10 bg-white">
-            <h4 className="text-4xl col-span-full text-slate-900">Login</h4>
+            <h1 className="text-4xl col-span-full text-slate-900">Login</h1>
             {error && <p className="col-span-2 text-red-500">{error}</p>}
             <TextField
               variant="outlined"

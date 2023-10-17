@@ -20,7 +20,6 @@ export default function RegisterLayout({
       {!loading && (
         <>
           <SimpleSnackbar />
-          <DebugDialog />
         </>
       )}
     </>

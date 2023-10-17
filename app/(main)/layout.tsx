@@ -21,7 +21,7 @@ export default function RootLayout({
     initialSession: Session | null;
   };
 }) {
-  const supabase = createClientComponentClient();
+
 
   return (
     <html lang="en">

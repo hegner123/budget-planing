@@ -28,10 +28,10 @@ const RegisterForm = () => {
     <main className="justify-center min-w-full mt-10 main-min-h site-width site_grid">
       <div className="w-full col-span-4 col-start-6">
         <form className="grid w-full grid-cols-12 gap-6 p-10 bg-white">
-          <h1 className="text-3xl col-span-full text-black">Register</h1>
+          <h1 className="text-4xl text-black col-span-full">Register</h1>
 
           <TextField
-            className="my-0 bg-transparent  col-span-full"
+            className="my-0 bg-transparent col-span-full"
             type="email"
             label="Email"
             id="email"
@@ -40,7 +40,7 @@ const RegisterForm = () => {
           />
 
           <TextField
-            className="bg-transparent  col-span-full"
+            className="bg-transparent col-span-full"
             type="password"
             label="Password"
             id="password"
@@ -56,15 +56,18 @@ const RegisterForm = () => {
             value={passwordConfirmation}
             onChange={(e) => setPasswordConfirmation(e.target.value)}
           />
-          <div className="flex space-x-4">
-            <Button
-              variant="contained"
-              className="col-span-4 p-2 mt-5 rounded bg-brand-dark-blue text-slate-900"
-              onClick={(e) => handleSubmit(e)}>
-              Submit
+
+          <Button
+            variant="contained"
+            className="col-span-4 p-2 mt-5 rounded bg-brand-dark-blue text-slate-900"
+            onClick={(e) => handleSubmit(e)}>
+            Submit
+          </Button>
+          <Link href="../" className="col-span-4 mt-5 ">
+            <Button variant="outlined" className="w-full p-2 rounded ">
+              Cancel
             </Button>
-            <Link href="../">Cancel</Link>
-          </div>
+          </Link>
         </form>
       </div>
     </main>
