@@ -5,6 +5,10 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -21,7 +25,7 @@ export const ConfigForecast = ({ compiledData }: any) => {
   dayjs.extend(duration);
   const [length, setLength] = useState<any>("");
   const [unit, setUnit] = useState<any>("");
-
+  const [customBalance, setCustomBalance] = useState<any>(null);
   const [forecastDuration, setForecastDuration] = useState<number>(null);
   const { forecastBudget } = useForecastBudget();
   const [forecastStart, setStartDate] = useAtom(configForecastStartAtom);
@@ -111,9 +115,33 @@ export const ConfigForecast = ({ compiledData }: any) => {
           label="Forecast Start Date"
           value={forecastStart}
           onChange={(newValue) => setStartDate(newValue)}
-          className="col-span-6 mt-5"
+          className="mt-5 col-span-full"
         />
       </LocalizationProvider>
+      <FormControl className="col-span-6">
+        <FormLabel id="balance-radio-buttons-label">Balance</FormLabel>
+        <RadioGroup
+          aria-labelledby="balance-radio-buttons-label"
+          defaultValue="saved-balance"
+          name="balance-radio-buttons-group">
+          <FormControlLabel
+            value="saved-balance"
+            control={<Radio />}
+            label="Saved Balance"
+          />
+          <FormControlLabel
+            value={customBalance}
+            control={<Radio />}
+            label={
+              <TextField
+                label="Custom Balance"
+                onChange={(e) => setCustomBalance(e.target.value)}
+                className="w-80"
+              />
+            }
+          />
+        </RadioGroup>
+      </FormControl>
       <Button
         onClick={(e) => handleSubmit(e as any)}
         variant="contained"

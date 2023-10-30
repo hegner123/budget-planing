@@ -1,6 +1,6 @@
 "use client";
 
-import "@budget/styles/style.scss";
+
 import { Inter } from "next/font/google";
 import {
   createClientComponentClient,
@@ -9,6 +9,8 @@ import {
 import JotaiProvider from "@budget/store/state";
 import { SnackbarProvider } from "notistack";
 import Navigation from "@budget/components/navigation/nav";
+import GlobalCssPriority from "@budget/styles/styleProvider";
+import CssBaseline from "@mui/material/CssBaseline";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,17 +23,18 @@ export default function RootLayout({
     initialSession: Session | null;
   };
 }) {
-
-
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <JotaiProvider>
-          <SnackbarProvider maxSnack={6}>
-            <Navigation />
-            {children}
-          </SnackbarProvider>
-        </JotaiProvider>
+      <body className={`${inter.className} root`}>
+        <GlobalCssPriority>
+          <CssBaseline />
+          <JotaiProvider>
+            <SnackbarProvider maxSnack={6}>
+              <Navigation />
+              {children}
+            </SnackbarProvider>
+          </JotaiProvider>
+        </GlobalCssPriority>
       </body>
     </html>
   );
