@@ -6,7 +6,8 @@ import usePasswordReset from "@budget/hooks/auth/usePasswordReset";
 import { usePathname } from "next/navigation";
 import CloseIcon from "@mui/icons-material/Close";
 import useDeleteAccount from "@budget/hooks/admin/useAdmin";
-import { DeleteAccountDialog } from "@budget/components/dialogs/deleteAccount";
+import { enqueueSnackbar } from "notistack";
+import { useRouter } from "next/navigation";
 
 export default function UserAccount() {
   const pathname = usePathname();
@@ -16,6 +17,14 @@ export default function UserAccount() {
   const [showDeleteAccount, setShowDeleteAccount] = useState(false);
   const { handlePasswordReset } = usePasswordReset();
   const { handleDeleteAccount } = useDeleteAccount();
+  const { push } = useRouter();
+
+  function handleDelete() {
+    handleDeleteAccount();
+    setShowDeleteAccount(false);
+    enqueueSnackbar("Account deleted", { variant: "success" });
+    push("/");
+  }
 
   const { getSession } = useSession();
   useEffect(() => {
@@ -77,12 +86,19 @@ export default function UserAccount() {
           open={showDeleteAccount}
           onClose={() => setShowDeleteAccount(!showDeleteAccount)}
           PaperProps={{ className: "w-full p-5 grid grid-cols-12 " }}>
-          <DeleteAccountDialog
-            setShowDeleteAccount={() =>
-              setShowDeleteAccount(!showDeleteAccount)
-            }
-            handleDeleteAccount={() => handleDeleteAccount()}
-          />
+          <h4 className="col-span-6">Delete Your Account</h4>
+          <IconButton
+            onClick={() => setShowDeleteAccount(false)}
+            className="self-end col-start-[-1]">
+            <CloseIcon fontSize="small" />
+          </IconButton>
+
+          <Button
+            variant="contained"
+            onClick={() => handleDelete()}
+            className="mt-5 text-white bg-brand-dark-blue hover:text-black hover:bg-brand-light-blue w-fit col-span-full">
+            Delete
+          </Button>
         </Dialog>
       </div>
     </div>

@@ -18,7 +18,7 @@ export function DeleteAccountDialog({
 
       <Button
         variant="contained"
-        onClick={() => handleDeleteAccount()}
+        onClick={() => handleDeleteAccount}
         className="mt-5 text-white bg-brand-dark-blue hover:text-black hover:bg-brand-light-blue w-fit col-span-full">
         Delete
       </Button>
