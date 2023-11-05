@@ -23,7 +23,7 @@ import { useSession } from "@budget/hooks/auth/useSession";
 const AddIncomeForm = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [name, setName] = useState<any>("");
-  const [income, setIncome] = useState<number>(0);
+  const [amount, setAmount] = useState<number>(0);
   const [repeated, setRepeated] = useState<string>("");
   const [date, setDate] = useState<any>(null);
   const { addIncomeSubmit } = useIncome();
@@ -46,7 +46,7 @@ const AddIncomeForm = () => {
   const handleSubmit = () => {
     const formSubmit = {
       name: name,
-      income: income,
+      amount: amount,
       repeated: repeated,
       date: date,
       user: user,
@@ -69,7 +69,7 @@ const AddIncomeForm = () => {
   };
   const resetForm = () => {
     setName("");
-    setIncome(0);
+    setAmount(0);
     setRepeated("");
     setDate(null);
   };
@@ -100,8 +100,8 @@ const AddIncomeForm = () => {
                 label="Income"
                 variant="outlined"
                 type="number"
-                value={income}
-                onChange={(e: any) => setIncome(e.target.value)}
+                value={amount}
+                onChange={(e: any) => setAmount(e.target.value)}
                 className="w-full mt-5"
                 InputProps={{
                   startAdornment: (

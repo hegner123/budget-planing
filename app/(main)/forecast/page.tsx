@@ -76,7 +76,7 @@ const Forecast = () => {
           </ToggleButtonGroup>
         </div>
         <Card className="col-span-4 p-5 max-h-fit">
-          <h2 className="mb-5 text-2xl">Forecast Length</h2>
+          <h2 className="mb-5 text-2xl">Forecast Config</h2>
           <ConfigForecast compiledData={compiledData} />
         </Card>
         <Card className="col-span-8 p-5">
@@ -128,6 +128,9 @@ const Forecast = () => {
                   </Accordion>
                 </li>
               ))}
+            {forecastDisplay === "list" && forecastList.length === 0 && (
+              <p className="text-gray-500">No Forecast Data</p>
+            )}
             {forecastDisplay === "chart" && (
               <Chart
                 forecastData={forecastList}

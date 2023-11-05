@@ -5,6 +5,10 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -21,7 +25,8 @@ export const ConfigForecast = ({ compiledData }: any) => {
   dayjs.extend(duration);
   const [length, setLength] = useState<any>("");
   const [unit, setUnit] = useState<any>("");
-
+  const [customBalance, setCustomBalance] = useState<any>("");
+  const [balanceOption, setBalanceOption] = useState<any>("saved-balance");
   const [forecastDuration, setForecastDuration] = useState<number>(null);
   const { forecastBudget } = useForecastBudget();
   const [forecastStart, setStartDate] = useAtom(configForecastStartAtom);
@@ -37,13 +42,14 @@ export const ConfigForecast = ({ compiledData }: any) => {
   }, [length, unit, forecastStart]);
 
   const forecastData = useCallback(
-    (duration: any, start: any, compiledData: any) => {
+    (duration: any, start: any, compiledData: any, customBalance?: any) => {
       try {
         if (duration && start && compiledData) {
           const forecast = forecastBudget(
             duration,
             start,
-            JSON.stringify(compiledData)
+            JSON.stringify(compiledData),
+            customBalance
           );
           enqueueSnackbar("Forecasting...", { variant: "info" });
           return forecast;
@@ -60,7 +66,12 @@ export const ConfigForecast = ({ compiledData }: any) => {
     e.preventDefault();
     let forecast = null;
 
-    forecast = forecastData(forecastDuration, forecastStart, compiledData);
+    forecast = forecastData(
+      forecastDuration,
+      forecastStart,
+      compiledData,
+      balanceOption === "custom-balance" ? customBalance : null
+    );
     if (forecast !== null) {
       setForecastList(forecast);
     }
@@ -82,6 +93,9 @@ export const ConfigForecast = ({ compiledData }: any) => {
     }
     setLength(length);
   }
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBalanceOption((event.target as HTMLInputElement).value);
+  };
 
   return (
     <form className="grid grid-cols-12 gap-5">
@@ -111,9 +125,35 @@ export const ConfigForecast = ({ compiledData }: any) => {
           label="Forecast Start Date"
           value={forecastStart}
           onChange={(newValue) => setStartDate(newValue)}
-          className="col-span-6 mt-5"
+          className="mt-5 col-span-full"
         />
       </LocalizationProvider>
+      <FormControl className="col-span-6">
+        <FormLabel id="balance-radio-buttons-label">Balance</FormLabel>
+        <RadioGroup
+          aria-labelledby="balance-radio-buttons-label"
+          defaultValue="saved-balance"
+          name="balance-radio-buttons-group"
+          value={balanceOption}
+          onChange={handleChange}>
+          <FormControlLabel
+            value="saved-balance"
+            control={<Radio />}
+            label="Saved Balance"
+          />
+          <FormControlLabel
+            value={"custom-balance"}
+            control={<Radio />}
+            label={
+              <TextField
+                label="Custom Balance"
+                onChange={(e) => setCustomBalance(e.target.value)}
+                className="w-80"
+              />
+            }
+          />
+        </RadioGroup>
+      </FormControl>
       <Button
         onClick={(e) => handleSubmit(e as any)}
         variant="contained"

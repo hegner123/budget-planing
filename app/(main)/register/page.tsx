@@ -5,8 +5,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { loadingAtom } from "@budget/store/state";
-import { useAtom } from "jotai";
+
 import { SyntheticEvent, useEffect } from "react";
 
 const RegisterForm = () => {
@@ -19,10 +18,6 @@ const RegisterForm = () => {
     setPasswordConfirmation,
     handleSubmit,
   } = useRegister();
-  const [, setLoading] = useAtom(loadingAtom);
-  useEffect(() => {
-    setLoading(false);
-  }, [setLoading]);
 
   return (
     <main className="justify-center min-w-full mt-10 main-min-h site-width site_grid">

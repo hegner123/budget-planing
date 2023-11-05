@@ -2,19 +2,19 @@ import { IncomeUpdateObject, IncomeAddHook } from "@budget/types";
 export async function addIncome({
   user,
   name,
-  income,
+  amount,
   repeated,
   date,
   supabaseClient,
 }: IncomeAddHook) {
   if (!name) throw new Error("No name provided");
-  if (!income) throw new Error("No amount provided");
+  if (!amount) throw new Error("No amount provided");
 
   const { data, error } = await supabaseClient.from("Income").insert([
     {
       user: `${user}`,
       name: `${name}`,
-      amount: `${income}`,
+      amount: `${amount}`,
       repeated: repeated,
       date: `${date}`,
     },

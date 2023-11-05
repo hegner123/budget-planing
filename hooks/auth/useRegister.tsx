@@ -49,11 +49,6 @@ const useRegister = () => {
 
     registerUser()
       .then(() => {
-        login.handleSubmit({
-          email: email,
-          password: password,
-          supabaseClient: supabaseClient,
-        });
       })
       .catch((err) => {
         setError(err);
