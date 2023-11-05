@@ -49,7 +49,6 @@ export function forecastBudget(length: number, startDate: string, stringData: an
   for (let i: number = 0; i < length; i++) {
     let newDate: string = startDateDayjs.add(i + 1, "day").format("MM/DD/YYYY");
     let newBalance: number = rawBalance[balanceLength - 1].amount;
-    console.log(forecastList);
 
     const forecastedBalance: ForecastEntry = createBalance(
       Number(forecastList[i - 1]?.balance) || (newBalance as number),

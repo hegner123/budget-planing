@@ -8,10 +8,11 @@ import { useIncome } from "@budget/hooks/income/useIncome";
 import { AddIncomeForm } from "@budget/components/addIncome/addIncome";
 import { AddExpenseForm } from "@budget/components/addExpense/addExpense";
 import { AddBalanceForm } from "@budget/components/addBalance/addBalance";
+import DeleteDialog from "@budget/components/dialogs/deleteDialog";
+import ImportDialog from "@budget/components/dialogs/importDialog";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import DeleteIcon from "@mui/icons-material/Delete";
-import DeleteDialog from "@budget/components/dialogs/deleteDialog";
 import { useAtom } from "jotai";
 import {
   loadingAtom,
@@ -28,7 +29,6 @@ import {
   GridColDef,
   GridComparatorFn,
 } from "@mui/x-data-grid";
-
 import { styled } from "@mui/material/styles";
 import { useSnackbar } from "notistack";
 import { updateBalance } from "@budget/supabaseTables";
@@ -62,7 +62,8 @@ export default function Dashboard() {
   const { balance, fetchedBalance } = useBalance();
   const { expenses, fetchedExpenses, updateExpenses } = useExpenses();
   const { income, fetchedIncome, updateIncomeEntry } = useIncome();
-  const [openDialog, setOpenDialog] = useState<any>(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState<any>(false);
+  const [openImportDialog, setOpenImportDialog] = useState<any>(false);
   const [loading, setLoading] = useState<any>(true);
   const [balanceData, setBalanceData] = useState<any>(null);
   const [expenseData, setExpenseData] = useState<any>(null);
@@ -162,7 +163,7 @@ export default function Dashboard() {
   function prepDelete(id: string, type: string) {
     setDeleteEntry(id);
     setDeleteEntryType(type);
-    setOpenDialog(true);
+    setOpenDeleteDialog(true);
   }
 
   function formatDate(date: any) {
@@ -241,6 +242,13 @@ export default function Dashboard() {
           <AddIncomeForm />
           <AddExpenseForm />
         </ButtonGroup>
+        <ButtonGroup>
+          <Button
+            variant="outlined"
+            onClick={() => setOpenImportDialog(!openImportDialog)}>
+            Import
+          </Button>
+        </ButtonGroup>
       </div>
 
       <div className="col-span-10 col-start-2 bg-white">
@@ -314,7 +322,14 @@ export default function Dashboard() {
           onProcessRowUpdateError={handleRowUpdateError}
         />
       </div>
-      <DeleteDialog open={openDialog} close={() => setOpenDialog(false)} />
+      <DeleteDialog
+        open={openDeleteDialog}
+        close={() => setOpenDeleteDialog(false)}
+      />
+      <ImportDialog
+        open={openImportDialog}
+        close={() => setOpenImportDialog(false)}
+      />
     </main>
   );
 }

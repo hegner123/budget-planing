@@ -1,7 +1,7 @@
 export interface IncomeAdd {
   user: string;
   name: string;
-  income: number;
+  amount: number;
   repeated: string;
   date: string;
 }

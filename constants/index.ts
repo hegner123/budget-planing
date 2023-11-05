@@ -1,0 +1,2 @@
+export const DATE_DISPLAY_FORMAT = "MM/DD/YYYY";
+export const DATE_STORAGE_FORMAT = "YYYY-MM-DD";

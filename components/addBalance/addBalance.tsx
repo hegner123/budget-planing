@@ -21,13 +21,14 @@ const AddBalanceForm = () => {
   const [date, setDate] = useState<any>(null);
   const [user, setUser] = useState<any>("");
   const { getSession } = useSession();
+  const { addBalance } = useBalance();
+
   useEffect(() => {
     getSession().then((res) => {
       setUser(res.data.session.user.id);
     });
   }, [getSession]);
 
-  const { addBalance } = useBalance();
 
   function handleOpen() {
     setOpen(true);
