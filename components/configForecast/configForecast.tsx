@@ -25,7 +25,8 @@ export const ConfigForecast = ({ compiledData }: any) => {
   dayjs.extend(duration);
   const [length, setLength] = useState<any>("");
   const [unit, setUnit] = useState<any>("");
-  const [customBalance, setCustomBalance] = useState<any>(null);
+  const [customBalance, setCustomBalance] = useState<any>("");
+  const [balanceOption, setBalanceOption] = useState<any>("saved-balance");
   const [forecastDuration, setForecastDuration] = useState<number>(null);
   const { forecastBudget } = useForecastBudget();
   const [forecastStart, setStartDate] = useAtom(configForecastStartAtom);
@@ -41,13 +42,14 @@ export const ConfigForecast = ({ compiledData }: any) => {
   }, [length, unit, forecastStart]);
 
   const forecastData = useCallback(
-    (duration: any, start: any, compiledData: any) => {
+    (duration: any, start: any, compiledData: any, customBalance?: any) => {
       try {
         if (duration && start && compiledData) {
           const forecast = forecastBudget(
             duration,
             start,
-            JSON.stringify(compiledData)
+            JSON.stringify(compiledData),
+            customBalance
           );
           enqueueSnackbar("Forecasting...", { variant: "info" });
           return forecast;
@@ -64,7 +66,12 @@ export const ConfigForecast = ({ compiledData }: any) => {
     e.preventDefault();
     let forecast = null;
 
-    forecast = forecastData(forecastDuration, forecastStart, compiledData);
+    forecast = forecastData(
+      forecastDuration,
+      forecastStart,
+      compiledData,
+      balanceOption === "custom-balance" ? customBalance : null
+    );
     if (forecast !== null) {
       setForecastList(forecast);
     }
@@ -86,6 +93,9 @@ export const ConfigForecast = ({ compiledData }: any) => {
     }
     setLength(length);
   }
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBalanceOption((event.target as HTMLInputElement).value);
+  };
 
   return (
     <form className="grid grid-cols-12 gap-5">
@@ -123,14 +133,16 @@ export const ConfigForecast = ({ compiledData }: any) => {
         <RadioGroup
           aria-labelledby="balance-radio-buttons-label"
           defaultValue="saved-balance"
-          name="balance-radio-buttons-group">
+          name="balance-radio-buttons-group"
+          value={balanceOption}
+          onChange={handleChange}>
           <FormControlLabel
             value="saved-balance"
             control={<Radio />}
             label="Saved Balance"
           />
           <FormControlLabel
-            value={customBalance}
+            value={"custom-balance"}
             control={<Radio />}
             label={
               <TextField
