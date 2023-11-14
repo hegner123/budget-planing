@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useAtom } from "jotai";
-import { configForecastDurationAtom } from "@budget/store/state";
+
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -11,7 +11,6 @@ import duration from "dayjs/plugin/duration";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-
 
 const TestingComponent = () => {
   const [field1, setField1] = useState<any>("");
@@ -21,9 +20,7 @@ const TestingComponent = () => {
   const [field5, setField5] = useState<any>("");
   const [startDate, setStartDate] = useState<any>(null);
   const [endDate, setEndDate] = useState<any>("");
-  const [configForecastDuration, setConfigForecastDuration]: any = useAtom<any>(
-    configForecastDurationAtom
-  );
+
   const [results, setResults] = useState<any>("");
   dayjs.extend(duration);
 
@@ -35,7 +32,7 @@ const TestingComponent = () => {
 
   function handleSubmit() {
     let durationValue: any = dayjs.duration(field1, field2);
-    setConfigForecastDuration(durationValue);
+
     setResults(JSON.stringify(durationValue));
   }
   return (
@@ -100,9 +97,7 @@ const TestingComponent = () => {
               ForecastDiff:{" "}
               {JSON.stringify(startDate?.diff(endDate, "day") * -1)}
             </p>
-            <p className="col-span-5">
-              {JSON.stringify(configForecastDuration)}
-            </p>
+
             <p className="col-span-full">{results}</p>
           </Card>
         </div>

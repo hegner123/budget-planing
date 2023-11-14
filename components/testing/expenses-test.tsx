@@ -39,11 +39,11 @@ const TestExpenseForm = () => {
 
   const handleSubmit = () => {
     const formSubmit = {
-      name: name,
-      amount: expense,
-      repeated: repeated,
-      date: date,
-      user: user,
+      name: name as string,
+      amount: expense as number,
+      repeated: repeated as string,
+      date: date as string,
+      user: user as string,
     };
     addExpense(formSubmit);
   };
