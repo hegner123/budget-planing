@@ -7,7 +7,6 @@ import {
   deleteEntryAtom,
   deleteEntryTypeAtom,
   configForecastAtom,
-  configForecastDurationAtom,
   forecastListAtom,
   loggedInUserAtom,
 } from "@budget/store/state";
@@ -29,7 +28,7 @@ export default function DebugDialog() {
   const [deleteEntry] = useAtom(deleteEntryAtom);
   const [deleteEntryType] = useAtom(deleteEntryTypeAtom);
   const [configForecast] = useAtom(configForecastAtom);
-  const [configForecastDuration] = useAtom(configForecastDurationAtom);
+
   const [forecastList] = useAtom(forecastListAtom);
   const [user, setUser] = useAtom(loggedInUserAtom);
 
@@ -56,7 +55,7 @@ const DebugModalDialog = () => {
   const [deleteEntry] = useAtom(deleteEntryAtom);
   const [deleteEntryType] = useAtom(deleteEntryTypeAtom);
   const [configForecast] = useAtom(configForecastAtom);
-  const [configForecastDuration] = useAtom(configForecastDurationAtom);
+
   const [forecastList] = useAtom(forecastListAtom);
   const [user, setUser] = useAtom(loggedInUserAtom);
 
@@ -132,17 +131,6 @@ const DebugModalDialog = () => {
         </AccordionSummary>
         <AccordionDetails>
           <pre>{JSON.stringify(forecastList, null, 2)}</pre>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion className="px-4 ">
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header">
-          <h2>Config Forecast Duration</h2>
-        </AccordionSummary>
-        <AccordionDetails>
-          <pre>{JSON.stringify(configForecastDuration, null, 2)}</pre>
         </AccordionDetails>
       </Accordion>
     </Dialog>

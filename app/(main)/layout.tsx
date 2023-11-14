@@ -14,15 +14,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function RootLayout({
-  children,
-  pageProps,
-}: {
-  children: React.ReactNode;
-  pageProps: {
-    initialSession: Session | null;
-  };
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={`${inter.className} root`}>

@@ -37,11 +37,11 @@ const TestIncomeForm = () => {
 
   const handleSubmit = () => {
     const formSubmit = {
-      name: name,
-      income: income,
-      repeated: repeated,
-      date: date,
-      user: user,
+      name: name as string,
+      amount: income as number,
+      repeated: repeated as string,
+      date: date as string,
+      user: user as string,
     };
     addIncomeSubmit(formSubmit);
   };

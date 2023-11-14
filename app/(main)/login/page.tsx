@@ -16,7 +16,7 @@ import type { Session } from "@supabase/auth-helpers-nextjs";
 import { useSession } from "@budget/hooks/auth/useSession";
 import { usePathname } from "next/navigation";
 
-const LoginPage = ({ session }: { session: Session | null }) => {
+const LoginPage = () => {
   const pathname = usePathname();
   const { email, password, error, setEmail, setPassword, handleSubmit } =
     useLogin();
