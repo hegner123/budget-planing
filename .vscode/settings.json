@@ -10,5 +10,6 @@
     "timestamptz",
     "xlight",
     "xxlight"
-  ]
+  ],
+  "deno.enable": true
 }
