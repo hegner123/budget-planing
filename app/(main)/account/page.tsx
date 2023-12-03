@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Dialog, TextField, Button, IconButton } from "@mui/material";
 import { useSession } from "@budget/hooks/auth/useSession";
+import useSignOut from "@budget/hooks/auth/useSignOut";
 import usePasswordReset from "@budget/hooks/auth/usePasswordReset";
 import { usePathname } from "next/navigation";
 import CloseIcon from "@mui/icons-material/Close";
@@ -17,13 +18,18 @@ export default function UserAccount() {
   const [showDeleteAccount, setShowDeleteAccount] = useState(false);
   const { handlePasswordReset } = usePasswordReset();
   const { handleDeleteAccount } = useDeleteAccount();
+  const { handleSignOut } = useSignOut();
   const { push } = useRouter();
 
   function handleDelete() {
-    handleDeleteAccount();
-    setShowDeleteAccount(false);
+    try {
+      handleDeleteAccount();
+      setShowDeleteAccount(false);
+    } catch (error) {
+      enqueueSnackbar("Error", { variant: "error" });
+    }
     enqueueSnackbar("Account deleted", { variant: "success" });
-    push("/");
+    handleSignOut();
   }
 
   const { getSession } = useSession();

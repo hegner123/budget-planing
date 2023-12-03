@@ -51,6 +51,11 @@ export default function Page() {
                 Register
               </Link>
             </Button>
+            <Button variant="contained" className="btn-primary">
+              <Link href="/demo" passHref>
+                Demo
+              </Link>
+            </Button>
           </div>
         </section>
       </main>

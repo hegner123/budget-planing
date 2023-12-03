@@ -58,7 +58,7 @@ export const useIncome = () => {
     }
   }, [data, error, enqueueSnackbar]);
 
-  function addIncomeSubmit(data: IncomeAdd) {
+  function addIncome(data: IncomeAdd) {
     addIncome({
       ...data,
       supabaseClient,
@@ -89,7 +89,7 @@ export const useIncome = () => {
     income,
     fetchedIncome,
     incomeLog,
-    addIncomeSubmit,
+    addIncome,
     deleteIncomeEntry,
     updateIncomeEntry,
   };

@@ -6,7 +6,7 @@ import useSignOut from "./useSignOut";
 
 export default function usePasswordReset() {
   const supabase = createClientComponentClient();
-  const { signOut } = useSignOut();
+  const { handleSignOut } = useSignOut();
   const { enqueueSnackbar } = useSnackbar();
 
   async function handlePasswordReset(email: string) {
@@ -19,7 +19,7 @@ export default function usePasswordReset() {
       enqueueSnackbar(JSON.stringify(error), { variant: "error" });
     }
     if (data) {
-      signOut();
+      handleSignOut();
     }
     return { data, error };
   }

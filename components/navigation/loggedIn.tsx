@@ -3,7 +3,7 @@ import Link from "next/link";
 import useSignOut from "@budget/hooks/auth/useSignOut";
 
 const LoggedInLinks = () => {
-  const { signOut } = useSignOut();
+  const { handleSignOut } = useSignOut();
 
   return (
     <ul className="flex">
@@ -25,7 +25,7 @@ const LoggedInLinks = () => {
       <li className="px-5">
         <span
           className="text-white hover:cursor-pointer"
-          onClick={() => signOut()}>
+          onClick={() => handleSignOut()}>
           Sign Out
         </span>
       </li>

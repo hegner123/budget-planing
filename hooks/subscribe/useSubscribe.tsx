@@ -28,15 +28,12 @@ const useSubscribe = (balance, income, expense) => {
     ) {
       switch (table) {
         case "Balance":
-          console.log("Balance");
           handleUpdatedBalanceData(data, updatedBalance);
           break;
         case "Expenses":
-          console.log("Expenses");
           handleUpdatedExpenseData(data, updatedExpense);
           break;
         case "Income":
-          console.log("Income");
           handleUpdatedIncomeData(data, updatedIncome);
           break;
         default:

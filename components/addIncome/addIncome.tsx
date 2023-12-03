@@ -26,7 +26,7 @@ const AddIncomeForm = () => {
   const [amount, setAmount] = useState<number>(0);
   const [repeated, setRepeated] = useState<string>("");
   const [date, setDate] = useState<any>(null);
-  const { addIncomeSubmit } = useIncome();
+  const { addIncome } = useIncome();
   const [user, setUser] = useState<any>("");
   const { getSession } = useSession();
   useEffect(() => {
@@ -51,7 +51,7 @@ const AddIncomeForm = () => {
       date: date,
       user: user,
     };
-    addIncomeSubmit(formSubmit);
+    addIncome(formSubmit);
   };
 
   const handleSubmitAndClose = () => {
