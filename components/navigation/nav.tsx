@@ -24,7 +24,7 @@ export default function Navigation() {
       <nav className="flex justify-between p-5 bg-blue-950">
         <div>
           <Link href={"/"} passHref>
-            <h3 className="text-xl bold">Budget Planning</h3>
+            <h3 className="text-xl bold">Budget Forecast</h3>
           </Link>
         </div>
         <div>{user ? <LoggedInLinks /> : <LoggedOutLinks />}</div>

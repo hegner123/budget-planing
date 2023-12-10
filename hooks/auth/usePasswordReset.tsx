@@ -4,7 +4,7 @@ import { useAtom } from "jotai";
 import { useSnackbar } from "notistack";
 import useSignOut from "./useSignOut";
 
-export default function usePasswordReset() {
+const usePasswordReset = () => {
   const supabase = createClientComponentClient();
   const { handleSignOut } = useSignOut();
   const { enqueueSnackbar } = useSnackbar();
@@ -25,4 +25,7 @@ export default function usePasswordReset() {
   }
 
   return { handlePasswordReset };
-}
+};
+
+
+export default usePasswordReset;

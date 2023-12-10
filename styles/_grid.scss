@@ -22,7 +22,7 @@
           column-gap: $gutter;
       }
 
-      @include media(gt-large) {
+      @include media(gt-xl) {
           grid-template-columns: [screen-start] 1fr [content-start] repeat(12, math.div($max-width - $gutter * ($grid-columns - 1), $grid-columns)) [content-end] 1fr [screen-end];
       }
   }

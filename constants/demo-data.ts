@@ -1,8 +1,7 @@
 "use client";
-import useSession from "@budget/hooks/useSession";
 
 export const demoData = () => {
-  const demoExpenses = [
+  const demoExpensesTemplate = [
     {
       name: "Food",
       amount: 200,
@@ -19,7 +18,7 @@ export const demoData = () => {
     },
   ];
 
-  const demoIncome = {
+  const demoIncomeTemplate = {
     name: "Test",
     amount: 2000,
     repeated: "Monthly",
@@ -27,14 +26,32 @@ export const demoData = () => {
     date: "2023-11-01",
   };
 
-  const demoBalance = [
-    {
-      name: "Test",
-      amount: 2000,
-      user: "",
-      date: "2023-11-14",
-    },
-  ];
+  const demoBalanceTemplate = {
+    name: "Test",
+    amount: 2000,
+    user: "",
+    date: "2023-11-14",
+  };
+
+  function demoExpenses(user) {
+    const data = demoExpensesTemplate.map((expense) => {
+      expense.user = user;
+      return expense;
+    });
+    return data;
+  }
+
+  function demoIncome(user) {
+    const data = demoIncomeTemplate;
+    data.user = user;
+    return data;
+  }
+
+  function demoBalance(user) {
+    const data = demoBalanceTemplate;
+    data.user = user;
+    return data;
+  }
 
   return { demoExpenses, demoIncome, demoBalance };
 };

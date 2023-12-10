@@ -1,19 +1,20 @@
 "use client";
 import { useEffect } from "react";
-import { useLogin } from "@budget/hooks/auth/useLogin";
 import { useBalance } from "@budget/hooks/balance/useBalance";
 import { useExpenses } from "@budget/hooks/expense/useExpense";
 import { useIncome } from "@budget/hooks/income/useIncome";
-import {
-  demoBalance,
-  demoIncome,
-  demoExpenses,
-} from "@budget/constants/demo-data";
+import { demoData } from "@budget/constants/demo-data";
 import { deleteUserData } from "@budget/supabaseTables";
+import useLogin from "@budget/hooks/auth/useLogin";
+import useSession from "@budget/hooks/auth/useSession";
+import useRegister from "@budget/hooks/auth/useRegister";
 
 export default function DemoLogin() {
+  const register = useRegister();
   const { email, password, error, setEmail, setPassword, handleSubmit } =
     useLogin();
+  const { demoBalance, demoIncome, demoExpenses } = demoData();
+  const { getSession } = useSession();
   const { addBalance } = useBalance();
   const { addExpense } = useExpenses();
   const { addIncome } = useIncome();
@@ -21,10 +22,11 @@ export default function DemoLogin() {
   useEffect(() => {
     const clearData = () => {};
     const refreshDemo = () => {
-      addBalance([{ ...demoBalance, user: "demo" }]);
-      addIncome(demoIncome);
-      addExpense(demoExpenses[0]);
-      addExpense(demoExpenses[1]);
+      addBalance(demoBalance("demo"));
+      addIncome(demoIncome("demo"));
+      let expenses = demoExpenses("demo");
+      addExpense(expenses[0]);
+      addExpense(expenses[1]);
     };
     const demoLogin = () => {
       setEmail("demo@budgetforecast.io");
@@ -37,5 +39,15 @@ export default function DemoLogin() {
     return () => {
       console.log("unmount");
     };
-  }, [handleSubmit, setEmail, setPassword]);
+  }, [
+    handleSubmit,
+    setEmail,
+    setPassword,
+    addBalance,
+    addExpense,
+    addIncome,
+    demoBalance,
+    demoExpenses,
+    demoIncome,
+  ]);
 }

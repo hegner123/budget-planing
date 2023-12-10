@@ -8,7 +8,7 @@ import { useSnackbar } from "notistack";
 import { useAtom } from "jotai";
 import { loadingAtom } from "@budget/store/state";
 
-export const useLogin = () => {
+const useLogin = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -17,7 +17,7 @@ export const useLogin = () => {
   const router = useRouter();
   const supabaseClient = createClientComponentClient();
 
-  async function handleSubmit(e: any) {
+  async function handleSubmit(e?: any) {
     if (e) {
       e.preventDefault();
     }
@@ -46,3 +46,5 @@ export const useLogin = () => {
     handleSubmit,
   };
 };
+
+export default useLogin;

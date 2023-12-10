@@ -1,7 +1,8 @@
 "use client";
 import { useCallback, useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-export const useSession = () => {
+
+const useSession = () => {
   const supabase = createClientComponentClient();
 
   const getSession = useCallback(async () => {
@@ -18,3 +19,5 @@ export const useSession = () => {
 
   return { getSession, refreshSession };
 };
+
+export default useSession;

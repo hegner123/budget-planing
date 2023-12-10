@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Dialog, TextField, Button, IconButton } from "@mui/material";
-import { useSession } from "@budget/hooks/auth/useSession";
+import useSession from "@budget/hooks/auth/useSession";
 import useSignOut from "@budget/hooks/auth/useSignOut";
 import usePasswordReset from "@budget/hooks/auth/usePasswordReset";
 import { usePathname } from "next/navigation";
