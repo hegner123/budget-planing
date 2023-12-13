@@ -52,7 +52,9 @@ const useRegister = () => {
       });
   }
 
-  async function registerDemoUser() {
+  async function registerDemoUser(email, password) {
+    setEmail(`demo@example.com`);
+    setPassword(`delete#me`);
     const { data, error }: any = await supabaseClient.auth.signUp({
       email: `demo@example.com`,
       password: `delete#me`,

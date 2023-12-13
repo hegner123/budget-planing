@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { deleteExpenses, updateExpense } from "@budget/supabaseTables";
 import { ExpensePayload, ExpenseEntry, ExpenseAdd } from "@budget/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useSession } from "@budget/hooks/auth/useSession";
+import useSession from "@budget/hooks/auth/useSession";
 import useSWR from "swr";
 
 export const useExpenses = () => {

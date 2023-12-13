@@ -4,7 +4,7 @@ import Link from "next/link";
 import LoggedInLinks from "./loggedIn";
 import LoggedOutLinks from "./loggedOut";
 import { usePathname } from "next/navigation";
-import { useSession } from "@budget/hooks/auth/useSession";
+import useSession from "@budget/hooks/auth/useSession";
 
 import DebugDialog from "@budget/components/dialogs/debugDialog";
 import { loadingAtom } from "@budget/store/state";

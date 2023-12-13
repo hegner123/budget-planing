@@ -3,16 +3,16 @@ import { useEffect, useState } from "react";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import InputAdornment from "@mui/material/InputAdornment";
+import SubmitButtons from "../forms/submit";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useBalance } from "@budget/hooks/balance/useBalance";
-import { useSession } from "@budget/hooks/auth/useSession";
+import useSession from "@budget/hooks/auth/useSession";
 
 const AddBalanceForm = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -28,7 +28,6 @@ const AddBalanceForm = () => {
       setUser(res.data.session.user.id);
     });
   }, [getSession]);
-
 
   function handleOpen() {
     setOpen(true);
@@ -47,7 +46,7 @@ const AddBalanceForm = () => {
     });
   };
 
-  const handleSubmitAndReset = () => {
+  const handleSubmitAndAddMore = () => {
     handleSubmit();
     resetForm();
   };
@@ -109,21 +108,11 @@ const AddBalanceForm = () => {
             </form>
           </DialogContent>
         </div>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button
-            onClick={handleSubmitAndClose}
-            variant="contained"
-            className="text-black hover:text-white bg-brand-dark-blue">
-            Add
-          </Button>
-          <Button
-            onClick={handleSubmitAndReset}
-            variant="contained"
-            className="text-black hover:text-white bg-brand-dark-blue">
-            Add Another
-          </Button>
-        </DialogActions>
+        <SubmitButtons
+          cancel={handleClose}
+          add={handleSubmitAndClose}
+          addMore={handleSubmitAndAddMore}
+        />
       </Dialog>
     </>
   );

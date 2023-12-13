@@ -15,7 +15,7 @@ import {
   loggedInUserAtom,
 } from "@budget/store/state";
 import { notificationMessageAtom } from "@budget/store/state";
-import { useSession } from "@budget/hooks/auth/useSession";
+import useSession from "@budget/hooks/auth/useSession";
 import { useAtom } from "jotai";
 
 const DeleteDialog = ({ open, close }: { open: any; close: any }) => {

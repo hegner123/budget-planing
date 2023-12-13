@@ -2,12 +2,12 @@
 import { useState, useEffect } from "react";
 import {
   getIncomes,
-  addIncome,
+  addIncomeSupabase,
   deleteIncome,
   updateIncome,
 } from "@budget/supabaseTables";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useSession } from "@budget/hooks/auth/useSession";
+import useSession from "@budget/hooks/auth/useSession";
 import { useAtom } from "jotai";
 
 import { useSnackbar } from "notistack";
@@ -59,7 +59,7 @@ export const useIncome = () => {
   }, [data, error, enqueueSnackbar]);
 
   function addIncome(data: IncomeAdd) {
-    addIncome({
+    addIncomeSupabase({
       ...data,
       supabaseClient,
     } as IncomeAddHook).then((res) => {

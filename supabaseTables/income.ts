@@ -1,5 +1,5 @@
 import { IncomeUpdateObject, IncomeAddHook } from "@budget/types";
-export async function addIncome({
+export async function addIncomeSupabase({
   user,
   name,
   amount,
