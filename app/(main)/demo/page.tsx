@@ -66,3 +66,10 @@
 //   ]);
 //   return <></>;
 // };
+
+
+const demoPage = () => {
+  return <div>Demo Page</div>;
+};
+
+export default demoPage;
