@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
-import { useLogin } from "@budget/hooks/auth/useLogin";
+import useLogin from "@budget/hooks/auth/useLogin";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
@@ -13,7 +13,7 @@ import usePasswordReset from "@budget/hooks/auth/usePasswordReset";
 import { loadingAtom } from "@budget/store/state";
 import { useAtom } from "jotai";
 import type { Session } from "@supabase/auth-helpers-nextjs";
-import { useSession } from "@budget/hooks/auth/useSession";
+import useSession from "@budget/hooks/auth/useSession";
 import { usePathname } from "next/navigation";
 
 const LoginPage = () => {

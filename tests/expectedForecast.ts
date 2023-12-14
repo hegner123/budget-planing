@@ -1,6 +1,11 @@
+import dayjs from "dayjs";
+
+const thisMonth = dayjs().month();
+const month = dayjs(thisMonth).format("MM");
+
 const expectedForecast = [
   {
-    date: "08/02/2023",
+    date: `${month}/02/2023`,
     balance: 1000,
     balanceDetails: {
       previousBalance: 1000,
@@ -12,7 +17,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/03/2023",
+    date: `${month}/03/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -24,7 +29,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/04/2023",
+    date: `${month}/04/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -36,7 +41,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/05/2023",
+    date: `${month}/05/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -48,7 +53,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/06/2023",
+    date: `${month}/06/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -60,7 +65,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/07/2023",
+    date: `${month}/07/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -72,7 +77,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/08/2023",
+    date: `${month}/08/2023`,
     balance: 1098,
     balanceDetails: {
       previousBalance: 1000,
@@ -89,7 +94,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/09/2023",
+    date: `${month}/09/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -101,7 +106,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/10/2023",
+    date: `${month}/10/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -113,7 +118,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/11/2023",
+    date: `${month}/11/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -125,7 +130,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/12/2023",
+    date: `${month}/12/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -137,7 +142,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/13/2023",
+    date: `${month}/13/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -149,7 +154,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/14/2023",
+    date: `${month}/14/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -161,7 +166,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/15/2023",
+    date: `${month}/15/2023`,
     balance: 1097,
     balanceDetails: {
       previousBalance: 1000,
@@ -179,7 +184,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/16/2023",
+    date: `${month}/16/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -191,7 +196,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/17/2023",
+    date: `${month}/17/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -203,7 +208,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/18/2023",
+    date: `${month}/18/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -215,7 +220,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/19/2023",
+    date: `${month}/19/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -227,7 +232,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/20/2023",
+    date: `${month}/20/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -239,7 +244,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/21/2023",
+    date: `${month}/21/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -251,7 +256,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/22/2023",
+    date: `${month}/22/2023`,
     balance: 1098,
     balanceDetails: {
       previousBalance: 1000,
@@ -268,7 +273,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/23/2023",
+    date: `${month}/23/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -280,7 +285,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/24/2023",
+    date: `${month}/24/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -292,7 +297,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/25/2023",
+    date: `${month}/25/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -304,7 +309,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/26/2023",
+    date: `${month}/26/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -316,7 +321,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/27/2023",
+    date: `${month}/27/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -328,7 +333,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/28/2023",
+    date: `${month}/28/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -340,7 +345,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/29/2023",
+    date: `${month}/29/2023`,
     balance: 1097,
     balanceDetails: {
       previousBalance: 1000,
@@ -358,7 +363,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/30/2023",
+    date: `${month}/30/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,
@@ -370,7 +375,7 @@ const expectedForecast = [
     },
   },
   {
-    date: "08/31/2023",
+    date: `${month}/31/2023`,
     balance: 999,
     balanceDetails: {
       previousBalance: 1000,

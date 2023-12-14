@@ -4,7 +4,7 @@ import Link from "next/link";
 import LoggedInLinks from "./loggedIn";
 import LoggedOutLinks from "./loggedOut";
 import { usePathname } from "next/navigation";
-import { useSession } from "@budget/hooks/auth/useSession";
+import useSession from "@budget/hooks/auth/useSession";
 
 import DebugDialog from "@budget/components/dialogs/debugDialog";
 import { loadingAtom } from "@budget/store/state";
@@ -24,7 +24,7 @@ export default function Navigation() {
       <nav className="flex justify-between p-5 bg-blue-950">
         <div>
           <Link href={"/"} passHref>
-            <h3 className="text-xl bold">Budget Planning</h3>
+            <h3 className="text-xl bold">Budget Forecast</h3>
           </Link>
         </div>
         <div>{user ? <LoggedInLinks /> : <LoggedOutLinks />}</div>

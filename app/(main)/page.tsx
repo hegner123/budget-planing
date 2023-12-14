@@ -3,7 +3,7 @@
 import CircularProgress from "@mui/material/CircularProgress";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useSession } from "@budget/hooks/auth/useSession";
+import useSession from "@budget/hooks/auth/useSession";
 import { loadingAtom, loggedInUserAtom } from "@budget/store/state";
 import { useAtom } from "jotai";
 import Button from "@mui/material/Button";
@@ -38,9 +38,11 @@ export default function Page() {
   return (
     <>
       <main className="grid min-w-full min-h-screen ">
-        <section className="grid grid-cols-4 grid-rows-3 gap-3">
-          <h2 className="col-start-2 row-start-2 text-6xl">Budget Planning</h2>
-          <div className="flex col-start-3 row-start-2 gap-3 h-fit">
+        <section className="grid grid-cols-4 grid-rows-5 gap-3 ">
+          <h2 className="col-start-2 row-start-2 text-6xl col-span-full">
+            Budget Forecast
+          </h2>
+          <div className="flex col-start-2 row-start-3 gap-3 h-fit ">
             <Button variant="contained" className="btn-primary">
               <Link href="/login" passHref>
                 Login
@@ -50,6 +52,11 @@ export default function Page() {
               <Link href="/register" passHref>
                 Register
               </Link>
+            </Button>
+            <Button variant="contained" className="btn-primary">
+              {/* <Link href="/demo" passHref>
+                Demo
+              </Link> */}
             </Button>
           </div>
         </section>

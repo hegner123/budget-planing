@@ -4,7 +4,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { addBalance, deleteBalance } from "@budget/supabaseTables";
 import { useAtom } from "jotai";
 import useSWR from "swr";
-import { useSession } from "@budget/hooks/auth/useSession";
+import useSession from "@budget/hooks/auth/useSession";
 
 export const useBalance = () => {
   const supabaseClient = createClientComponentClient();

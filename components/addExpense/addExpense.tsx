@@ -4,7 +4,7 @@ import { RepeatedDefaults } from "@budget/hooks/forecast/useForecast";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
+
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -13,11 +13,12 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputAdornment from "@mui/material/InputAdornment";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import SubmitButtons from "../forms/submit";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useExpenses } from "@budget/hooks/expense/useExpense";
-import { useSession } from "@budget/hooks/auth/useSession";
+import useSession from "@budget/hooks/auth/useSession";
 
 const AddExpenseForm = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -58,7 +59,7 @@ const AddExpenseForm = () => {
     handleClose();
   };
 
-  const handleSubmitAndReset = () => {
+  const handleSubmitAndAddMore = () => {
     handleSubmit();
     resetForm();
   };
@@ -85,7 +86,6 @@ const AddExpenseForm = () => {
             <DialogContentText>
               To add an expense, please fill out the form below.
             </DialogContentText>
-
             <form>
               <TextField
                 id="name"
@@ -135,21 +135,11 @@ const AddExpenseForm = () => {
             </form>
           </DialogContent>
         </div>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button
-            onClick={handleSubmitAndClose}
-            variant="contained"
-            className="text-black hover:text-white bg-brand-dark-blue">
-            Add
-          </Button>
-          <Button
-            onClick={handleSubmitAndReset}
-            variant="contained"
-            className="text-black hover:text-white bg-brand-dark-blue">
-            Add Another
-          </Button>
-        </DialogActions>
+        <SubmitButtons
+          cancel={handleClose}
+          add={handleSubmitAndClose}
+          addMore={handleSubmitAndAddMore}
+        />
       </Dialog>
     </>
   );

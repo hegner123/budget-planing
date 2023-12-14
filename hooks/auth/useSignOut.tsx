@@ -11,7 +11,7 @@ const useSignOut = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [, setLoading] = useAtom(loadingAtom);
 
-  async function signOut() {
+  async function handleSignOut() {
     const { error } = await supabase.auth.signOut();
     if (error) {
       enqueueSnackbar(error.message, { variant: "error" });
@@ -21,7 +21,7 @@ const useSignOut = () => {
     setLoading(true);
     router.push("/");
   }
-  return { signOut };
+  return { handleSignOut };
 };
 
 export default useSignOut;

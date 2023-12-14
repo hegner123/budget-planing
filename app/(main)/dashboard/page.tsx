@@ -14,6 +14,7 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useAtom } from "jotai";
+import useSession from "@budget/hooks/auth/useSession";
 import {
   loadingAtom,
   deleteEntryAtom,
@@ -59,6 +60,7 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 
 export default function Dashboard() {
   const supabaseClient = createClientComponentClient();
+  const [user, setUser] = useState<any>(null);
   const { balance, fetchedBalance } = useBalance();
   const { expenses, fetchedExpenses, updateExpenses } = useExpenses();
   const { income, fetchedIncome, updateIncomeEntry } = useIncome();
@@ -78,7 +80,19 @@ export default function Dashboard() {
     income,
     expenses
   );
+  const { getSession } = useSession();
 
+  console.log(getSession());
+
+  if (!user) {
+    getSession().then((res) => {
+      setUser(res.data.session.user.id as string);
+    });
+  }
+
+  if (user === "842f7daf-6d49-425a-a6d8-09484a1b9457") {
+    console.log("demo");
+  }
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {

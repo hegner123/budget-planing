@@ -15,7 +15,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useIncome } from "@budget/hooks/income/useIncome";
-import { useSession } from "@budget/hooks/auth/useSession";
+import useSession from "@budget/hooks/auth/useSession";
 
 const TestIncomeForm = () => {
   const [name, setName] = useState<string>("");
@@ -24,7 +24,7 @@ const TestIncomeForm = () => {
   const [date, setDate] = useState<any>(null);
   const [user, setUser] = useState<any>("");
   const { getSession } = useSession();
-  const { addIncomeSubmit, incomeLog } = useIncome();
+  const { addIncome, incomeLog } = useIncome();
 
   useEffect(() => {
     getSession().then((res) => {
@@ -43,7 +43,7 @@ const TestIncomeForm = () => {
       date: date as string,
       user: user as string,
     };
-    addIncomeSubmit(formSubmit);
+    addIncome(formSubmit);
   };
 
   const handleSubmitAndClose = () => {

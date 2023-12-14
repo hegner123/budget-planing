@@ -4,9 +4,9 @@ import { useAtom } from "jotai";
 import { useSnackbar } from "notistack";
 import useSignOut from "./useSignOut";
 
-export default function usePasswordReset() {
+const usePasswordReset = () => {
   const supabase = createClientComponentClient();
-  const { signOut } = useSignOut();
+  const { handleSignOut } = useSignOut();
   const { enqueueSnackbar } = useSnackbar();
 
   async function handlePasswordReset(email: string) {
@@ -19,10 +19,13 @@ export default function usePasswordReset() {
       enqueueSnackbar(JSON.stringify(error), { variant: "error" });
     }
     if (data) {
-      signOut();
+      handleSignOut();
     }
     return { data, error };
   }
 
   return { handlePasswordReset };
-}
+};
+
+
+export default usePasswordReset;

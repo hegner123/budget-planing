@@ -6,7 +6,7 @@ import { DATE_DISPLAY_FORMAT, DATE_STORAGE_FORMAT } from "@budget/constants";
 import { useBalance } from "@budget/hooks/balance/useBalance";
 import { useIncome } from "@budget/hooks/income/useIncome";
 import { useExpenses } from "@budget/hooks/expense/useExpense";
-import { useSession } from "@budget/hooks/auth/useSession";
+import useSession from "@budget/hooks/auth/useSession";
 
 export function useImportExcell() {
   const [pendingImportData, setPendingImportData] = useState(null);
@@ -15,7 +15,7 @@ export function useImportExcell() {
     pendingImportData ? "Has Pending Import Data" : "No Pending Import Data"
   );
   const { addBalance } = useBalance();
-  const { addIncomeSubmit } = useIncome();
+  const { addIncome } = useIncome();
   const { addExpense } = useExpenses();
   const { getSession } = useSession();
   useEffect(() => {
@@ -94,7 +94,7 @@ export function useImportExcell() {
             // If income id exists, update.
             // Add to income.
             try {
-              addIncomeSubmit(entryData);
+              addIncome(entryData);
             } catch (error) {
               console.error(error);
             }

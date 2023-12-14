@@ -8,11 +8,9 @@ async function loginUser({ email, password, supabaseClient }: AuthLogin) {
     email: `${email}`,
     password: `${password}`,
   });
-  if (error) {
-    return { error: error.message };
-  }
+if (error) throw new Error(JSON.stringify(error));
+return data;
 
-  return data;
 }
 
 export { loginUser };
