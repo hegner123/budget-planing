@@ -59,6 +59,7 @@ const LoginPage = () => {
               value={email}
               type="email"
               id="email"
+              autoComplete="email"
               label="Email"
               InputLabelProps={{ shrink: true, htmlFor: "email" }}
             />

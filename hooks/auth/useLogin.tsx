@@ -21,19 +21,22 @@ const useLogin = () => {
     if (e) {
       e.preventDefault();
     }
-    setLoading(true);
     try {
+      setLoading(true);
       const { data, error } = await loginUser({
         email: email,
         password: password,
         supabaseClient: supabaseClient,
       } as AuthLogin);
+      if (data) {
+        router.push("/dashboard");
+      }
     } catch (err: any) {
       setError(err);
 
       enqueueSnackbar("Error logging in", { variant: "error" });
       setLoading(false);
-    }
+    } 
   }
 
   return {
