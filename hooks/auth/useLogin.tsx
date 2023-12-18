@@ -17,7 +17,7 @@ const useLogin = () => {
   const router = useRouter();
   const supabaseClient = createClientComponentClient();
 
-  async function handleSubmit(e?: any) {
+  async function handleSubmit(e?: any, route?: string) {
     if (e) {
       e.preventDefault();
     }
@@ -29,14 +29,14 @@ const useLogin = () => {
         supabaseClient: supabaseClient,
       } as AuthLogin);
       if (data) {
-        router.push("/dashboard");
+        router.push(route ? route : "/dashboard");
       }
     } catch (err: any) {
       setError(err);
 
       enqueueSnackbar("Error logging in", { variant: "error" });
       setLoading(false);
-    } 
+    }
   }
 
   return {
