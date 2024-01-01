@@ -29,6 +29,8 @@ const LoginPage = () => {
   const supabase = createClientComponentClient();
   const router = useRouter();
 
+  setLoading(false);
+
   useEffect(() => {
     getSession().then((res) => {
       setUser(res.data.session?.user.id);

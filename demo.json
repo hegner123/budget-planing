@@ -1,0 +1,507 @@
+{
+  "dashboardData": [
+    {
+      "id": "0a53730c-3d13-4db7-a59d-9e9ece50fe6f",
+      "name": "Rent",
+      "expenses": "$2000",
+      "date": "06/01/2023",
+      "repeated": "monthly",
+      "type": "expenses"
+    },
+    {
+      "id": "0c99f3c0-7b8e-4589-9b76-b0ad6180984c",
+      "name": "Cell Phone",
+      "expenses": "$100",
+      "date": "06/08/2023",
+      "repeated": "monthly",
+      "type": "expenses"
+    },
+    {
+      "id": "8af363b9-c7c5-432b-884e-e6baf7c7b01d",
+      "name": "Electricity",
+      "expenses": "$200",
+      "date": "08/31/2023",
+      "repeated": "Monthly",
+      "type": "expenses"
+    },
+    {
+      "id": "9296758a-85be-4808-a342-6e93e9e4d2e6",
+      "name": "Hobbies",
+      "expenses": "$100",
+      "date": "10/02/2023",
+      "repeated": "Weekly",
+      "type": "expenses"
+    },
+    {
+      "id": "b7a0c01e-94b0-477c-9d23-567e8bf3d412",
+      "name": "Food",
+      "expenses": "$200",
+      "date": "10/09/2023",
+      "repeated": "Weekly",
+      "type": "expenses"
+    },
+    {
+      "id": "9a641921-0e1a-4bf4-bf0a-2a4bf597ab97",
+      "name": "Current Balance",
+      "amount": 4180,
+      "date": "10/17/2023",
+      "type": "balance"
+    },
+    {
+      "id": "8724db47-ebae-4ae0-a8c0-2c7bdb1391ca",
+      "name": "Test Income",
+      "amount": 4000,
+      "date": "10/27/2023",
+      "repeated": "Biweekly",
+      "type": "income"
+    }
+  ],
+  "forecastData": [
+    {
+      "date": "01/02/2024",
+      "balance": 4180,
+      "balanceDetails": {
+        "previousBalance": 4180,
+        "newBalance": 4080,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 100,
+        "expenses": [
+          {
+            "name": "Hobbies",
+            "amount": 100,
+            "repeated": "Weekly"
+          }
+        ]
+      }
+    },
+    {
+      "date": "01/03/2024",
+      "balance": 4180,
+      "balanceDetails": {
+        "previousBalance": 4180,
+        "newBalance": 4180,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/04/2024",
+      "balance": 4180,
+      "balanceDetails": {
+        "previousBalance": 4180,
+        "newBalance": 4180,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/05/2024",
+      "balance": 4180,
+      "balanceDetails": {
+        "previousBalance": 4180,
+        "newBalance": 4180,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/06/2024",
+      "balance": 4180,
+      "balanceDetails": {
+        "previousBalance": 4180,
+        "newBalance": 4180,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/07/2024",
+      "balance": 4180,
+      "balanceDetails": {
+        "previousBalance": 4180,
+        "newBalance": 4180,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/08/2024",
+      "balance": 4080,
+      "balanceDetails": {
+        "previousBalance": 4180,
+        "newBalance": 4080,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 100,
+        "expenses": [
+          {
+            "name": "Cell Phone",
+            "amount": 100,
+            "repeated": "monthly"
+          }
+        ]
+      }
+    },
+    {
+      "date": "01/09/2024",
+      "balance": 3780,
+      "balanceDetails": {
+        "previousBalance": 4080,
+        "newBalance": 3780,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 300,
+        "expenses": [
+          {
+            "name": "Hobbies",
+            "amount": 100,
+            "repeated": "Weekly"
+          },
+          {
+            "name": "Food",
+            "amount": 200,
+            "repeated": "Weekly"
+          }
+        ]
+      }
+    },
+    {
+      "date": "01/10/2024",
+      "balance": 3780,
+      "balanceDetails": {
+        "previousBalance": 3780,
+        "newBalance": 3780,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/11/2024",
+      "balance": 3780,
+      "balanceDetails": {
+        "previousBalance": 3780,
+        "newBalance": 3780,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/12/2024",
+      "balance": 3780,
+      "balanceDetails": {
+        "previousBalance": 3780,
+        "newBalance": 3780,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/13/2024",
+      "balance": 3780,
+      "balanceDetails": {
+        "previousBalance": 3780,
+        "newBalance": 3780,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/14/2024",
+      "balance": 3780,
+      "balanceDetails": {
+        "previousBalance": 3780,
+        "newBalance": 3780,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/15/2024",
+      "balance": 3780,
+      "balanceDetails": {
+        "previousBalance": 3780,
+        "newBalance": 3780,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/16/2024",
+      "balance": 3480,
+      "balanceDetails": {
+        "previousBalance": 3780,
+        "newBalance": 3480,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 300,
+        "expenses": [
+          {
+            "name": "Hobbies",
+            "amount": 100,
+            "repeated": "Weekly"
+          },
+          {
+            "name": "Food",
+            "amount": 200,
+            "repeated": "Weekly"
+          }
+        ]
+      }
+    },
+    {
+      "date": "01/17/2024",
+      "balance": 3480,
+      "balanceDetails": {
+        "previousBalance": 3480,
+        "newBalance": 3480,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/18/2024",
+      "balance": 3480,
+      "balanceDetails": {
+        "previousBalance": 3480,
+        "newBalance": 3480,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/19/2024",
+      "balance": 3480,
+      "balanceDetails": {
+        "previousBalance": 3480,
+        "newBalance": 3480,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/20/2024",
+      "balance": 3480,
+      "balanceDetails": {
+        "previousBalance": 3480,
+        "newBalance": 3480,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/21/2024",
+      "balance": 3480,
+      "balanceDetails": {
+        "previousBalance": 3480,
+        "newBalance": 3480,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/22/2024",
+      "balance": 3480,
+      "balanceDetails": {
+        "previousBalance": 3480,
+        "newBalance": 3480,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/23/2024",
+      "balance": 3180,
+      "balanceDetails": {
+        "previousBalance": 3480,
+        "newBalance": 3180,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 300,
+        "expenses": [
+          {
+            "name": "Hobbies",
+            "amount": 100,
+            "repeated": "Weekly"
+          },
+          {
+            "name": "Food",
+            "amount": 200,
+            "repeated": "Weekly"
+          }
+        ]
+      }
+    },
+    {
+      "date": "01/24/2024",
+      "balance": 3180,
+      "balanceDetails": {
+        "previousBalance": 3180,
+        "newBalance": 3180,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/25/2024",
+      "balance": 3180,
+      "balanceDetails": {
+        "previousBalance": 3180,
+        "newBalance": 3180,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/26/2024",
+      "balance": 3180,
+      "balanceDetails": {
+        "previousBalance": 3180,
+        "newBalance": 3180,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/27/2024",
+      "balance": 7180,
+      "balanceDetails": {
+        "previousBalance": 3180,
+        "newBalance": 7180,
+        "incomesTotal": 4000,
+        "incomes": [
+          {
+            "name": "Test Income",
+            "amount": 4000,
+            "repeated": "Biweekly"
+          }
+        ],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/28/2024",
+      "balance": 7180,
+      "balanceDetails": {
+        "previousBalance": 7180,
+        "newBalance": 7180,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/29/2024",
+      "balance": 7180,
+      "balanceDetails": {
+        "previousBalance": 7180,
+        "newBalance": 7180,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 0,
+        "expenses": []
+      }
+    },
+    {
+      "date": "01/30/2024",
+      "balance": 6880,
+      "balanceDetails": {
+        "previousBalance": 7180,
+        "newBalance": 6880,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 300,
+        "expenses": [
+          {
+            "name": "Hobbies",
+            "amount": 100,
+            "repeated": "Weekly"
+          },
+          {
+            "name": "Food",
+            "amount": 200,
+            "repeated": "Weekly"
+          }
+        ]
+      }
+    },
+    {
+      "date": "01/31/2024",
+      "balance": 6680,
+      "balanceDetails": {
+        "previousBalance": 6880,
+        "newBalance": 6680,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 200,
+        "expenses": [
+          {
+            "name": "Electricity",
+            "amount": 200,
+            "repeated": "Monthly"
+          }
+        ]
+      }
+    },
+    {
+      "date": "02/01/2024",
+      "balance": 4680,
+      "balanceDetails": {
+        "previousBalance": 6680,
+        "newBalance": 4680,
+        "incomesTotal": 0,
+        "incomes": [],
+        "expensesTotal": 2000,
+        "expenses": [
+          {
+            "name": "Rent",
+            "amount": 2000,
+            "repeated": "monthly"
+          }
+        ]
+      }
+    }
+  ]
+}
