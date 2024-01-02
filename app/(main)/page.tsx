@@ -10,57 +10,66 @@ import Button from "@mui/material/Button";
 import Link from "next/link";
 import { ForecastAccordion } from "@budget/components/forecastAccordion/forecastAccordion";
 import { ForecastEntry } from "@budget/types";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
+// import { LOCAL_DEMO_DATA } from "@budget/constants";
 
 export default function Page() {
   const [user, setUser] = useAtom(loggedInUserAtom);
   const [loading, setLoading] = useAtom(loadingAtom);
   const router = useRouter();
   const { getSession } = useSession();
-  const [demoData, setDemoData] = useState(null);
+
+  const queryClient = useQueryClient();
+  const {
+    isPending,
+    isError,
+    data,
+    error,
+  }: { isPending: any; isError: any; data: any; error: any } = useQuery({
+    queryKey: ["demo_data"],
+    queryFn: getDemoData,
+  });
   const url =
     "https://ukbhnbmumzaorpsnhjoa.supabase.co/storage/v1/object/public/demo_data/demo/demo.json";
 
   async function getDemoData() {
-    try {
-      const res = await fetch(url);
+    const results = new Promise((resolve, reject) => {
+      const res = fetch(url).then((res) => res.json());
+      console.log("res", res);
+      resolve(res);
+    });
 
-      const data = await res.json();
-      console.log("demo data", data.forecastData);
-      return data;
-    } catch (err) {
-      console.error(err);
-    }
+    return results;
   }
 
   useEffect(() => {
-    setDemoData(getDemoData());
-  }, []);
+    getSession()
+      .then((res) => {
+        setUser(res.data.session.user.id as string);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setUser("error");
+        setLoading(false);
+      });
+  }, [getSession, setLoading, setUser]);
 
-  // useEffect(() => {
-  //   demoData.map((item: any) => {
-  //     console.log("demo item", item);
-  //   });
-  // }, [demoData]);
+  useEffect(() => {
+    if (user !== "" && user !== "error" && !loading) {
+      router.push("/dashboard");
+      return;
+    }
+  }, [user, router, loading]);
 
-  // useEffect(() => {
-  //   getSession()
-  //     .then((res) => {
-  //       setUser(res.data.session.user.id as string);
-  //       setLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //       setUser("error");
-  //       setLoading(false);
-  //     });
-  // }, [getSession, setLoading, setUser]);
+  if (isPending) {
+    return <span>Loading...</span>;
+  }
 
-  // useEffect(() => {
-  //   if (user !== "" && user !== "error" && !loading) {
-  //     router.push("/dashboard");
-  //     return;
-  //   }
-  // }, [user, router, loading]);
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
 
   return (
     <>
@@ -88,16 +97,24 @@ export default function Page() {
           </div>
         </section>
         <section className="grid grid-cols-12 grid-rows-5 gap-3 ">
-          <div className="col-start-2 row-start-2 col-span-full">
-            {demoData?.forecastData &&
-              demoData?.forecastData?.map((item: ForecastEntry, i: number) => {
-                <ForecastAccordion item={item} i={i} />;
-              })}
+          <div className="col-start-2 col-end-[6]">
+            <h3 className="text-4xl">Forecast Data</h3>
+            <p>
+              The forecast function provides the forecasted balance and
+              contributing expenses and incomes.
+            </p>
           </div>
+          <ul className="grid col-start-6 col-end-[-2] gap-3">
+            {data.forecastData &&
+              data.forecastData.map((item: ForecastEntry, i: number) => (
+                <li key={`forecast${i}`}>
+                  <ForecastAccordion item={item} i={i} />
+                </li>
+              ))}
+          </ul>
         </section>
       </main>
     </>
   );
 }
-
 
