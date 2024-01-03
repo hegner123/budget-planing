@@ -98,6 +98,12 @@ export default function Page() {
         </section>
         <section className="grid grid-cols-12 grid-rows-5 gap-3 ">
           <div className="col-start-2 col-end-[6]">
+            <h3 className="text-4xl">Dashboard view</h3>
+            <p>Allows users to log all expenses and incomes.</p>
+          </div>
+        </section>
+        <section className="grid grid-cols-12 grid-rows-5 gap-3 ">
+          <div className="col-start-2 col-end-[6]">
             <h3 className="text-4xl">Forecast Data</h3>
             <p>
               The forecast function provides the forecasted balance and
