@@ -2,8 +2,12 @@
 import { useCallback } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
+
 const useSession = () => {
-  const supabase = createClientComponentClient();
+  const supabase = createClientComponentClient({
+    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  });
 
   const getSession = useCallback(async () => {
     try {

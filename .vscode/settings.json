@@ -12,5 +12,7 @@
     "xlight",
     "XVCJ",
     "xxlight"
-  ]
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }
