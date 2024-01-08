@@ -2,18 +2,22 @@
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { compiledDataAtom, forecastListAtom } from "@budget/store/state";
-import { useForecastBudget } from "@budget/hooks/forecast/useForecast";
 import Card from "@mui/material/Card";
 import { ConfigForecast } from "@budget/components/configForecast/configForecast";
-import { ToggleButtonGroup, ToggleButton } from "@mui/material";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Chart from "@budget/components/chart";
-import dayjs from "dayjs";
+import { ForecastAccordion } from "@budget/components/forecastAccordion/forecastAccordion";
 import { IncomeAccordion } from "@budget/components/forecast/incomeAccordion";
 import { ExpenseAccordion } from "@budget/components/forecast/expenseAccordion";
+import Chart from "@budget/components/chart";
+import dayjs from "dayjs";
+import {
+  ToggleButtonGroup,
+  ToggleButton,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { ForecastEntry } from "@budget/types";
 
 const Forecast = () => {
   const [compiledData, setCompiledData] = useAtom(compiledDataAtom);
@@ -84,48 +88,9 @@ const Forecast = () => {
           <ul className="w-3/4">
             {forecastDisplay === "list" &&
               forecastList &&
-              forecastList.map((item: any, i: any) => (
+              forecastList.map((item: ForecastEntry, i: number) => (
                 <li key={i} className="mt-2">
-                  <Accordion className={"bg-slate-500"}>
-                    <AccordionSummary
-                      className={`text-white rounded ${balanceColor(
-                        item.balance
-                      )}`}
-                      expandIcon={<ExpandMoreIcon className="text-white" />}
-                      aria-controls={`panel${i}a-content`}
-                      id={`panel${i}a-header`}>
-                      <div className="flex justify-between w-full pr-20">
-                        <p className="text-xl">
-                          {dayjs(item.date).format("MM/DD")}
-                        </p>
-                        <p className="text-xl">
-                          {" "}
-                          {` ${numberFormat.format(item.balance)}`}
-                        </p>
-                      </div>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <ul className="grid gap-5">
-                        <li>
-                          <p className="text-white">
-                            Previous Balance: $
-                            {item.balanceDetails.previousBalance}
-                          </p>
-                        </li>
-                        <li>
-                          <p className="text-white">
-                            New Balance: ${item.balanceDetails.newBalance}
-                          </p>
-                        </li>
-                        {item.balanceDetails.incomesTotal !== 0 && (
-                          <IncomeAccordion i={i} item={item} />
-                        )}
-                        {item.balanceDetails.expensesTotal !== 0 && (
-                          <ExpenseAccordion i={i} item={item} />
-                        )}
-                      </ul>
-                    </AccordionDetails>
-                  </Accordion>
+                  <ForecastAccordion item={item} i={i} />
                 </li>
               ))}
             {forecastDisplay === "list" && forecastList.length === 0 && (

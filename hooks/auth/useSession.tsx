@@ -1,20 +1,32 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
+
 const useSession = () => {
-  const supabase = createClientComponentClient();
+  const supabase = createClientComponentClient({
+    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  });
 
   const getSession = useCallback(async () => {
-    const { data, error }: { data: any; error: any } =
-      await supabase.auth.getSession();
-    return { data: data, error: error };
+    try {
+      const { data, error }: { data: any; error: any } =
+        await supabase.auth.getSession();
+      return { data: data, error: error };
+    } catch (err) {
+      console.error(err);
+    }
   }, [supabase.auth]);
 
   const refreshSession = useCallback(async () => {
-    const { data, error }: { data: any; error: any } =
-      await supabase.auth.refreshSession();
-    return { data: data, error: error };
+    try {
+      const { data, error }: { data: any; error: any } =
+        await supabase.auth.refreshSession();
+      return { data: data, error: error };
+    } catch (error) {
+      console.error(error);
+    }
   }, [supabase.auth]);
 
   return { getSession, refreshSession };

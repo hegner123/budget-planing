@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import {
-  getIncomes,
   addIncomeSupabase,
   deleteIncome,
   updateIncome,
@@ -41,11 +40,15 @@ export const useIncome = () => {
 
   async function getIncome(user: string, supabaseClient: any) {
     if (!user) return;
-    let { data, error } = await supabaseClient
-      .from("Income")
-      .select("*")
-      .eq("user", user);
-    return { data, error };
+    try {
+      let { data, error } = await supabaseClient
+        .from("Income")
+        .select("*")
+        .eq("user", user);
+      return { data, error };
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   useEffect(() => {

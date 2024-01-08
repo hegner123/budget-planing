@@ -15,7 +15,10 @@ const useLogin = () => {
   const [loading, setLoading] = useAtom(loadingAtom);
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
-  const supabaseClient = createClientComponentClient();
+  const supabaseClient = createClientComponentClient({
+    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  });
 
   async function handleSubmit(e?: any) {
     if (e) {

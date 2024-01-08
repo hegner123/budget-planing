@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import dayjs from "dayjs";
@@ -82,13 +83,13 @@ export default function Dashboard() {
   );
   const { getSession } = useSession();
 
-  console.log(getSession());
+  // console.log(getSession());
 
-  if (!user) {
-    getSession().then((res) => {
-      setUser(res.data.session.user.id as string);
-    });
-  }
+  useEffect(() => {
+    if (getSession()) {
+      setUser(getSession().then((res) => res.data.user.id));
+    }
+  }, [getSession]);
 
   if (user === "842f7daf-6d49-425a-a6d8-09484a1b9457") {
     console.log("demo");
