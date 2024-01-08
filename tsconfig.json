@@ -23,6 +23,13 @@
       "@budget/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx", "tests/index.js"],
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "tests/forecast.test.js",
+    "tests/vars.js"
+  ],
   "exclude": ["node_modules"]
 }

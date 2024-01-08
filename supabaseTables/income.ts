@@ -23,20 +23,7 @@ export async function addIncomeSupabase({
   return { data, error };
 }
 
-export async function getIncomes({
-  user,
-  supabaseClient,
-}: {
-  user: string;
-  supabaseClient: any;
-}) {
-  const { data, error } = await supabaseClient
-    .from("Income")
-    .select("*")
-    .eq("user", user);
 
-  return { data, error };
-}
 
 export async function deleteIncome({
   id,

@@ -38,6 +38,7 @@ export default function Page() {
       const res = fetch(url).then((res) => res.json());
       console.log("res", res);
       resolve(res);
+      reject("error");
     });
 
     return results;
