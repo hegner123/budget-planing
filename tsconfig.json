@@ -27,9 +27,7 @@
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx",
-    "tests/forecast.test.js",
-    "tests/vars.js"
+    "**/*.tsx"
   ],
   "exclude": ["node_modules"]
 }

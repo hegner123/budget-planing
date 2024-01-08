@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "edge": "supabase functions deploy deleteUser --project-ref ukbhnbmumzaorpsnhjoa",
-    "test": "jest --detectOpenHandles"
+    "edge": "supabase functions deploy deleteUser --project-ref ukbhnbmumzaorpsnhjoa"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",
@@ -48,9 +47,6 @@
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.23.3",
-    "@jest/globals": "^29.6.0",
-    "@types/jest": "^29.5.2",
-    "encoding": "^0.1.13",
-    "ts-jest": "^29.1.1"
+    "encoding": "^0.1.13"
   }
 }
