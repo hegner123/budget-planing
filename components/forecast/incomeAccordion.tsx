@@ -17,7 +17,7 @@ const IncomeAccordion = ({ i, item }) => {
         <ul className="grid w-full grid-cols-2">
           <li className="col-start-1">
             <p className="text-white mt-[12px]">
-              Income Total: ${item.balanceDetails.incomesTotal}
+              Income Total: ${item?.balanceDetails?.incomesTotal}
             </p>
           </li>
           <li className="col-start-2">
@@ -31,11 +31,11 @@ const IncomeAccordion = ({ i, item }) => {
               </AccordionSummary>
               <AccordionDetails>
                 <ul>
-                  {item.balanceDetails.incomes.map(
+                  {item?.balanceDetails?.incomes?.map(
                     (income: IncomePeek, i: any) => (
                       <li key={i}>
                         <p>
-                          {income.name}: ${income.amount}
+                          {income?.name}: ${income?.amount}
                         </p>
                       </li>
                     )
