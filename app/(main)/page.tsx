@@ -47,7 +47,8 @@ export default function Page() {
   useEffect(() => {
     getSession()
       .then((res) => {
-        setUser(res.data.session.user.id as string);
+        console.log("res", res);
+        setUser(res.data.session ? res.data.session.user.id : "error");
         setLoading(false);
       })
       .catch((err) => {
@@ -97,12 +98,12 @@ export default function Page() {
             </Button> */}
           </div>
         </section>
-        <section className="grid grid-cols-12 grid-rows-5 gap-3 ">
+        {/* <section className="grid grid-cols-12 grid-rows-5 gap-3 ">
           <div className="col-start-2 col-end-[6]">
             <h3 className="text-4xl">Dashboard view</h3>
             <p>Allows users to log all expenses and incomes.</p>
           </div>
-        </section>
+        </section> */}
         <section className="grid grid-cols-12 grid-rows-5 gap-3 ">
           <div className="col-start-2 col-end-[6]">
             <h3 className="text-4xl">Forecast Data</h3>
@@ -113,7 +114,7 @@ export default function Page() {
           </div>
           <ul className="grid col-start-6 col-end-[-2] gap-3">
             {data.forecastData &&
-              data.forecastData.map((item: ForecastEntry, i: number) => (
+              data.forecastData[0].map((item: ForecastEntry, i: number) => (
                 <li key={`forecast${i}`}>
                   <ForecastAccordion item={item} i={i} />
                 </li>
