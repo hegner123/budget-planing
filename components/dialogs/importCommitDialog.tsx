@@ -23,12 +23,12 @@ export default function ImportCommitDialog({ data }) {
 
   return (
     <>
-      <div className="col-span-10 col-start-2 bg-white">
+      <div className="bg-white col-span-full">
         <DataGrid
           checkboxSelection={true}
           columns={[
             {
-              field: "name",
+              field: "label",
               headerName: "Label",
               flex: 1,
               editable: true,
@@ -73,6 +73,7 @@ export default function ImportCommitDialog({ data }) {
               type: "singleSelect",
               valueOptions: ["None", "Weekly", "Biweekly", "Monthly", "Yearly"],
             },
+            { field: "type", headerName: "Type", flex: 1, editable: true },
           ]}
           rows={data ? data : []}
           getRowClassName={(params) => `super-app-theme--${params.row.type}`}
