@@ -87,7 +87,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (getSession()) {
-      setUser(getSession().then((res) => res.data.user.id));
+      setUser(getSession().then((res) => res?.data?.user?.id));
     }
   }, [getSession]);
 

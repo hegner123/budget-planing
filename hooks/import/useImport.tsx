@@ -20,7 +20,7 @@ export function useImportExcell() {
   const { getSession } = useSession();
   useEffect(() => {
     getSession().then((res) => {
-      setUser(res.data.session.user.id);
+      setUser(res?.data?.session?.user?.id);
     });
   }, [getSession]);
   // File.
@@ -56,18 +56,22 @@ export function useImportExcell() {
   function parseRows(rows) {
     try {
       const stripedColumns = rows.filter((cell) => cell[0] !== "Id");
-      const parsedRows = stripedColumns.map((cell) => {
-        const dayjsDate = dayjs(cell[2] as string).format(DATE_STORAGE_FORMAT);
-        const row = {
-          id: cell[0],
-          label: cell[1],
-          amount: cell[2],
-          date: dayjsDate,
-          repeated: cell[4],
-          type: cell[5],
-        };
-        return row;
-      });
+      const parsedRows = stripedColumns
+        .map((cell, i) => {
+          const dayjsDate = dayjs(cell[2] as string).format(
+            DATE_STORAGE_FORMAT
+          );
+          const row = {
+            id: cell[0],
+            label: cell[1],
+            amount: cell[2],
+            date: dayjsDate,
+            repeated: cell[4],
+            type: cell[5],
+          };
+          return row;
+        })
+        .filter((row, i) => i !== 0);
       setPendingImportData(parsedRows);
       console.log(parsedRows);
     } catch (error) {

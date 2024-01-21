@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   Tabs,
@@ -12,6 +12,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import Input from "@mui/material/Input";
 import { useImportExcell } from "@budget/hooks/import/useImport";
+import ImportCommitDialog from "./importCommitDialog";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -59,6 +60,8 @@ export default function ImportDialog({ open, close }) {
   const [hasFile, setHasFile] = useState(null);
   const [importUrl, setImportUrl] = useState("");
   const { readFile, readUrl, cancelImport, confirmImport } = useImportExcell();
+  const [parsedData, setParsedData] = useState(null); // [ { id: 1, label: "test", amount: 100, date: "2021-10-10" }
+  const [showPreview, setShowPreview] = useState(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
@@ -68,6 +71,7 @@ export default function ImportDialog({ open, close }) {
     close();
     cancelImport();
   };
+
   return (
     <Dialog open={open}>
       <Box sx={{ p: 3 }} className="grid grid-cols-3">
@@ -99,9 +103,7 @@ export default function ImportDialog({ open, close }) {
             fullWidth
           />
         </ImportTabPanel>
-        <ImportTabPanel value={activeTab} index={2}>
-          Item Three
-        </ImportTabPanel>
+        {showPreview && <ImportCommitDialog data={parsedData} />}
       </Box>
     </Dialog>
   );

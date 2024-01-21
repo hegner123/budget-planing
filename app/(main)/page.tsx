@@ -75,12 +75,12 @@ export default function Page() {
 
   return (
     <>
-      <main className="grid min-w-full min-h-screen ">
-        <section className="grid grid-cols-4 grid-rows-5 gap-3 ">
+      <main className="grid min-w-full min-h-screen grid-flow-row auto-rows-fr ">
+        <section className="grid grid-cols-12 gap-3 auto-rows-fr">
           <h2 className="col-start-2 row-start-2 text-6xl col-span-full">
             Budget Forecast
           </h2>
-          <div className="flex col-start-2 row-start-3 gap-3 h-fit ">
+          <div className="flex col-span-5 col-start-2 row-start-3 gap-3 h-fit ">
             <Button variant="contained" className="btn-primary">
               <Link href="/login" passHref>
                 Login
@@ -104,7 +104,7 @@ export default function Page() {
             <p>Allows users to log all expenses and incomes.</p>
           </div>
         </section> */}
-        <section className="grid grid-cols-12 grid-rows-5 gap-3 ">
+        <section className="grid grid-cols-12 gap-3 ">
           <div className="col-start-2 col-end-[6]">
             <h3 className="text-4xl">Forecast Data</h3>
             <p>
