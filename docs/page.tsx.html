@@ -1,0 +1,277 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> page.tsx</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">Budget Planning</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Modules</h3><ul><li><a href="module-app_main_page.html">app/main/page</a></li></ul><h3>Global</h3><ul><li><a href="global.html#app/main/page">app/main/page</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>page.tsx</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use client";
+
+import CircularProgress from "@mui/material/CircularProgress";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import useSession from "@budget/hooks/auth/useSession";
+import { loadingAtom, loggedInUserAtom } from "@budget/store/state";
+import { Atom, useAtom } from "jotai";
+import Button from "@mui/material/Button";
+import Link from "next/link";
+import { ForecastAccordion } from "@budget/components/forecastAccordion/forecastAccordion";
+import { ForecastEntry } from "@budget/types";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
+// import { LOCAL_DEMO_DATA } from "@budget/constants";
+
+/**
+ * A Component that renders a page!
+ * @module app/main/page
+ * @type {function}
+ * @returns {JSX.Element} - A JSX Element
+ * @see module:app/main/page
+ *
+ */
+
+/** Render Page */
+
+export default function Page() {
+  /**
+   * @type {Atom}
+   */
+  const [user, setUser] = useAtom(loggedInUserAtom);
+  const [loading, setLoading] = useAtom(loadingAtom);
+  const router = useRouter();
+  const { getSession } = useSession();
+
+  const queryClient = useQueryClient();
+  const {
+    isPending,
+    isError,
+    data,
+    error,
+  }: { isPending: any; isError: any; data: any; error: any } = useQuery({
+    queryKey: ["demo_data"],
+    queryFn: getDemoData,
+  });
+  /**
+   * A url to fetch demo data from supabase blob storage
+   * @type {string}
+   */
+  const supabaseBlobStorageUrlDemoDataUrl: string =
+    "https://ukbhnbmumzaorpsnhjoa.supabase.co/storage/v1/object/public/demo_data/demo/demo.json";
+
+  /**
+   * @function getDemoData
+   * @returns {Promise} - A promise
+   * @description - A function that fetches demo data
+   *
+   *
+   *
+   */
+  async function getDemoData() {
+    const results = new Promise((resolve, reject) => {
+      const res = fetch(supabaseBlobStorageUrlDemoDataUrl).then((res) =>
+        res.json()
+      );
+      console.log("res", res);
+      resolve(res);
+      reject("error");
+    });
+
+    return results;
+  }
+
+  useEffect(() => {
+    getSession()
+      .then((res) => {
+        console.log("res", res);
+        setUser(res.data.session ? res.data.session.user.id : "error");
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setUser("error");
+        setLoading(false);
+      });
+  }, [getSession, setLoading, setUser]);
+
+  useEffect(() => {
+    if (user !== "" &amp;&amp; user !== "error" &amp;&amp; !loading) {
+      router.push("/dashboard");
+      return;
+    }
+  }, [user, router, loading]);
+
+  if (isPending) {
+    return &lt;span>Loading...&lt;/span>;
+  }
+
+  if (isError) {
+    return &lt;span>Error: {error.message}&lt;/span>;
+  }
+
+  return (
+    &lt;>
+      &lt;main className="grid min-w-full min-h-screen grid-flow-row auto-rows-fr ">
+        &lt;section className="grid grid-cols-12 gap-3 auto-rows-fr">
+          &lt;h2 className="col-start-2 row-start-2 text-6xl col-span-full">
+            Budget Forecast
+          &lt;/h2>
+          &lt;div className="flex col-span-5 col-start-2 row-start-3 gap-3 h-fit ">
+            &lt;Button variant="contained" className="btn-primary">
+              &lt;Link href="/login" passHref>
+                Login
+              &lt;/Link>
+            &lt;/Button>
+            &lt;Button variant="contained" className="btn-primary">
+              &lt;Link href="/register" passHref>
+                Register
+              &lt;/Link>
+            &lt;/Button>
+            {/* &lt;Button variant="contained" className="btn-primary">
+              &lt;Link href="/demo" passHref>
+                Demo
+              &lt;/Link>
+            &lt;/Button> */}
+          &lt;/div>
+        &lt;/section>
+        {/* &lt;section className="grid grid-cols-12 grid-rows-5 gap-3 ">
+          &lt;div className="col-start-2 col-end-[6]">
+            &lt;h3 className="text-4xl">Dashboard view&lt;/h3>
+            &lt;p>Allows users to log all expenses and incomes.&lt;/p>
+          &lt;/div>
+        &lt;/section> */}
+        &lt;section className="grid grid-cols-12 gap-3 ">
+          &lt;div className="col-start-2 col-end-[6]">
+            &lt;h3 className="text-4xl">Forecast Data&lt;/h3>
+            &lt;p>
+              The forecast function provides the forecasted balance and
+              contributing expenses and incomes.
+            &lt;/p>
+          &lt;/div>
+          &lt;ul className="grid col-start-6 col-end-[-2] gap-3">
+            {data.forecastData &amp;&amp;
+              data.forecastData[0].map((item: ForecastEntry, i: number) => (
+                &lt;li key={`forecast${i}`}>
+                  &lt;ForecastAccordion item={item} i={i} />
+                &lt;/li>
+              ))}
+          &lt;/ul>
+        &lt;/section>
+      &lt;/main>
+    &lt;/>
+  );
+}
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

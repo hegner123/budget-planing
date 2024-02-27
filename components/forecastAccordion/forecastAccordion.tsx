@@ -21,13 +21,13 @@ function ForecastAccordion({ item, i }: { item: ForecastEntry; i: number }) {
   const numberFormat = new Intl.NumberFormat("en-US", options);
 
   function balanceColor(balance: number): string {
-    if (balance < 1000 && balance > 600) {
+    if (balance < 200 && balance > 0) {
       return balanceWarningColor;
     }
-    if (balance < 600) {
+    if (balance < 0) {
       return balanceDangerColor;
     }
-    if (balance > 0) {
+    if (balance > 200) {
       return balanceGoodColor;
     }
   }

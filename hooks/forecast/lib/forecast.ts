@@ -8,47 +8,38 @@ import {
 import { refreshDates } from "./refresh";
 import { repeatedEntries } from "./repeats";
 import { createBalance } from "./createBalance";
+import processExpenses from "./processExpenses";
+import processIncome from "./processIncome";
 import dayjs from "dayjs";
 
 export function forecastBudget(
   length: number,
   startDate: string,
-  stringData: any,
+  stringData: string,
   customBalance?: number
 ) {
-  let data: BudgetEntry[] = JSON.parse(stringData);
+  let userBudgetData: BudgetEntry[] = JSON.parse(stringData);
 
-  const rawBalance: BudgetEntry[] = data.filter(
+  const extractedBalances: BudgetEntry[] = userBudgetData.filter(
     (entry: BudgetEntry) => entry.type === "balance"
   );
-  let customRawBalance: BudgetEntry[] = [];
+  let customExtractedBalances: BudgetEntry[] = [];
+
   if (customBalance) {
-    customRawBalance[0] = rawBalance[0];
-    customRawBalance[0].amount = customBalance;
+    // customExtractedBalances[0] = ExtractedBalances[0];
+    customExtractedBalances[0].amount = customBalance;
   }
 
-  const balanceLength = rawBalance.length;
+  const balanceLength = extractedBalances.length;
 
-  const rawIncome: BudgetEntry[] = data.filter(
-    (entry: BudgetEntry) => entry.type === "income"
+  const repeatedExpenses: BudgetEntryRepeats[] = processExpenses(
+    userBudgetData,
+    length
   );
 
-  const rawExpenses: BudgetEntry[] = data.filter(
-    (entry: BudgetEntry) => entry.type === "expenses"
-  );
-
-  const freshIncome: BudgetEntry[] = refreshDates(rawIncome as BudgetEntry[]);
-  const freshExpenses: BudgetEntry[] = refreshDates(
-    rawExpenses
-  ) as BudgetEntry[];
-
-  const repeatedIncome: BudgetEntryRepeats[] = repeatedEntries(
-    freshIncome as BudgetEntry[],
-    length as number
-  );
-  const repeatedExpenses: BudgetEntryRepeats[] = repeatedEntries(
-    freshExpenses as BudgetEntry[],
-    length as number
+  const repeatedIncome: BudgetEntryRepeats[] = processIncome(
+    userBudgetData,
+    length
   );
 
   const forecastStartDate: String = dayjs(startDate).format("MM/DD/YYYY");
@@ -56,24 +47,27 @@ export function forecastBudget(
 
   let forecastList: ForecastEntry[] = [];
 
-  for (let i: number = 0; i < length; i++) {
-    let newDate: string = startDateDayjs.add(i + 1, "day").format("MM/DD/YYYY");
-    let newBalance: number = rawBalance[balanceLength - 1].amount;
-
-    if (customBalance) {
-      newBalance = customRawBalance[balanceLength - 1].amount;
-    }
-
-    const forecastedBalance: ForecastEntry = createBalance(
-      Number(forecastList[i - 1]?.balance) || (newBalance as number),
+  forecastList.push(
+    createBalance(
+      extractedBalances[balanceLength - 1].amount,
       repeatedIncome as BudgetEntryRepeats[],
       repeatedExpenses as BudgetEntryRepeats[],
-      newDate as string,
-      i as number,
-      newBalance as number
+      forecastStartDate as string
+    )
+  );
+
+  for (let i: number = 0; i < length; i++) {
+    let newDate: string = startDateDayjs.add(i + 1, "day").format("MM/DD/YYYY");
+    let newBalance: number = extractedBalances[balanceLength - 1].amount;
+
+    const forecastedBalance: ForecastEntry = createBalance(
+      Number(forecastList[i]?.balance),
+      repeatedIncome as BudgetEntryRepeats[],
+      repeatedExpenses as BudgetEntryRepeats[],
+      newDate as string
     );
 
-    forecastList.push(forecastedBalance);
+    forecastList = [...forecastList, forecastedBalance];
   }
   return forecastList;
 }
