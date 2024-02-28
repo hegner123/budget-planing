@@ -10,8 +10,9 @@ import {
 } from "chart.js";
 import dayjs from "dayjs";
 import { Line } from "react-chartjs-2";
-
+import useExport from "@budget/hooks/export/useExport";
 export default function Chart({ forecastData, x, y, title }) {
+  const { exportToExcel } = useExport();
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -57,9 +58,18 @@ export default function Chart({ forecastData, x, y, title }) {
       },
     ],
   };
+
+  function handleExportClick() {
+    exportToExcel(forecastData, "forecast.xlsx");
+  }
   return (
     <div className="col-span-6 col-start-4 min-h-[100vh]">
       <Line options={options} data={data} />
+      <button
+        onClick={() => handleExportClick()}
+        className="px-4 py-2 mt-4 text-white bg-blue-500 rounded-lg">
+        Export to Excel
+      </button>
       <table className="justify-between w-full ">
         <thead>
           <th className="text-left">Date</th>
