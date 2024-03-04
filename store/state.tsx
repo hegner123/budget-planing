@@ -1,5 +1,9 @@
 "use strict";
+/**
+ * @module store/state
+ */
 import { Provider, createStore, atom } from "jotai";
+
 import dayjs from "dayjs";
 
 

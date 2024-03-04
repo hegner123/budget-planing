@@ -320,7 +320,7 @@ const expectedExpensesPostRepeats = [
   },
 ];
 
-const forecastEntries = [
+const forecastEntriesLong = [
   {
     id: "ff1fd50c-aab8-4a4b-a63c-41c564855d4a",
     name: "Test balance",
@@ -386,6 +386,33 @@ const forecastEntries = [
   },
 ];
 
+const forecastEntriesShort = [
+    {
+    id: "ff1fd50c-aab8-4a4b-a63c-41c564855d4a",
+    name: "Test balance",
+    amount: 1000,
+    date: dayjs("01/01/2020").format("MM/DD/YYYY"),
+    type: "balance",
+  },
+  {
+    id: "ff1fd50c-aab8-4a4b-a63c-41c564855d4a",
+    name: "Test Income Biweekly",
+    amount: 100,
+    date: testDate,
+    repeated: "Biweekly",
+    type: "income",
+  },
+  {
+    id: "ff1fd50c-aab8-4a4b-a63c-41c56485ad4a",
+    name: "Test Daily",
+    amount: 1,
+    date: testDate,
+    repeated: "Daily",
+    type: "expenses",
+  },
+]
+
+
 const expectedForecastEntries = "test";
 
 const expectedIncomeTotal = 2;
@@ -410,6 +437,7 @@ export {
   expensesPostRepeats,
   expectedIncomePostRepeats,
   expectedExpensesPostRepeats,
-  forecastEntries,
-  expectedForecastEntries,
+  forecastEntriesShort,
+  forecastEntriesLong,
+  expectedForecastEntries
 };

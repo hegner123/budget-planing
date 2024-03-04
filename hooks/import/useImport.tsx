@@ -8,6 +8,19 @@ import { useIncome } from "@budget/hooks/income/useIncome";
 import { useExpenses } from "@budget/hooks/expense/useExpense";
 import useSession from "@budget/hooks/auth/useSession";
 
+type Row = {
+  id: cell;
+  label: cell;
+  amount: cell;
+  date: cell;
+  repeated: cell;
+  type: cell;
+};
+
+type cell = {
+  value: string;
+};
+
 export function useImportExcell() {
   const [pendingImportData, setPendingImportData] = useState(null);
   const [user, setUser] = useState<any>("");
@@ -20,22 +33,20 @@ export function useImportExcell() {
   const { getSession } = useSession();
   useEffect(() => {
     getSession().then((res) => {
-      setUser(res.data.session.user.id);
+      setUser(res?.data?.session?.user?.id);
     });
   }, [getSession]);
   // File.
 
-  function readFile(file) {
-    readXlsxFile(file).then((rows) => {
+  async function readFile(file: File) {
+    const res = await readXlsxFile(file).then((rows) => {
       // `rows` is an array of rows
       // each row being an array of cells.
-      try {
-        parseRows(rows);
-      } catch (error) {
-        console.log(error);
-        cancelImport();
-      }
+      const res = sendToParser(rows);
+
+      return res;
     });
+    return res;
   }
   function readUrl(url) {
     // Blob.
@@ -45,34 +56,38 @@ export function useImportExcell() {
       .then((rows) => {
         // `rows` is an array of rows
         // each row being an array of cells.
-        try {
-          parseRows(rows);
-        } catch (error) {
-          console.log(error);
-          cancelImport();
-        }
+        return sendToParser(rows);
       });
   }
-  function parseRows(rows) {
+  function sendToParser(rows) {
     try {
-      const stripedColumns = rows.filter((cell) => cell[0] !== "Id");
-      const parsedRows = stripedColumns.map((cell) => {
+      return parseRows(rows);
+    } catch (error) {
+      console.log(error);
+      cancelImport();
+    }
+  }
+  function parseRows(rows) {
+    const stripedColumns = rows.filter((cell) => cell[0] !== "Id");
+    const parsedRows = stripedColumns
+      .map((cell, i) => {
         const dayjsDate = dayjs(cell[2] as string).format(DATE_STORAGE_FORMAT);
         const row = {
-          id: cell[0],
+          id: i,
           label: cell[1],
           amount: cell[2],
           date: dayjsDate,
           repeated: cell[4],
           type: cell[5],
         };
+        console.log(row);
         return row;
-      });
-      setPendingImportData(parsedRows);
-      console.log(parsedRows);
-    } catch (error) {
-      console.log(error);
-    }
+      })
+      .filter((row, i) => i !== 0);
+    // setPendingImportData(parsedRows);
+    console.log(parsedRows);
+
+    return parsedRows;
   }
 
   function cancelImport() {

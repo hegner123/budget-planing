@@ -9,6 +9,7 @@ const customJestConfig = {
     '^.+\\.tsx?$': 'babel-jest',
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  testRegex: '(/__tests__/.*(test|spec))\\.tsx?$',
 }
 
 // createJestConfig is exported in this way to ensure that next/jest can load the Next.js configuration, which is async

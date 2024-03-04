@@ -14,9 +14,7 @@ export function createBalance(
   balance: number,
   incomes: BudgetEntryRepeats[],
   expenses: BudgetEntryRepeats[],
-  date,
-  i,
-  startingBalance
+  date
 ): ForecastEntry {
   const dateIncomes: BudgetEntryRepeats[] = dateFilter(incomes, date);
   const dateExpenses: BudgetEntryRepeats[] = dateFilter(expenses, date);
@@ -38,43 +36,25 @@ export function createBalance(
     };
   });
 
-  if (i === 0) {
-    return {
-      date: date as string | Dayjs,
-      balance: startingBalance as number,
-      balanceDetails: {
-        previousBalance: startingBalance as number,
-        newBalance: newBalance(
-          startingBalance as number,
-          incomeTotal as number,
-          expenseTotal as number
-        ),
-        incomesTotal: incomeTotal as number,
-        incomes: mappedIncomes as IncomePeek[],
-        expensesTotal: expenseTotal as number,
-        expenses: mappedExpenses as ExpensePeek[],
-      },
-    };
-  } else {
-    return {
-      date: date as string | Dayjs,
-      balance: newBalance(
-        i > 0 ? balance : (startingBalance as number),
+  return {
+    date: date as string | Dayjs,
+    balance: newBalance(
+      balance as number,
+      incomeTotal as number,
+      expenseTotal as number
+    ),
+    balanceDetails: {
+      previousBalance: balance as number,
+      newBalance: newBalance(
+        balance as number,
         incomeTotal as number,
         expenseTotal as number
       ),
-      balanceDetails: {
-        previousBalance: balance as number,
-        newBalance: newBalance(
-          balance as number,
-          incomeTotal as number,
-          expenseTotal as number
-        ),
-        incomesTotal: incomeTotal as number,
-        incomes: mappedIncomes as IncomePeek[],
-        expensesTotal: expenseTotal as number,
-        expenses: mappedExpenses as ExpensePeek[],
-      },
-    };
-  }
+      incomesTotal: incomeTotal as number,
+      incomes: mappedIncomes as IncomePeek[],
+      expensesTotal: expenseTotal as number,
+      expenses: mappedExpenses as ExpensePeek[],
+    },
+  };
 }
+
