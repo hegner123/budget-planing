@@ -13,12 +13,7 @@ export default function useExport() {
     console.log(data);
     const headers = headerGenerator(["Date", "Balance", "Incomes", "Expenses"]);
     const rows = data.map((item) => {
-      return [
-        item.date,
-        item.balance,
-        [item.balanceDetails.incomesTotal].join(", "),
-        [item.balanceDetails.expensesTotal].join(", "),
-      ];
+      return [item.date, item.balance];
     });
     return [headers, ...rows];
   }

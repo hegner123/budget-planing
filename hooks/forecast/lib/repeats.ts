@@ -12,8 +12,6 @@ const repeatedEntries = (
   let newRepeatedEntries: BudgetEntryRepeats[] = [];
 
   for (let entry of entries) {
-    const repeatedLength: number = determineRepeatedCount(entry, length);
-
     if (entry.repeated.toLowerCase() === "none") {
       let entryRepeated: BudgetEntryRepeats = {
         ...entry,
@@ -21,6 +19,7 @@ const repeatedEntries = (
       };
       newRepeatedEntries.push(entryRepeated);
     }
+    const repeatedLength: number = determineRepeatedCount(entry, length);
     switch (entry.repeated.toLowerCase()) {
       case "daily":
         let dailyDates: BudgetEntryRepeats = {

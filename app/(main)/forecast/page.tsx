@@ -30,10 +30,10 @@ const Forecast = () => {
   const options = { style: "currency", currency: "USD" };
   const numberFormat = new Intl.NumberFormat("en-US", options);
 
-  useEffect(() => {
-    setCompiledData(JSON.parse(localStorage.getItem("compiledData")!));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   setCompiledData(JSON.parse(localStorage.getItem("compiledData")!));
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   useEffect(() => {
     return () => {
