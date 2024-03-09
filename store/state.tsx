@@ -17,22 +17,27 @@ const deleteEntryAtom = atom("");
 const deleteEntryTypeAtom = atom("");
 const configForecastAtom = atom<any>({});
 const configForecastStartAtom = atom<any>(dayjs(new Date()));
-
+const isLoggedInAtom = atom<boolean>(false);
 const showDebugModalAtom = atom<boolean>(false);
 const forecastListAtom = atom<any>([]);
+const isMobileMenuOpenAtom = atom<boolean>(false);
+const isMobileAtom = atom<boolean>(false);
 
 export {
-  loadingAtom,
-  compiledDataAtom,
-  showNotificationAtom,
-  notificationMessageAtom,
-  deleteEntryAtom,
-  deleteEntryTypeAtom,
-  configForecastAtom,
-  configForecastStartAtom,
-  showDebugModalAtom,
-  forecastListAtom,
-  loggedInUserAtom,
+    loadingAtom,
+    isLoggedInAtom,
+    compiledDataAtom,
+    showNotificationAtom,
+    notificationMessageAtom,
+    deleteEntryAtom,
+    deleteEntryTypeAtom,
+    configForecastAtom,
+    configForecastStartAtom,
+    showDebugModalAtom,
+    forecastListAtom,
+    loggedInUserAtom,
+    isMobileMenuOpenAtom,
+    isMobileAtom,
 };
 
 const JotaiProvider = ({ children }: any) => {

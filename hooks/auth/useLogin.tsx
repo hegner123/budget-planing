@@ -21,35 +21,58 @@ const useLogin = () => {
   });
 
   async function handleSubmit(e?: any) {
-    if (e) {
-      e.preventDefault();
-    }
-    try {
-      setLoading(true);
-      const { data, error } = await loginUser({
-        email: email,
-        password: password,
-        supabaseClient: supabaseClient,
-      } as AuthLogin);
-      if (data) {
-        router.push("/dashboard");
+      if (e) {
+          e.preventDefault();
       }
-    } catch (err: any) {
-      setError(err);
+      try {
+          setLoading(true);
+          const { data, error } = await loginUser({
+              email: email,
+              password: password,
+              supabaseClient: supabaseClient,
+          } as AuthLogin);
+          if (data) {
+              router.push("/dashboard");
+          }
+      } catch (err: any) {
+          console.error(err);
+          enqueueSnackbar("Error logging in", { variant: "error" });
+          setLoading(false);
+      }
+  }
+  async function handleDemoSubmit(e?: any) {
+      if (e) {
+          e.preventDefault();
+      }
+      try {
+          const demoEmail = process.env.NEXT_PUBLIC_DEMO_EMAIL;
+          const demoPassword = process.env.NEXT_PUBLIC_DEMO_PASSWORD;
+          setLoading(true);
+          const { data, error } = await loginUser({
+              email: demoEmail,
+              password: demoPassword,
+              supabaseClient: supabaseClient,
+          } as AuthLogin);
+          if (data) {
+              router.push("/dashboard");
+          }
+      } catch (err: any) {
+          setError(err);
 
-      enqueueSnackbar("Error logging in", { variant: "error" });
-      setLoading(false);
-    } 
+          enqueueSnackbar("Error logging in", { variant: "error" });
+          setLoading(false);
+      }
   }
 
   return {
-    email,
-    password,
-    error,
-    loading,
-    setEmail,
-    setPassword,
-    handleSubmit,
+      email,
+      password,
+      error,
+      loading,
+      setEmail,
+      setPassword,
+      handleSubmit,
+      handleDemoSubmit,
   };
 };
 
