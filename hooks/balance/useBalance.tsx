@@ -1,8 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { addBalance, deleteBalance } from "@budget/supabaseTables";
-import { useAtom } from "jotai";
+import { deleteBalance } from "@budget/supabaseTables";
 import useSWR from "swr";
 import useSession from "@budget/hooks/auth/useSession";
 
@@ -23,6 +22,14 @@ export const useBalance = () => {
   const { data, error, isLoading } = useSWR(`balance/${user}`, () =>
     getBalance(user, supabaseClient)
   );
+
+    if (error){
+        console.error(error)
+    }
+
+    if (isLoading) {
+        return <>Loading</>
+    }
 
   async function getBalance(user: string, supabaseClient: any) {
     if (!user) return;
@@ -51,7 +58,6 @@ export const useBalance = () => {
     user: string;
     date: string;
   }) {
-    // if (!user) return console.log("No user");
     const { data, error } = await supabaseClient
       .from("Balance")
       .insert([{ name: name, amount: amount, date: date, user: user }]);
@@ -67,7 +73,6 @@ export const useBalance = () => {
     balance,
     fetchedBalance,
     balanceLog,
-
     addBalance,
     deleteBalanceEntry,
   };

@@ -12,7 +12,7 @@ export default function useExport() {
   function mapExcelRows(data: any) {
     console.log(data);
     const headers = headerGenerator(["Date", "Balance", "Incomes", "Expenses"]);
-    const rows = data.map((item) => {
+    const rows = data.map((item:any) => {
       return [item.date, item.balance];
     });
     return [headers, ...rows];

@@ -32,7 +32,7 @@ function ForecastAccordion({ item, i }: { item: ForecastEntry; i: number }) {
     }
   }
   return (
-    <Accordion className={"bg-slate-500"}>
+    <Accordion className={"bg-slate-500"} >
       <AccordionSummary
         className={`text-white rounded ${balanceColor(item?.balance)}`}
         expandIcon={<ExpandMoreIcon className="text-white" />}

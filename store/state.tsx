@@ -45,3 +45,4 @@ const JotaiProvider = ({ children }: any) => {
 };
 
 export default JotaiProvider;
+
