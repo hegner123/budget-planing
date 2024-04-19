@@ -1,13 +1,11 @@
 "use client";
 import Link from "next/link";
 
-const LoggedOutLinks = (isMobile) => {
-    let mobileClasses = "grid";
-    let desktopClasses = "flex";
+const LoggedOutLinks = () => {
     return (
-        <ul className={isMobile ? mobileClasses : desktopClasses}>
+        <ul className="lg:flex grid w-fit">
             <li>
-                <Link className="px-5" href="/login">
+                <Link className="px-5 hover:bg-sky50" href="/login">
                     Login
                 </Link>
             </li>

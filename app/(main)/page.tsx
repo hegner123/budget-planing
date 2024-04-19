@@ -11,6 +11,7 @@ import { ForecastAccordion } from "@budget/components/forecastAccordion/forecast
 import { ForecastEntry } from "@budget/types";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "./loading";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 // import { LOCAL_DEMO_DATA } from "@budget/constants";
 
@@ -26,12 +27,9 @@ import Loading from "./loading";
 /** Render Page */
 
 export default function Page() {
-    /**
-     * @type {Atom}
-     */
-    const [user, setUser] = useAtom(loggedInUserAtom);
-    const [loading, setLoading] = useAtom(loadingAtom);
-    const router = useRouter();
+    const [user, setUser]: [string, Function] = useAtom(loggedInUserAtom);
+    const [loading, setLoading]: [Boolean, Function] = useAtom(loadingAtom);
+    const router: AppRouterInstance = useRouter();
     const { getSession } = useSession();
 
     const {
@@ -54,16 +52,12 @@ export default function Page() {
      * @function getDemoData
      * @returns {Promise} - A promise
      * @description - A function that fetches demo data
-     *
-     *
-     *
      */
-    async function getDemoData() {
+    async function getDemoData(): Promise<Object> {
         const results = new Promise((resolve, reject) => {
             const res = fetch(supabaseBlobStorageUrlDemoDataUrl).then((res) =>
                 res.json()
             );
-            console.log("res", res);
             resolve(res);
             reject("error");
         });

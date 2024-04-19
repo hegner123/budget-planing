@@ -1,4 +1,5 @@
 import { IncomeUpdateObject, IncomeAddHook } from "@budget/types";
+import { useQuery } from '@tanstack/react-query'
 export async function addIncomeSupabase({
   user,
   name,

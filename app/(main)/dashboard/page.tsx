@@ -46,7 +46,6 @@ export default function Dashboard() {
         data,
         handleRowUpdateError,
         dayInMonthComparator,
-        handleDeleteSelectedRows,
         processRowUpdate,
         prepDelete,
         setOpenImportDialog,
@@ -142,7 +141,7 @@ export default function Dashboard() {
                                 <p>
                                     {params.value &&
                                         params.value.charAt(0).toUpperCase() +
-                                            params.value.slice(1)}
+                                        params.value.slice(1)}
                                 </p>
                             ),
                             headerClassName: "super-app-theme--header",

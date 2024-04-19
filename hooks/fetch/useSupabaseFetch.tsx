@@ -15,7 +15,6 @@ import { useIncome } from "@budget/hooks/income/useIncome";
 import useSession from "../auth/useSession";
 import dayjs from "dayjs";
 import { GridComparatorFn } from "@mui/x-data-grid";
-import { get } from "http";
 
 export default function useSupabaseFetch() {
   const supabaseClient = createClientComponentClient();

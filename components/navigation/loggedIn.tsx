@@ -2,13 +2,11 @@
 import Link from "next/link";
 import useSignOut from "@budget/hooks/auth/useSignOut";
 
-const LoggedInLinks = (isMobile) => {
+const LoggedInLinks = () => {
     const { handleSignOut } = useSignOut();
-    let mobileClasses = "grid";
-    let desktopClasses = "flex";
 
     return (
-        <ul className={isMobile ? mobileClasses : desktopClasses}>
+        <ul className="lg:flex grid w-fit">
             <li className="px-5">
                 <Link
                     href="/dashboard"

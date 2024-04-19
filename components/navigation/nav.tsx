@@ -17,6 +17,7 @@ export default function Navigation() {
     useEffect(() => {
         const checkIsMobile = () => {
             if (typeof window !== "undefined") {
+                console.log(window.innerWidth)
                 return window.innerWidth < 768;
             }
             return false;
@@ -38,8 +39,8 @@ export default function Navigation() {
 
     const mobileMenuLayout = (
         <div className={`mobile-menu ${mobileMenuOpen ? "open" : ""}`}>
-            {isLoggedIn && <LoggedInLinks isMobile />}
-            {!isLoggedIn && <LoggedOutLinks isMobile />}
+            {isLoggedIn && <LoggedInLinks  />}
+            {!isLoggedIn && <LoggedOutLinks />}
             <IconButton onClick={() => showMobileMenu()}>
                 <CloseIcon />
             </IconButton>
@@ -66,8 +67,8 @@ export default function Navigation() {
                     </>
                 ) : (
                     <div className="flex items-center">
-                        {isLoggedIn && <LoggedInLinks isMobile />}
-                        {!isLoggedIn && <LoggedOutLinks isMobile />}
+                        {isLoggedIn && <LoggedInLinks  />}
+                        {!isLoggedIn && <LoggedOutLinks />}
                     </div>
                 )}
             </nav>
