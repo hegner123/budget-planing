@@ -19,9 +19,9 @@ import { GridComparatorFn } from "@mui/x-data-grid";
 export default function useSupabaseFetch() {
   const supabaseClient = createClientComponentClient();
   const [user, setUser] = useState<any>(null);
-  const { balance, fetchedBalance } = useBalance();
+  const { balance } = useBalance();
   const { expenses, fetchedExpenses, updateExpenses } = useExpenses();
-  const { income, fetchedIncome, updateIncomeEntry } = useIncome();
+  const { income, updateIncomeEntry } = useIncome();
   const [openDeleteDialog, setOpenDeleteDialog] = useState<any>(false);
   const [openImportDialog, setOpenImportDialog] = useState<any>(false);
   const [loading, setLoading] = useState<any>(true);

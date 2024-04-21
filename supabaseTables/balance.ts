@@ -1,4 +1,3 @@
-import { BalanceUpdateObject } from "@budget/types";
 
 export async function addBalance({
   name,
@@ -13,7 +12,6 @@ export async function addBalance({
   date: string;
   supabaseClient: any;
 }) {
-  // if (!user) return console.log("No user");
   const { data, error } = await supabaseClient
     .from("Balance")
     .insert([{ name: name, amount: amount, date: date, user: user }]);
