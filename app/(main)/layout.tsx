@@ -2,14 +2,14 @@
 
 
 import { Inter } from "next/font/google";
-import JotaiProvider from "@budget/store/state";
+import budgetStore from "@budget/store/state";
 import { SnackbarProvider } from "notistack";
 import Navigation from "@budget/components/navigation/nav";
 import PageFooter from "@budget/components/footer";
 import GlobalCssPriority from "@budget/styles/styleProvider";
 import CssBaseline from "@mui/material/CssBaseline";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useAtom } from "jotai";
+import { Provider, useAtom } from "jotai";
 import { isMobileMenuOpenAtom } from "@budget/store/state";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
@@ -26,14 +26,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <body className={`${inter.className} root ${menuOpenClass}`}>
                 <GlobalCssPriority>
                     <QueryClientProvider client={queryClient}>
-                        <JotaiProvider>
+                        <Provider store={budgetStore}>
                             <CssBaseline />
                             <SnackbarProvider maxSnack={6}>
                                 <Navigation />
                                 {children}
-                                <PageFooter/>
+                                <PageFooter />
                             </SnackbarProvider>
-                        </JotaiProvider>
+                        </Provider>
                         <ReactQueryDevtools initialIsOpen={false} />
                     </QueryClientProvider>
                 </GlobalCssPriority>

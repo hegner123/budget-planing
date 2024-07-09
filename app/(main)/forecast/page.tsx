@@ -36,6 +36,7 @@ const Forecast = () => {
   // }, []);
 
   useEffect(() => {
+        console.log(forecastList)
     return () => {
       setForecastList([]);
     };
@@ -93,7 +94,7 @@ const Forecast = () => {
                   <ForecastAccordion item={item} i={i} />
                 </li>
               ))}
-            {forecastDisplay === "list" && forecastList.length === 0 && (
+            {forecastDisplay === "list" && forecastList?.length === 0 && (
               <p className="text-gray-500">No Forecast Data</p>
             )}
             {forecastDisplay === "chart" && (

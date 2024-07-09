@@ -2,7 +2,7 @@
 /**
  * @module store/state
  */
-import { Provider, createStore, atom } from "jotai";
+import { createStore, atom } from "jotai";
 
 import dayjs from "dayjs";
 
@@ -40,9 +40,6 @@ export {
     isMobileAtom,
 };
 
-const JotaiProvider = ({ children }: any) => {
-  return <Provider store={budgetStore}>{children}</Provider>;
-};
 
-export default JotaiProvider;
+export default budgetStore;
 

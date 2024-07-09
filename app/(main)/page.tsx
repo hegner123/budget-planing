@@ -10,21 +10,11 @@ import Link from "next/link";
 import { ForecastAccordion } from "@budget/components/forecastAccordion/forecastAccordion";
 import { ForecastEntry } from "@budget/types";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "./loading";
+import Loading from "@budget/components/loading/loading";
+import { Session } from "@supabase/supabase-js";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-// import { LOCAL_DEMO_DATA } from "@budget/constants";
 
-/**
- * A Component that renders a page!
- * @module app/main/page
- * @type {function}
- * @returns {JSX.Element} - A JSX Element
- * @see module:app/main/page
- *
- */
-
-/** Render Page */
 
 export default function Page() {
     const [user, setUser]: [string, Function] = useAtom(loggedInUserAtom);
@@ -41,42 +31,37 @@ export default function Page() {
         queryKey: ["demo_data"],
         queryFn: getDemoData,
     });
-    /**
-     * A url to fetch demo data from supabase blob storage
-     * @type {string}
-     */
+
     const supabaseBlobStorageUrlDemoDataUrl: string =
         "https://ukbhnbmumzaorpsnhjoa.supabase.co/storage/v1/object/public/demo_data/demo/demo.json";
 
-    /**
-     * @function getDemoData
-     * @returns {Promise} - A promise
-     * @description - A function that fetches demo data
-     */
-    async function getDemoData(): Promise<Object> {
-        const results = new Promise((resolve, reject) => {
-            const res = fetch(supabaseBlobStorageUrlDemoDataUrl).then((res) =>
-                res.json()
-            );
-            resolve(res);
-            reject("error");
-        });
 
-        return results;
+    async function getDemoData() {
+        const res = await fetch(supabaseBlobStorageUrlDemoDataUrl)
+        const data = await res.json()
+        console.log("data", data)
+        return data
     }
 
     useEffect(() => {
-        getSession()
-            .then((res) => {
-                console.log("res", res);
-                setUser(res.data.session ? res.data.session.user.id : "error");
-                setLoading(false);
-            })
-            .catch((err) => {
+        async function fetchSession() {
+            try {
+                return await getSession()
+            }
+            catch (err) {
                 console.error(err);
                 setUser("error");
                 setLoading(false);
-            });
+            };
+        }
+
+        const fetchedSession: Promise<{ data: { session: Session | null }; error: Error }> = fetchSession()
+        fetchedSession.then(res => {
+            console.log('res', res)
+            //setUser(res ? res.user.id : "error");
+
+            setLoading(false);
+        }).catch(err => console.error(err))
     }, [getSession, setLoading, setUser]);
 
     useEffect(() => {
@@ -137,8 +122,8 @@ export default function Page() {
                         </p>
                     </div>
                     <ul className="grid col-start-2  xl:col-start-6 col-end-[-2] gap-3 mb-10">
-                        {data.forecastData &&
-                            data.forecastData[0].map(
+                        {!isPending &&
+                            data.forecastData.map(
                                 (item: ForecastEntry, i: number) => (
                                     <li key={`forecast${i}`}>
                                         <ForecastAccordion item={item} i={i} />

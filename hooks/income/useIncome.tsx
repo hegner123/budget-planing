@@ -1,81 +1,94 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
     addIncomeSupabase,
     deleteIncome,
     updateIncome,
 } from "@budget/supabaseTables";
-import { SupabaseClient, createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import useSession from "@budget/hooks/auth/useSession";
-
 import { useSnackbar } from "notistack";
-import {
-    IncomeUpdateObject,
-    IncomeUpdateHook,
-    IncomeAdd,
-    IncomeAddHook,
-    IncomeEntry,
-    IncomePayload,
-} from "@budget/types/income";
-import { useQuery } from "@tanstack/react-query";
+import { IncomeAdd, IncomeAddHook, IncomeEntry } from "@budget/types/income";
+import supabase from "@budget/supabaseTables/client";
+import { PostgrestError } from "@supabase/supabase-js";
 
 export const useIncome = () => {
-    const supabaseClient: SupabaseClient = createClientComponentClient();
+    const supabaseClient = supabase();
     const [incomeLog, setIncomeLog] = useState<string>("");
-    const [user, setUser] = useState<string | null>("");
-    
+    const [user, setUser] = useState<{ id: string | null }>({ id: null });
+    const [income, setIncome] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
     const { getSession } = useSession();
     const { enqueueSnackbar } = useSnackbar();
-    
+
     useEffect(() => {
         getSession().then((res) => {
-            setUser(res?.data?.session?.user?.id);
+            setUser({ id: res?.data?.session?.user?.id || null });
         });
     }, [getSession]);
 
-    async function getIncome(user: string, supabaseClient: any) {
-        let { data, error } = await supabaseClient
-            .from("Income")
-            .select("*")
-            .eq("user", user);
+    const fetchIncome = useCallback(async (userId: string) => {
+        try {
+            setLoading(true);
+            setError(null);
+            const { data, error }: { data: any[], error: PostgrestError } = await supabaseClient
+                .from("Income")
+                .select("*")
+                .eq("user", userId);
 
-        if (error) {
-            throw new Error("Error fetching income");
+            if (error) {
+                throw new Error("Error fetching income");
+            }
+            setIncome(data);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
         }
-        return { data };
+    }, [supabaseClient]);
 
-    }
-    const { data, error } = useQuery({
-        queryKey: ['income', { user, supabaseClient }],
-        queryFn: () => getIncome(user, supabaseClient),
-    })
+    useEffect(() => {
+        if (user.id) {
+            fetchIncome(user.id);
+        }
+    }, [user.id, fetchIncome]);
 
-    function addIncome(data: IncomeAdd) {
-        addIncomeSupabase({
-            ...data,
-            supabaseClient,
-        } as IncomeAddHook).then((res) => {
+    const addIncome = useCallback(async (incomeData: IncomeAdd) => {
+        try {
+            const res = await addIncomeSupabase({ ...incomeData, supabaseClient } as IncomeAddHook);
             setIncomeLog(JSON.stringify(res));
-        });
-    }
-
-    function deleteIncomeEntry(id: string) {
-        deleteIncome({ id, supabaseClient } as {
-            id: string;
-            supabaseClient: any;
-        });
-    }
-
-    async function updateIncomeEntry(newRow) {
-        const { data, error } = await updateIncome({
-            newRow,
-            supabaseClient,
-        });
-        if (data === null && error === null) {
-            return { data: newRow, error: null };
+            enqueueSnackbar("Income added successfully", { variant: "success" });
+            fetchIncome(user.id!); // Refresh income data
+        } catch (error) {
+            enqueueSnackbar("Error adding income", { variant: "error" });
         }
-        return { data, error };
-    }
+    }, [supabaseClient, enqueueSnackbar, user.id, fetchIncome]);
+
+    const deleteIncomeEntry = useCallback(async (id: string) => {
+        try {
+            await deleteIncome({ id, supabaseClient });
+            enqueueSnackbar("Income deleted successfully", { variant: "success" });
+            fetchIncome(user.id!); // Refresh income data
+        } catch (error) {
+            enqueueSnackbar("Error deleting income", { variant: "error" });
+        }
+    }, [supabaseClient, enqueueSnackbar, user.id, fetchIncome]);
+
+    const updateIncomeEntry = useCallback(async (newRow: IncomeEntry) => {
+        try {
+            const { data, error } = await updateIncome({ newRow, supabaseClient });
+            if (!data && !error) {
+                return { data: newRow, error: null };
+            }
+            enqueueSnackbar("Income updated successfully", { variant: "success" });
+            fetchIncome(user.id!); // Refresh income data
+            return { data, error };
+        } catch (error) {
+            enqueueSnackbar("Error updating income", { variant: "error" });
+            return { data: null, error };
+        }
+    }, [supabaseClient, enqueueSnackbar, user.id, fetchIncome]);
 
     return {
         income,
@@ -83,5 +96,8 @@ export const useIncome = () => {
         addIncome,
         deleteIncomeEntry,
         updateIncomeEntry,
+        isLoading: loading,
+        error,
     };
 };
+
