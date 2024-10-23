@@ -32,7 +32,7 @@
     "chart.js": "^4.3.0",
     "dayjs": "^1.11.7",
     "eslint": "^8.41.0",
-    "eslint-config-next": "^13.0.0",
+    "eslint-config-next": "^15.0.0",
     "jotai": "^2.1.0",
     "jotai-devtools": "^0.7.0",
     "modern-normalize": "^2.0.0",
